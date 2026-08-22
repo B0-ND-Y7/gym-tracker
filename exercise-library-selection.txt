@@ -52,6 +52,7 @@ pull_row           | 0606-aaXr7ld.gif         | lever t bar row | leverage machi
 pull_row           | 1351-FVM1AUZ.gif         | lever t-bar reverse grip row | leverage machine
 pull_row           | 1313-oROuvrX.gif         | lever unilateral row | leverage machine
 pull_row           | 3200-LuBEORI.gif         | lever bent-over row with v-bar | leverage machine
+pull_row           | 0159-kesXOpB.gif         | cable decline seated wide-grip row | cable
 pull_rear          | 0602-myfUsKf.gif         | lever seated reverse fly | leverage machine
 pull_rear          | 0601-xiHiJcA.gif         | lever seated reverse fly (parallel grip) | leverage machine
 pull_rear          | 0202-yUdIGNs.gif         | cable rear delt row (stirrups) | cable
@@ -98,3 +99,8 @@ lower_hip          | 1774-WL4EmxJ.gif         | side bridge hip abduction | body
 lower_calf         | 1385-IeDEXTe.gif         | lever seated squat calf raise on leg press machine | leverage machine
 lower_calf         | 0594-bOOdeyc.gif         | lever seated calf raise | leverage machine
 lower_calf         | 0605-ykUOVze.gif         | lever standing calf raise | leverage machine
+lower_calf         | 0773-6MaEjVA.gif         | smith standing leg calf raise | smith machine
+pull_biceps        | 3195-UXpKJoq.gif         | lever lying two-one leg curl | leverage machine
+pull_vertical      | 2330-LEprlgG.gif         | cable lat pulldown full range of motion | cable
+pull_vertical      | 0017-kiJ4Z2K.gif         | assisted pull-up | leverage machine
+pull_vertical      | 1431-7OeHptV.gif         | assisted standing chin-up | leverage machine
