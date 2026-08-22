@@ -1,22 +1,22 @@
 arm_circles            | NOT FOUND
-shoulder_rolls         | 2203-8coXSYU.gif         | roller seated shoulder flexor depresor retractor
+shoulder_rolls         | NOT FOUND
 chest_opener           | 1167-3uj0Ozg.gif         | dynamic chest stretch (male)
 thoracic_rotation      | NOT FOUND
-scapular_push          | 3011-GdMa1ET.gif         | incline scapula push up
+scapular_push          | 3021-jV65tKx.gif         | scapula push-up
 scapular_pull          | 0688-uTBt1HV.gif         | scapular pull-up
 leg_swings             | NOT FOUND
-walking_lunge          | 3655-J9zIWig.gif         | walking high knees lunge
-bodyweight_squat       | 3543-wfotm7S.gif         | bodyweight drop jump squat
-hip_circles            | 0984-vIICElP.gif         | band lying hip internal rotation
+walking_lunge          | 1460-IZVHb27.gif         | walking lunge
+bodyweight_squat       | NOT FOUND
+hip_circles            | NOT FOUND
 knee_hugs              | NOT FOUND
-high_knees             | 3636-ealLwvX.gif         | high knee against wall
+high_knees             | NOT FOUND
 ankle_circles          | 1368-uL9CsKm.gif         | ankle circles
 chest_stretch          | 1271-Uto7l43.gif         | chest and front of shoulder stretch
-shoulder_stretch       | NOT FOUND
+shoulder_stretch       | 0669-xifhB5W.gif         | rear deltoid stretch
 triceps_stretch        | 0643-Z5YStHW.gif         | overhead triceps stretch
 lat_stretch            | 1346-f38OEuO.gif         | kneeling lat stretch
 hamstring_stretch      | 1511-99rWm7w.gif         | hamstring stretch
-quad_stretch           | 1512-qBcKorM.gif         | all fours squad stretch
-calf_stretch           | 1390-17bqEXD.gif         | seated calf stretch (male)
+quad_stretch           | 0613-BWnJR72.gif         | lying (side) quads stretch
+calf_stretch           | 1398-qOKcgVP.gif         | standing calves calf stretch
 glute_stretch          | 1424-DeDThfG.gif         | seated glute stretch
-hip_flexor_stretch     | 1559-2LQkNPW.gif         | exercise ball hip flexor stretch
+hip_flexor_stretch     | 1564-tFGKm99.gif         | intermediate hip flexor and quad stretch

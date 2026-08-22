@@ -1,4 +1,4 @@
-Gym Tracker v9
+Gym Tracker v9.3
 ==============
 
 Changes from v8.5:
@@ -22,3 +22,11 @@ Review selections:
   cat prep-library-selection.txt
 
 The 106 main exercises and prep/stretch movements are copied locally from your own media collection.
+
+Prep matcher tightened in v9.3 to reject jump/roller/band/ball/machine false positives.
+
+
+v9.3 matcher cleanup:
+- Rejects squat-row combinations for bodyweight squat prep.
+- Rejects walking-lunge and wall variations for high-knee prep.
+- A missing prep GIF is intentionally preferred over an incorrect movement.

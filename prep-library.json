@@ -1,21 +1,5 @@
 [
   {
-    "id": "2203",
-    "filename": "2203-8coXSYU.gif",
-    "name": "roller seated shoulder flexor depresor retractor",
-    "category": "chest",
-    "equipment": "roller",
-    "target": "pectorals",
-    "muscle_group": "deltoids",
-    "secondary_muscles": [
-      "deltoids",
-      "triceps"
-    ],
-    "image": "images/2203-8coXSYU.jpg",
-    "gif_url": "videos/2203-8coXSYU.gif",
-    "key": "shoulder_rolls"
-  },
-  {
     "id": "1167",
     "filename": "1167-3uj0Ozg.gif",
     "name": "dynamic chest stretch (male)",
@@ -32,9 +16,9 @@
     "key": "chest_opener"
   },
   {
-    "id": "3011",
-    "filename": "3011-GdMa1ET.gif",
-    "name": "incline scapula push up",
+    "id": "3021",
+    "filename": "3021-jV65tKx.gif",
+    "name": "scapula push-up",
     "category": "chest",
     "equipment": "body weight",
     "target": "serratus anterior",
@@ -43,8 +27,8 @@
       "triceps",
       "shoulders"
     ],
-    "image": "images/3011-GdMa1ET.jpg",
-    "gif_url": "videos/3011-GdMa1ET.gif",
+    "image": "images/3021-jV65tKx.jpg",
+    "gif_url": "videos/3021-jV65tKx.gif",
     "key": "scapular_push"
   },
   {
@@ -65,73 +49,21 @@
     "key": "scapular_pull"
   },
   {
-    "id": "3655",
-    "filename": "3655-J9zIWig.gif",
-    "name": "walking high knees lunge",
-    "category": "cardio",
+    "id": "1460",
+    "filename": "1460-IZVHb27.gif",
+    "name": "walking lunge",
+    "category": "upper legs",
     "equipment": "body weight",
-    "target": "cardiovascular system",
+    "target": "glutes",
     "muscle_group": "quadriceps",
     "secondary_muscles": [
       "quadriceps",
       "hamstrings",
-      "glutes",
       "calves"
     ],
-    "image": "images/3655-J9zIWig.jpg",
-    "gif_url": "videos/3655-J9zIWig.gif",
+    "image": "images/1460-IZVHb27.jpg",
+    "gif_url": "videos/1460-IZVHb27.gif",
     "key": "walking_lunge"
-  },
-  {
-    "id": "3543",
-    "filename": "3543-wfotm7S.gif",
-    "name": "bodyweight drop jump squat",
-    "category": "upper legs",
-    "equipment": "body weight",
-    "target": "glutes",
-    "muscle_group": "quadriceps",
-    "secondary_muscles": [
-      "quadriceps",
-      "hamstrings",
-      "calves"
-    ],
-    "image": "images/3543-wfotm7S.jpg",
-    "gif_url": "videos/3543-wfotm7S.gif",
-    "key": "bodyweight_squat"
-  },
-  {
-    "id": "0984",
-    "filename": "0984-vIICElP.gif",
-    "name": "band lying hip internal rotation",
-    "category": "upper legs",
-    "equipment": "band",
-    "target": "glutes",
-    "muscle_group": "hamstrings",
-    "secondary_muscles": [
-      "hamstrings",
-      "quadriceps"
-    ],
-    "image": "images/0984-vIICElP.jpg",
-    "gif_url": "videos/0984-vIICElP.gif",
-    "key": "hip_circles"
-  },
-  {
-    "id": "3636",
-    "filename": "3636-ealLwvX.gif",
-    "name": "high knee against wall",
-    "category": "cardio",
-    "equipment": "body weight",
-    "target": "cardiovascular system",
-    "muscle_group": "quadriceps",
-    "secondary_muscles": [
-      "quadriceps",
-      "hamstrings",
-      "glutes",
-      "calves"
-    ],
-    "image": "images/3636-ealLwvX.jpg",
-    "gif_url": "videos/3636-ealLwvX.gif",
-    "key": "high_knees"
   },
   {
     "id": "1368",
@@ -162,6 +94,22 @@
     "image": "images/1271-Uto7l43.jpg",
     "gif_url": "videos/1271-Uto7l43.gif",
     "key": "chest_stretch"
+  },
+  {
+    "id": "0669",
+    "filename": "0669-xifhB5W.gif",
+    "name": "rear deltoid stretch",
+    "category": "shoulders",
+    "equipment": "body weight",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids"
+    ],
+    "image": "images/0669-xifhB5W.jpg",
+    "gif_url": "videos/0669-xifhB5W.gif",
+    "key": "shoulder_stretch"
   },
   {
     "id": "0643",
@@ -210,34 +158,34 @@
     "key": "hamstring_stretch"
   },
   {
-    "id": "1512",
-    "filename": "1512-qBcKorM.gif",
-    "name": "all fours squad stretch",
+    "id": "0613",
+    "filename": "0613-BWnJR72.gif",
+    "name": "lying (side) quads stretch",
     "category": "upper legs",
     "equipment": "body weight",
     "target": "quads",
     "muscle_group": "hamstrings",
     "secondary_muscles": [
-      "hamstrings",
-      "glutes"
+      "hamstrings"
     ],
-    "image": "images/1512-qBcKorM.jpg",
-    "gif_url": "videos/1512-qBcKorM.gif",
+    "image": "images/0613-BWnJR72.jpg",
+    "gif_url": "videos/0613-BWnJR72.gif",
     "key": "quad_stretch"
   },
   {
-    "id": "1390",
-    "filename": "1390-17bqEXD.gif",
-    "name": "seated calf stretch (male)",
+    "id": "1398",
+    "filename": "1398-qOKcgVP.gif",
+    "name": "standing calves calf stretch",
     "category": "lower legs",
     "equipment": "body weight",
     "target": "calves",
     "muscle_group": "hamstrings",
     "secondary_muscles": [
-      "hamstrings"
+      "hamstrings",
+      "glutes"
     ],
-    "image": "images/1390-17bqEXD.jpg",
-    "gif_url": "videos/1390-17bqEXD.gif",
+    "image": "images/1398-qOKcgVP.jpg",
+    "gif_url": "videos/1398-qOKcgVP.gif",
     "key": "calf_stretch"
   },
   {
@@ -256,19 +204,19 @@
     "key": "glute_stretch"
   },
   {
-    "id": "1559",
-    "filename": "1559-2LQkNPW.gif",
-    "name": "exercise ball hip flexor stretch",
+    "id": "1564",
+    "filename": "1564-tFGKm99.gif",
+    "name": "intermediate hip flexor and quad stretch",
     "category": "upper legs",
-    "equipment": "stability ball",
-    "target": "glutes",
-    "muscle_group": "quadriceps",
+    "equipment": "rope",
+    "target": "quads",
+    "muscle_group": "hamstrings",
     "secondary_muscles": [
-      "quadriceps",
-      "hamstrings"
+      "hamstrings",
+      "glutes"
     ],
-    "image": "images/1559-2LQkNPW.jpg",
-    "gif_url": "videos/1559-2LQkNPW.gif",
+    "image": "images/1564-tFGKm99.jpg",
+    "gif_url": "videos/1564-tFGKm99.gif",
     "key": "hip_flexor_stretch"
   }
 ]

@@ -31,28 +31,33 @@ GLOBAL_EXCLUDE=["kettlebell","band","stability ball","bosu","medicine ball","res
 # These are searched against the user's full 1,324-entry lookup. The first good
 # match is used. If a particular movement is not present, v9 falls back to text.
 PREP_SPECS = {
-    "arm_circles": [["arm","circle"],["shoulder","circle"]],
-    "shoulder_rolls": [["shoulder","roll"],["shoulder","circle"]],
-    "chest_opener": [["dynamic","chest","stretch"],["chest","stretch"],["arm","swing"]],
-    "thoracic_rotation": [["thoracic","rotation"],["upper","back","rotation"],["reach","to","sky"]],
-    "scapular_push": [["scapular","push"],["scapula","push"]],
-    "scapular_pull": [["scapular","pull"],["scapula","pull"]],
-    "leg_swings": [["leg","swing"],["walking","high","kick"]],
-    "walking_lunge": [["walking","lunge"],["forward","lunge"]],
-    "bodyweight_squat": [["bodyweight","squat"],["body","weight","squat"],["air","squat"]],
-    "hip_circles": [["hip","circle"],["hip","rotation"]],
-    "knee_hugs": [["walking","knee","hug"],["knee","hug"]],
-    "high_knees": [["high","knee"]],
-    "ankle_circles": [["ankle","circle"],["ankle","rotation"]],
-    "chest_stretch": [["chest","stretch"],["front","shoulder","stretch"]],
-    "shoulder_stretch": [["shoulder","stretch"],["cross","body","shoulder"]],
-    "triceps_stretch": [["triceps","stretch"],["overhead","triceps"]],
-    "lat_stretch": [["lat","stretch"],["lats","stretch"],["side","lying","floor","stretch"]],
-    "hamstring_stretch": [["hamstring","stretch"],["runner","stretch"]],
-    "quad_stretch": [["quadriceps","stretch"],["quad","stretch"],["lying","prone","quadriceps"]],
-    "calf_stretch": [["calf","stretch"],["posterior","tibialis","stretch"]],
-    "glute_stretch": [["glute","stretch"],["lying","glute"]],
-    "hip_flexor_stretch": [["hip","flexor","stretch"],["kneeling","hip","flexor"]],
+    # Dynamic prep: prefer simple body-weight movements and reject machine/
+    # resistance variants that merely happen to contain the same words.
+    "arm_circles": {"patterns":[["arm","circle"],["shoulder","circle"],["arm","rotation"]],"exclude":["roller","cable","dumbbell","barbell","band","machine","lying","internal","external"]},
+    "shoulder_rolls": {"patterns":[["shoulder","roll"],["shoulder","circle"]],"exclude":["roller","flexor","depressor","retractor","cable","band","machine","lying"]},
+    "chest_opener": {"patterns":[["dynamic","chest","stretch"],["arm","swing"],["chest","opener"]],"exclude":["machine","cable","dumbbell","barbell"]},
+    "thoracic_rotation": {"patterns":[["thoracic","rotation"],["upper","back","rotation"],["reach","to","sky"],["thread","needle"],["torso","rotation"]],"exclude":["machine","cable","band","weighted"]},
+    "scapular_push": {"patterns":[["scapular","push"],["scapula","push"]],"exclude":["machine","cable"]},
+    "scapular_pull": {"patterns":[["scapular","pull"],["scapula","pull"]],"exclude":["machine","cable"]},
+    "leg_swings": {"patterns":[["leg","swing"],["walking","high","kick"],["straight","leg","kick"]],"exclude":["cable","band","machine","lying","weighted"]},
+    "walking_lunge": {"patterns":[["walking","lunge"],["forward","lunge"]],"exclude":["jump","barbell","dumbbell","weighted","smith"]},
+    "bodyweight_squat": {"patterns":[["bodyweight","squat"],["body","weight","squat"],["air","squat"]],"require_equipment":["body weight"],"exclude":["jump","drop","plyometric","pistol","sissy","split","curtsey","curtsy","cossack","barbell","dumbbell","smith","hack","row","rowing","pull"]},
+    "hip_circles": {"patterns":[["hip","circle"],["standing","hip","rotation"],["hip","opener"]],"exclude":["band","cable","machine","lying","internal","external","ball","weighted"]},
+    "knee_hugs": {"patterns":[["walking","knee","hug"],["knee","hug"],["walking","leg","cradle"]],"exclude":["machine","cable","band","lying"]},
+    "high_knees": {"patterns":[["high","knees"],["high","knee"]],"exclude":["wall","machine","cable","band","walking","lunge","row","lying"]},
+    "ankle_circles": {"patterns":[["ankle","circle"],["ankle","rotation"]],"exclude":["band","machine","cable","weighted"]},
+
+    # Post-workout static stretches: prefer simple standing/kneeling/floor
+    # versions rather than ball, band or machine variants.
+    "chest_stretch": {"patterns":[["chest","stretch"],["front","shoulder","stretch"]],"exclude":["ball","band","machine","cable"]},
+    "shoulder_stretch": {"patterns":[["cross","body","shoulder"],["posterior","shoulder","stretch"],["rear","deltoid","stretch"],["shoulder","stretch"]],"exclude":["ball","band","machine","cable","roller"]},
+    "triceps_stretch": {"patterns":[["overhead","triceps","stretch"],["triceps","stretch"]],"exclude":["ball","band","machine","cable"]},
+    "lat_stretch": {"patterns":[["kneeling","lat","stretch"],["lat","stretch"],["lats","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
+    "hamstring_stretch": {"patterns":[["standing","hamstring","stretch"],["seated","hamstring","stretch"],["hamstring","stretch"],["runner","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
+    "quad_stretch": {"patterns":[["standing","quadriceps","stretch"],["standing","quad","stretch"],["lying","quadriceps","stretch"],["quad","stretch"],["quadriceps","stretch"]],"exclude":["all fours","squad","ball","band","machine","cable"]},
+    "calf_stretch": {"patterns":[["standing","calf","stretch"],["calf","stretch"],["posterior","tibialis","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
+    "glute_stretch": {"patterns":[["seated","glute","stretch"],["lying","glute","stretch"],["glute","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
+    "hip_flexor_stretch": {"patterns":[["kneeling","hip","flexor"],["standing","hip","flexor"],["hip","flexor","stretch"]],"exclude":["exercise ball","stability ball","ball","band","machine","cable","weighted"]},
 }
 
 def norm(v:str)->str:
@@ -114,29 +119,52 @@ def media_item(rec,filename,source,instructions,role=None,key=None):
     if rid in instructions:item['instructions']=instructions[rid]
     return item,gif_src,img_src
 
-def find_prep(lookup,key,groups,used):
+def find_prep(lookup,key,spec,used):
+    patterns=spec.get('patterns',[])
+    excludes=[norm(x) for x in spec.get('exclude',[])]
+    req_equipment={norm(x) for x in spec.get('require_equipment',[])}
     ranked=[]
     for filename,rec in lookup.items():
         if filename in used:continue
-        name=norm(rec.get('name',''))
-        for rank,g in enumerate(groups):
-            if contains_all(name,g):
-                equipment=norm(rec.get('equipment',''))
-                # Prefer body-weight / simple prep movements and concise names.
-                sc=200-rank*25-max(0,len(name.split())-5)*3
-                if equipment=='body weight':sc+=30
-                if any(x in name for x in ['stretch','circle','swing','lunge','squat','rotation','roll','knee']):sc+=8
-                ranked.append((sc,filename,rec));break
+        name=norm(rec.get('name','')); equipment=norm(rec.get('equipment',''))
+        if any(x and x in name for x in excludes):continue
+        if req_equipment and equipment not in req_equipment:continue
+        for rank,g in enumerate(patterns):
+            if not contains_all(name,g):continue
+            # Strongly favour the earliest, most-specific pattern, simple
+            # body-weight movements, and concise names. Exact/near-exact names
+            # beat incidental word matches.
+            sc=260-rank*35-max(0,len(name.split())-5)*4
+            if equipment=='body weight':sc+=35
+            if equipment in {'other',''}:sc+=8
+            gnorm=' '.join(norm(x) for x in g)
+            if name==gnorm:sc+=55
+            elif name.startswith(gnorm) or name.endswith(gnorm):sc+=22
+            if any(x in name for x in ['stretch','circle','swing','lunge','squat','rotation','roll','knee','scapular','scapula']):sc+=8
+            ranked.append((sc,filename,rec));break
     ranked.sort(reverse=True,key=lambda x:x[0])
     return ranked[0][1:] if ranked else (None,None)
 
+def prep_candidates(lookup,spec,limit=5):
+    patterns=spec.get('patterns',[]); excludes=[norm(x) for x in spec.get('exclude',[])]
+    out=[]
+    for filename,rec in lookup.items():
+        name=norm(rec.get('name',''))
+        if any(x and x in name for x in excludes):continue
+        for g in patterns:
+            if contains_all(name,g):
+                out.append((filename,rec.get('name',''),rec.get('equipment','')));break
+        if len(out)>=limit:break
+    return out
+
 def main():
-    ap=argparse.ArgumentParser(description='Build Gym Tracker v9 exercise + prep media libraries from your local exercise GIF collection.')
+    ap=argparse.ArgumentParser(description='Build Gym Tracker v9.4 exercise + prep media libraries from your local exercise GIF collection.')
     ap.add_argument('--source',default='~/gym-exercise-lookup')
     ap.add_argument('--dest',default='.')
     ap.add_argument('--count',type=int,default=TARGET_COUNT)
     ap.add_argument('--dry-run',action='store_true')
     args=ap.parse_args()
+    print('Gym Tracker media builder v9.4')
     source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
     lookup_path=source/'exercise-gif-lookup.json'
     if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
@@ -173,9 +201,12 @@ def main():
 
     # Prep / stretch GIFs are intentionally additional to the 106 main exercises.
     prep=[];prep_media=[];prep_report=[];prep_used=set()
-    for key,groups in PREP_SPECS.items():
-        fn,rec=find_prep(lookup,key,groups,prep_used)
-        if not fn:prep_report.append(f'{key:22} | NOT FOUND');continue
+    for key,spec in PREP_SPECS.items():
+        fn,rec=find_prep(lookup,key,spec,prep_used)
+        if not fn:
+            cand=prep_candidates(lookup,spec)
+            suffix=(' | candidates: '+', '.join(f'{f}={n}' for f,n,e in cand)) if cand else ''
+            prep_report.append(f'{key:22} | NOT FOUND{suffix}');continue
         m=media_item(rec,fn,source,instructions,key=key)
         if not m:prep_report.append(f'{key:22} | MEDIA MISSING | {fn}');continue
         item,gif_src,img_src=m;prep.append(item);prep_media.append((item,gif_src,img_src));prep_used.add(fn);prep_report.append(f'{key:22} | {fn:24} | {item["name"]}')
