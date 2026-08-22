@@ -9,3 +9,5 @@ Changes from v10:
 - All v10 workout rotation, 106-exercise pool, GIFs, prep/stretch flow, progress, history and body-weight tracking retained.
 
 Media is still prepared locally with prepare-exercise-library.py.
+
+V10.2: Prep movements with no matching GIF now render as clear text instruction cards. No broken image placeholders are shown.
