@@ -3,6 +3,6 @@
   "short_name": "Gym",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#071a12",
-  "theme_color": "#0c3b2e"
+  "background_color": "#06170f",
+  "theme_color": "#0d5035"
 }
