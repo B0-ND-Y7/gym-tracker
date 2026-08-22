@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gym Tracker">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Gym Tracker</title>
+  <style>
+    :root{
+      color-scheme: light dark;
+      --bg:#0b1020; --panel:#121a2d; --panel2:#182238; --text:#f6f7fb;
+      --muted:#a9b1c3; --border:#2b3650; --accent:#7dd3fc; --good:#86efac;
+      --danger:#fca5a5; --input:#0f172a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:760px;margin:0 auto;padding:18px 14px 90px}
+    h1{font-size:28px;margin:8px 0 4px}
+    h2{font-size:20px;margin:0}
+    p{color:var(--muted);line-height:1.45}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .pill{font-size:12px;padding:6px 9px;border:1px solid var(--border);border-radius:999px;color:var(--muted)}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}
+    button,.btn{min-height:44px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);font-weight:700;padding:10px 12px}
+    button.active{outline:2px solid var(--accent);border-color:transparent}
+    button:active{transform:translateY(1px)}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;margin:12px 0}
+    .exercise-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .exercise-name{font-weight:800;font-size:17px}
+    .target{color:var(--muted);font-size:13px;margin-top:3px}
+    .sets{display:grid;grid-template-columns:42px 1fr 1fr 54px;gap:8px;align-items:center;margin-top:12px}
+    .sets .head{font-size:12px;color:var(--muted);font-weight:700}
+    input[type=number]{width:100%;min-height:42px;border:1px solid var(--border);border-radius:10px;background:var(--input);color:var(--text);padding:8px;font-size:16px}
+    .check{display:flex;justify-content:center}
+    input[type=checkbox]{width:24px;height:24px;accent-color:#22c55e}
+    .prev{font-size:12px;color:var(--muted);margin-top:10px}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .primary{background:#0ea5e9;border-color:#0ea5e9;color:white}
+    .good{background:#15803d;border-color:#15803d;color:white}
+    .danger{background:#7f1d1d;border-color:#7f1d1d;color:white}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+    .metric{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center}
+    .metric b{display:block;font-size:20px}
+    .metric span{font-size:12px;color:var(--muted)}
+    details{margin-top:14px}
+    summary{cursor:pointer;font-weight:800}
+    .history-row{border-top:1px solid var(--border);padding:10px 0}
+    .history-row:first-child{border-top:0}
+    .small{font-size:12px;color:var(--muted)}
+    .banner{background:#11233b;border:1px solid #1f466e;padding:12px;border-radius:14px;margin:12px 0;color:#d8efff}
+    .weekend-note{font-size:14px;color:var(--muted)}
+    .footer{position:fixed;left:0;right:0;bottom:0;background:rgba(11,16,32,.95);backdrop-filter:blur(12px);border-top:1px solid var(--border)}
+    .footer-inner{max-width:760px;margin:auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    @media (max-width:520px){
+      .tabs{grid-template-columns:repeat(2,1fr)}
+      .summary{grid-template-columns:1fr 1fr 1fr}
+      .sets{grid-template-columns:34px 1fr 1fr 48px}
+      .wrap{padding-top:10px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>Gym Tracker</h1>
+      <div class="small">3-day full-body machine plan</div>
+    </div>
+    <span class="pill" id="statusPill">Saved locally</span>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="summary">
+    <div class="metric"><b id="doneSets">0</b><span>sets done</span></div>
+    <div class="metric"><b id="totalSets">0</b><span>working sets</span></div>
+    <div class="metric"><b id="progressPct">0%</b><span>session</span></div>
+  </div>
+
+  <div id="sessionBanner" class="banner"></div>
+  <main id="workout"></main>
+
+  <div class="actions">
+    <button id="finishBtn" class="good">Finish & save workout</button>
+    <button id="clearBtn">Clear today</button>
+  </div>
+
+  <details>
+    <summary>Workout history</summary>
+    <div id="history"></div>
+  </details>
+
+  <details>
+    <summary>Backup / restore</summary>
+    <p class="small">Export a JSON backup occasionally. Useful before changing phones or clearing Safari website data.</p>
+    <div class="actions">
+      <button id="exportBtn">Export backup</button>
+      <label class="btn" for="importFile">Import backup</label>
+      <input id="importFile" type="file" accept="application/json" hidden>
+      <button id="wipeBtn" class="danger">Wipe all data</button>
+    </div>
+  </details>
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <button id="prevBtn">← Previous</button>
+    <button id="nextBtn" class="primary">Next workout →</button>
+  </div>
+</div>
+
+<script>
+const workouts = {
+  Monday: {
+    subtitle: "Full Body A",
+    exercises: [
+      ["Leg Press",3,"6–8"],
+      ["Machine Chest Press",3,"6–8"],
+      ["Lat Pulldown",3,"8–10"],
+      ["Seated Leg Curl",3,"8–10"],
+      ["Seated Cable Row",3,"8–10"],
+      ["Machine Shoulder Press",2,"8–10"],
+      ["Ab Crunch Machine",2,"10–15"],
+      ["Incline Treadmill",1,"10–20 min"]
+    ]
+  },
+  Wednesday: {
+    subtitle: "Full Body B",
+    exercises: [
+      ["Hack Squat / V-Squat",3,"8–10"],
+      ["Incline Machine Chest Press",3,"8–10"],
+      ["Chest-Supported Row Machine",3,"8–10"],
+      ["Leg Extension",3,"10–12"],
+      ["Leg Curl",3,"10–12"],
+      ["Machine Lateral Raise",2,"10–15"],
+      ["Bicep Curl Machine / Cable Curl",2,"10–12"],
+      ["Tricep Pushdown",2,"10–12"],
+      ["Bike / Treadmill",1,"10–20 min"]
+    ]
+  },
+  Friday: {
+    subtitle: "Full Body C",
+    exercises: [
+      ["Leg Press",3,"8–10"],
+      ["Machine Chest Press",3,"8–10"],
+      ["Lat Pulldown / Assisted Pull-up",3,"8–10"],
+      ["Seated Row Machine",3,"8–10"],
+      ["Leg Curl",3,"10–12"],
+      ["Machine Shoulder Press",2,"8–10"],
+      ["Calf Raise Machine",2,"10–15"],
+      ["Ab Crunch Machine",2,"10–15"],
+      ["Incline Treadmill",1,"10–20 min"]
+    ]
+  },
+  Weekend: {
+    subtitle: "Optional — nothing essential",
+    exercises: [
+      ["Incline Treadmill / Bike",1,"20–30 min"],
+      ["Bicep Curl",3,"10–12"],
+      ["Tricep Pushdown",3,"10–12"],
+      ["Lateral Raise",3,"12–15"],
+      ["Calf Raise",3,"10–15"],
+      ["Ab Crunch Machine",3,"10–15"]
+    ]
+  }
+};
+
+const order = ["Monday","Wednesday","Friday","Weekend"];
+let current = localStorage.getItem("gym-current") || bestDay();
+let state = JSON.parse(localStorage.getItem("gym-state") || "{}");
+let history = JSON.parse(localStorage.getItem("gym-history") || "[]");
+
+function bestDay(){
+  const d = new Date().getDay();
+  if (d===1 || d===2) return "Monday";
+  if (d===3 || d===4) return "Wednesday";
+  if (d===5) return "Friday";
+  return "Weekend";
+}
+function keyFor(day,i){ return day+"::"+i; }
+function getEntry(day,i,sets){
+  const k=keyFor(day,i);
+  if(!state[k]) state[k]={sets:Array.from({length:sets},()=>({w:"",r:"",d:false}))};
+  while(state[k].sets.length<sets) state[k].sets.push({w:"",r:"",d:false});
+  return state[k];
+}
+function save(){
+  localStorage.setItem("gym-state",JSON.stringify(state));
+  localStorage.setItem("gym-current",current);
+  localStorage.setItem("gym-history",JSON.stringify(history));
+  document.getElementById("statusPill").textContent="Saved locally";
+}
+function lastFor(name){
+  for(const h of history){
+    const ex=h.exercises.find(x=>x.name===name);
+    if(ex) return ex;
+  }
+  return null;
+}
+function renderTabs(){
+  const t=document.getElementById("tabs"); t.innerHTML="";
+  order.forEach(day=>{
+    const b=document.createElement("button");
+    b.textContent=day; b.className=day===current?"active":"";
+    b.addEventListener("click",()=>{current=day;save();render();});
+    t.appendChild(b);
+  });
+}
+function render(){
+  renderTabs();
+  const info=workouts[current];
+  document.getElementById("sessionBanner").innerHTML =
+    "<strong>"+current+" — "+info.subtitle+"</strong><br><span class='small'>First 1–2 weeks: do only 2 working sets on exercises that normally show 3.</span>";
+  const out=document.getElementById("workout"); out.innerHTML="";
+  info.exercises.forEach((ex,i)=>{
+    const [name,sets,target]=ex;
+    const entry=getEntry(current,i,sets);
+    const prev=lastFor(name);
+    const card=document.createElement("section");
+    card.className="card";
+    let rows="";
+    for(let s=0;s<sets;s++){
+      const x=entry.sets[s];
+      const cardio = target.includes("min");
+      rows += `
+        <div class="${s===0?'head':''}">${s===0?'SET':''}</div>
+        <div class="${s===0?'head':''}">${s===0?(cardio?'MINUTES':'WEIGHT'):''}</div>
+        <div class="${s===0?'head':''}">${s===0?(cardio?'LEVEL / NOTE':'REPS'):''}</div>
+        <div class="${s===0?'head':''}">${s===0?'DONE':''}</div>
+        <div>${s+1}</div>
+        <input aria-label="${name} set ${s+1} weight" type="number" inputmode="decimal" step="0.5" data-i="${i}" data-s="${s}" data-f="w" value="${x.w}">
+        <input aria-label="${name} set ${s+1} reps" type="number" inputmode="numeric" step="1" data-i="${i}" data-s="${s}" data-f="r" value="${x.r}">
+        <div class="check"><input aria-label="${name} set ${s+1} done" type="checkbox" data-i="${i}" data-s="${s}" data-f="d" ${x.d?'checked':''}></div>
+      `;
+    }
+    let prevText="No previous session yet";
+    if(prev){
+      prevText="Last time: "+prev.sets.map((x,idx)=>`S${idx+1} ${x.w||"–"}kg × ${x.r||"–"}`).join(" • ");
+    }
+    card.innerHTML=`
+      <div class="exercise-head">
+        <div><div class="exercise-name">${name}</div><div class="target">Target: ${sets} × ${target}</div></div>
+      </div>
+      <div class="sets">${rows}</div>
+      <div class="prev">${prevText}</div>`;
+    out.appendChild(card);
+  });
+
+  out.querySelectorAll("input").forEach(el=>{
+    el.addEventListener("input",updateField);
+    el.addEventListener("change",updateField);
+  });
+  updateSummary();
+  renderHistory();
+}
+function updateField(e){
+  const i=+e.target.dataset.i, s=+e.target.dataset.s, f=e.target.dataset.f;
+  const sets=workouts[current].exercises[i][1];
+  const entry=getEntry(current,i,sets);
+  entry.sets[s][f] = f==="d" ? e.target.checked : e.target.value;
+  save(); updateSummary();
+}
+function updateSummary(){
+  let done=0,total=0;
+  workouts[current].exercises.forEach((ex,i)=>{
+    const entry=getEntry(current,i,ex[1]);
+    entry.sets.forEach(x=>{total++; if(x.d)done++;});
+  });
+  document.getElementById("doneSets").textContent=done;
+  document.getElementById("totalSets").textContent=total;
+  document.getElementById("progressPct").textContent=Math.round(done/total*100)+"%";
+}
+function clearCurrent(){
+  workouts[current].exercises.forEach((ex,i)=>delete state[keyFor(current,i)]);
+  save();render();
+}
+function finishWorkout(){
+  const record={
+    day:current,
+    date:new Date().toISOString(),
+    exercises:workouts[current].exercises.map((ex,i)=>({
+      name:ex[0],
+      sets:getEntry(current,i,ex[1]).sets.map(x=>({...x}))
+    }))
+  };
+  history.unshift(record);
+  history=history.slice(0,100);
+  clearCurrent();
+  alert("Workout saved. Nice one.");
+}
+function renderHistory(){
+  const el=document.getElementById("history");
+  if(!history.length){el.innerHTML="<p class='small'>No completed workouts yet.</p>";return;}
+  el.innerHTML=history.slice(0,20).map(h=>{
+    const d=new Date(h.date);
+    return `<div class="history-row"><strong>${h.day}</strong> — ${d.toLocaleDateString()}<div class="small">${
+      h.exercises.map(x=>{
+        const filled=x.sets.filter(s=>s.w||s.r).length;
+        return filled?`${x.name}: ${x.sets.filter(s=>s.w||s.r).map(s=>`${s.w||"–"}×${s.r||"–"}`).join(", ")}`:"";
+      }).filter(Boolean).join(" · ")
+    }</div></div>`;
+  }).join("");
+}
+document.getElementById("finishBtn").addEventListener("click",()=>{
+  if(confirm("Save this workout to history and clear the session?")) finishWorkout();
+});
+document.getElementById("clearBtn").addEventListener("click",()=>{
+  if(confirm("Clear today's entered weights/reps?")) clearCurrent();
+});
+document.getElementById("prevBtn").addEventListener("click",()=>{
+  current=order[(order.indexOf(current)+order.length-1)%order.length];save();render();
+});
+document.getElementById("nextBtn").addEventListener("click",()=>{
+  current=order[(order.indexOf(current)+1)%order.length];save();render();
+});
+document.getElementById("exportBtn").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify({state,history,current},null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="gym-tracker-backup.json";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
+document.getElementById("importFile").addEventListener("change",async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{
+    const x=JSON.parse(await f.text());
+    if(!x || typeof x!=="object") throw new Error();
+    state=x.state||{};history=x.history||[];current=x.current||"Monday";save();render();
+    alert("Backup imported.");
+  }catch{alert("That backup file doesn't look valid.");}
+});
+document.getElementById("wipeBtn").addEventListener("click",()=>{
+  if(confirm("Wipe ALL workout data and history? This cannot be undone.")){
+    state={};history=[];save();render();
+  }
+});
+
+render();
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
