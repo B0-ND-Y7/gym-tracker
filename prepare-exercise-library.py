@@ -158,13 +158,13 @@ def prep_candidates(lookup,spec,limit=5):
     return out
 
 def main():
-    ap=argparse.ArgumentParser(description='Build Gym Tracker v9.4 exercise + prep media libraries from your local exercise GIF collection.')
+    ap=argparse.ArgumentParser(description='Build Gym Tracker v10 exercise + prep media libraries from your local exercise GIF collection.')
     ap.add_argument('--source',default='~/gym-exercise-lookup')
     ap.add_argument('--dest',default='.')
     ap.add_argument('--count',type=int,default=TARGET_COUNT)
     ap.add_argument('--dry-run',action='store_true')
     args=ap.parse_args()
-    print('Gym Tracker media builder v9.4')
+    print('Gym Tracker media builder v10')
     source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
     lookup_path=source/'exercise-gif-lookup.json'
     if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
