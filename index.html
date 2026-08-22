@@ -1,645 +1,98 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0f5132">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Gym Tracker">
-  <link rel="manifest" href="manifest.webmanifest">
-  <title>Gym Tracker</title>
-  <style>
-    :root{
-      --bg:#071a12;
-      --bg2:#0b241a;
-      --panel:#102d21;
-      --panel2:#143727;
-      --panel3:#193f2d;
-      --line:#245740;
-      --text:#f3fbf6;
-      --muted:#b5d1c0;
-      --accent:#55d98e;
-      --accent2:#8defb8;
-      --good:#2caf65;
-      --danger:#8f3741;
-      --shadow:0 14px 30px rgba(0,0,0,.25);
-      --radius:22px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(85,217,142,.16), transparent 22%),
-        radial-gradient(circle at top left, rgba(141,239,184,.08), transparent 20%),
-        linear-gradient(180deg,var(--bg),var(--bg2));
-    }
-    .wrap{max-width:940px;margin:0 auto;padding:16px 14px 110px}
-    .hero,.panel,.exercise,.history-card,details{
-      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.025));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-    }
-    .hero{padding:18px;margin-bottom:14px}
-    .hero-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-    h1{margin:0 0 6px;font-size:30px;line-height:1.05}
-    h2{margin:0;font-size:22px}
-    h3{margin:0;font-size:18px}
-    p{margin:6px 0;color:var(--muted);line-height:1.45}
-    .small{font-size:12px;color:var(--muted)}
-    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
-    .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-    .quick{padding:12px 13px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
-    .quick b{display:block;margin-bottom:4px;font-size:14px}
-    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 12px}
-    button,.btn{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel3),var(--panel2));color:var(--text);min-height:46px;padding:10px 12px;font-weight:750;cursor:pointer}
-    button:hover,.btn:hover{filter:brightness(1.05)}
-    button.active{background:linear-gradient(180deg,rgba(85,217,142,.26),rgba(85,217,142,.12));border-color:#49c97b;box-shadow:0 0 0 2px rgba(85,217,142,.12) inset}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
-    .stat{padding:14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);text-align:center}
-    .stat b{display:block;font-size:24px;margin-bottom:4px}
-    .stat span{font-size:12px;color:var(--muted)}
-    .panel{padding:16px;margin-bottom:14px}
-    .session-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
-    .session-grid{display:grid;grid-template-columns:1.15fr .95fr;gap:12px}
-    .subgrid{display:grid;gap:10px}
-    .box{padding:12px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
-    .box .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9ecab0;font-weight:800;margin-bottom:6px}
-    ul{margin:8px 0 0 18px;padding:0}
-    li{margin:6px 0;color:var(--muted)}
-    .mini-tags,.muscles{display:flex;flex-wrap:wrap;gap:7px}
-    .tag{font-size:12px;padding:6px 9px;border-radius:999px;border:1px solid rgba(85,217,142,.2);background:rgba(85,217,142,.1);color:#e5fced}
-    .exercise{padding:14px;margin:14px 0}
-    .exercise-header{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:start}
-    .thumb{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0c2018;aspect-ratio:4/3;padding:0;min-height:auto}
-    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .zoom{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 9px;font-size:12px;color:#fff}
-    .ex-title{font-size:20px;font-weight:850;line-height:1.12;margin-bottom:4px}
-    .target{font-size:13px;color:var(--muted);margin-bottom:8px}
-    .exercise-copy{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    .sets{margin-top:14px;border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(255,255,255,.025)}
-    .set-head,.set-row{display:grid;grid-template-columns:42px 1fr 1fr 54px;gap:8px;align-items:center}
-    .set-head{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:8px}
-    .set-row{margin-top:8px}
-    input[type=number]{width:100%;min-height:44px;border:1px solid var(--line);border-radius:12px;background:#0c2018;color:var(--text);padding:8px 10px;font-size:16px}
-    .check{display:flex;justify-content:center}
-    input[type=checkbox]{width:24px;height:24px;accent-color:#3ed276}
-    .prev{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.08);font-size:13px;color:var(--muted)}
-    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-    .good{background:linear-gradient(180deg,#59d18a,#2caf65);border-color:#57d88d;color:#fff}
-    .danger{background:linear-gradient(180deg,#a94752,#852e37);border-color:#a94752;color:#fff}
-    details{padding:14px;margin-top:14px}
-    summary{cursor:pointer;font-weight:800}
-    .history-row{padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
-    .history-row:first-child{border-top:0}
-    .footer{position:fixed;left:0;right:0;bottom:0;background:rgba(7,26,18,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-    .footer-inner{max-width:940px;margin:auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .credit-list{display:grid;gap:8px;margin-top:10px}
-    .credit{padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-    a{color:#a0f4c2}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
-    .modal.open{display:flex}
-    .modal-card{max-width:min(900px,100%);max-height:100%;display:grid;gap:10px}
-    .modal-card img{max-width:100%;max-height:78vh;border-radius:18px;border:1px solid rgba(255,255,255,.15)}
-    .close-btn{justify-self:end;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
-    @media (max-width:780px){
-      .quick-grid,.stats,.tabs,.session-grid,.exercise-copy{grid-template-columns:1fr}
-      .exercise-header{grid-template-columns:1fr}
-      .thumb{max-width:360px}
-    }
-    @media (max-width:520px){
-      .set-head,.set-row{grid-template-columns:34px 1fr 1fr 48px}
-      h1{font-size:28px}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c3b2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gym Tracker">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Gym Tracker</title>
+<style>
+:root{--bg:#071a12;--panel:#0e2b20;--panel2:#123629;--line:#24543f;--text:#f5fbf7;--muted:#b6cfbf;--accent:#55d98e;--accent2:#8ceab5;--white:#fff;--ink:#17231c;--soft:#eef7f1;--danger:#9b3b46;--shadow:0 12px 28px rgba(0,0,0,.22)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:radial-gradient(circle at top right,rgba(85,217,142,.16),transparent 24%),linear-gradient(180deg,#071a12,#0a2118);color:var(--text)}
+.wrap{max-width:900px;margin:auto;padding:14px 14px 110px}.hero,.panel,.exercise,details{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.025));border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:18px}.hero-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}h1{margin:0 0 5px;font-size:30px}h2{margin:0;font-size:23px}h3{margin:0;font-size:18px}p{margin:6px 0;color:var(--muted);line-height:1.45}.small{font-size:12px;color:var(--muted)}.pill{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:rgba(255,255,255,.03)}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.rule{border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:16px;padding:11px}.rule b{display:block;margin-bottom:3px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 10px}
+button,.btn{min-height:44px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#173f2f,#123327);color:var(--text);font-weight:750;padding:9px 11px;cursor:pointer}button.active{background:linear-gradient(180deg,rgba(85,217,142,.28),rgba(85,217,142,.12));border-color:#51ce84}.good{background:linear-gradient(180deg,#55d98e,#2cac65);border-color:#55d98e}.danger{background:linear-gradient(180deg,#ad4752,#87313a);border-color:#ad4752}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}.stat{border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;background:rgba(255,255,255,.03)}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
+.panel{padding:15px;margin-bottom:12px}.session-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.session-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.box{border:1px solid var(--line);border-radius:16px;padding:11px;background:rgba(255,255,255,.03)}.label{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;color:#9fc8b2;margin-bottom:6px}ul{padding-left:18px;margin:7px 0}li{margin:5px 0;color:var(--muted);line-height:1.4}
+.exercise{padding:14px;margin:12px 0}.ex-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.ex-title{font-size:20px;font-weight:850}.target{font-size:13px;color:var(--muted);margin-top:4px}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tag{font-size:12px;padding:5px 8px;border-radius:999px;background:rgba(85,217,142,.1);border:1px solid rgba(85,217,142,.2);color:#e7fbed}
+.art-card{margin-top:12px;background:#fff;border-radius:18px;border:1px solid #dbe7df;padding:10px;overflow:hidden}.art-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.art-frame{position:relative;min-height:210px;background:#fff;border:1px solid #edf1ee;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:8px}.art-frame img{width:100%;height:205px;object-fit:contain;display:block}.art-label{position:absolute;left:9px;bottom:8px;background:#0d6f43;color:white;font-size:11px;font-weight:800;border-radius:999px;padding:5px 8px}.art-caption{color:#43564a;font-size:12px;margin-top:7px;text-align:center}
+.guide{display:grid;grid-template-columns:1.15fr .85fr;gap:10px;margin-top:11px}.guide .box{background:rgba(255,255,255,.025)}details.form-detail{box-shadow:none;margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.025)}summary{cursor:pointer;font-weight:800}
+.sets{margin-top:12px;border:1px solid var(--line);border-radius:16px;padding:11px;background:rgba(255,255,255,.025)}.set-head,.set-row{display:grid;grid-template-columns:36px 1fr 1fr 50px;gap:8px;align-items:center}.set-head{font-size:11px;color:var(--muted);font-weight:800}.set-row{margin-top:8px}input[type=number]{width:100%;min-height:42px;border:1px solid var(--line);border-radius:11px;background:#0a2118;color:var(--text);font-size:16px;padding:8px}input[type=checkbox]{width:23px;height:23px;accent-color:#3fd579}.check{display:flex;justify-content:center}.prev{font-size:12px;color:var(--muted);border-top:1px dashed rgba(255,255,255,.09);padding-top:9px;margin-top:10px}
+.cardio-card{display:grid;grid-template-columns:150px 1fr;gap:13px;align-items:center}.cardio-art{background:white;border-radius:16px;padding:8px}.cardio-art img{width:100%;display:block}.cardio-track{display:grid;grid-template-columns:1fr 60px;gap:8px;margin-top:9px;align-items:center}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}details{padding:13px;margin-top:12px}.history-row{border-top:1px solid rgba(255,255,255,.07);padding:9px 0}.history-row:first-child{border-top:0}.credits a{color:#9ceab9}.footer{position:fixed;left:0;right:0;bottom:0;background:rgba(7,26,18,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line)}.footer-inner{max-width:900px;margin:auto;padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:720px){.rules,.stats,.tabs,.session-grid,.guide{grid-template-columns:1fr}.art-frame{min-height:180px}.art-frame img{height:180px}.cardio-card{grid-template-columns:1fr}.cardio-art{max-width:280px}.wrap{padding-top:10px}}@media(max-width:430px){.art-pair{grid-template-columns:1fr 1fr}.art-frame{min-height:150px;padding:4px}.art-frame img{height:150px}.set-head,.set-row{grid-template-columns:30px 1fr 1fr 44px}}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <section class="hero">
-    <div class="hero-top">
-      <div>
-        <h1>Gym Tracker</h1>
-        <p>Simple full-body machine plan for <b>Monday / Wednesday / Friday</b> with an optional easy <b>weekend +1 day</b>. The 3 main days already cover everything.</p>
-      </div>
-      <span class="pill" id="statusPill">Saved locally on this device</span>
-    </div>
-    <div class="quick-grid">
-      <div class="quick"><b>How hard?</b><span class="small">Pick a weight that feels challenging but still leaves about <b>2 reps in reserve</b>. If form goes to shit, the weight is too heavy.</span></div>
-      <div class="quick"><b>Rest times</b><span class="small"><b>90–120 sec</b> after bigger lifts like leg press, rows and chest press. <b>60–90 sec</b> on curls, laterals, calves and abs.</span></div>
-      <div class="quick"><b>Progress</b><span class="small">When you hit the <b>top end of the rep range on every set</b>, add a small jump next time. Usually 2.5–5 kg on machines, less on arms.</span></div>
-    </div>
-  </section>
-
-  <div class="tabs" id="tabs"></div>
-
-  <div class="stats">
-    <div class="stat"><b id="doneSets">0</b><span>sets done</span></div>
-    <div class="stat"><b id="totalSets">0</b><span>working sets</span></div>
-    <div class="stat"><b id="progressPct">0%</b><span>session done</span></div>
-    <div class="stat"><b id="exerciseCount">0</b><span>exercises</span></div>
+<section class="hero">
+  <div class="hero-top"><div><h1>Gym Tracker</h1><p>Three straightforward full-body sessions each week, plus one optional weekend session.</p></div><span class="pill" id="statusPill">Saved on this device</span></div>
+  <div class="rules">
+    <div class="rule"><b>Effort</b><span class="small">Finish most sets with about 2 good reps still available.</span></div>
+    <div class="rule"><b>Rest</b><span class="small">2 minutes on the main machines. 60–90 seconds on arms, calves and abs.</span></div>
+    <div class="rule"><b>Progress</b><span class="small">Hit the top of the rep range on every set, then add the smallest sensible weight increase next time.</span></div>
   </div>
-
-  <section class="panel" id="sessionPanel"></section>
-  <main id="workout"></main>
-
-  <div class="actions">
-    <button id="finishBtn" class="good">Finish & save workout</button>
-    <button id="clearBtn">Clear today</button>
-  </div>
-
-  <details>
-    <summary>Workout history</summary>
-    <div id="history"></div>
-  </details>
-
-  <details>
-    <summary>Backup / restore</summary>
-    <p class="small">Export a JSON backup once in a while. Useful if you change phone or wipe Safari data.</p>
-    <div class="actions">
-      <button id="exportBtn">Export backup</button>
-      <label class="btn" for="importFile">Import backup</label>
-      <input id="importFile" type="file" accept="application/json" hidden>
-      <button id="wipeBtn" class="danger">Wipe all data</button>
-    </div>
-  </details>
-
-  <details>
-    <summary>Photo credits</summary>
-    <p class="small">Exercise photos in this app are bundled from free-to-use Pexels images. Attribution is not required, but here's a courtesy list anyway.</p>
-    <div class="credit-list" id="credits"></div>
-  </details>
+</section>
+<div class="tabs" id="tabs"></div>
+<div class="stats"><div class="stat"><b id="doneSets">0</b><span>sets done</span></div><div class="stat"><b id="totalSets">0</b><span>working sets</span></div><div class="stat"><b id="progressPct">0%</b><span>session complete</span></div></div>
+<section class="panel" id="sessionPanel"></section>
+<main id="workout"></main>
+<section class="panel" id="cardioPanel"></section>
+<div class="actions"><button class="good" id="finishBtn">Finish and save workout</button><button id="clearBtn">Clear today</button></div>
+<details><summary>Workout history</summary><div id="history"></div></details>
+<details><summary>Backup and restore</summary><p class="small">Export a backup occasionally, especially before changing phone or clearing browser data.</p><div class="actions"><button id="exportBtn">Export backup</button><label class="btn" for="importFile">Import backup</label><input id="importFile" type="file" accept="application/json" hidden><button id="wipeBtn" class="danger">Wipe all data</button></div></details>
+<details class="credits"><summary>Illustration credits</summary><p class="small">Exercise illustrations are by Everkinetic and are reused from Wikimedia Commons under CC BY-SA 3.0. The images are stored locally in this app so they remain available offline.</p><div id="credits"></div></details>
 </div>
-
-<div class="footer">
-  <div class="footer-inner">
-    <button id="prevBtn">← Previous</button>
-    <button id="nextBtn" class="good">Next workout →</button>
-  </div>
-</div>
-
-<div class="modal" id="imageModal" aria-hidden="true">
-  <div class="modal-card">
-    <button class="close-btn" id="closeModal">Close</button>
-    <img id="modalImg" alt="Exercise image">
-    <p class="small" id="modalCaption"></p>
-  </div>
-</div>
-
+<div class="footer"><div class="footer-inner"><button id="prevBtn">← Previous</button><button class="good" id="nextBtn">Next workout →</button></div></div>
 <script>
-const exerciseInfo = {
-  legPress:{
-    image:'img/leg-press.png',
-    muscles:['Quads','Glutes','Hamstrings'],
-    summary:'Main lower-body press. Great beginner leg builder without needing to balance a bar.',
-    setup:['Set the seat so your knees are bent but not jammed into your chest at the bottom.','Place feet around shoulder width and keep your whole foot planted on the platform.','Unrack safely and keep your lower back glued to the pad.'],
-    perform:['Lower under control until you get a deep but comfortable bend.','Drive the platform away through the middle of your foot.','Stop just short of hard lockout, then repeat.'],
-    avoid:['Don\'t bounce out of the bottom.','Don\'t let your knees cave in.']
-  },
-  chestPress:{
-    image:'img/chest-press.png',
-    muscles:['Chest','Front delts','Triceps'],
-    summary:'Simple horizontal push to build chest and pressing strength.',
-    setup:['Set the seat so the handles line up around mid chest.','Sit right back into the pad with shoulders down and back.','Keep wrists straight and feet planted.'],
-    perform:['Push the handles away in a smooth line.','Stop just before your elbows lock fully hard.','Bring the handles back under control until you feel a stretch in the chest.'],
-    avoid:['Don\'t shrug your shoulders forward.','Don\'t cut the range short unless the machine feels awkward on your shoulders.']
-  },
-  inclineChestPress:{
-    image:'img/chest-press.png',
-    muscles:['Upper chest','Front delts','Triceps'],
-    summary:'Chest press with a slightly higher pressing angle to emphasise upper chest.',
-    setup:['Adjust the seat so the handles start at upper-chest level.','Pin your upper back into the seat and keep your chest up.'],
-    perform:['Press up and away in control.','Lower until the handles come back to a strong stretch without your shoulders rolling forward.'],
-    avoid:['Don\'t flare elbows excessively.','Don\'t lift your arse off the seat.']
-  },
-  latPulldown:{
-    image:'img/lat-pulldown.png',
-    muscles:['Lats','Upper back','Biceps'],
-    summary:'Vertical pull for back width. Think elbows driving down rather than arms yanking.',
-    setup:['Lock your knees under the pad and take a grip just outside shoulder width.','Sit tall with chest up and a slight lean back.'],
-    perform:['Pull the bar to the top of your chest.','Drive elbows down toward your sides.','Control the bar all the way back up and let your lats stretch.'],
-    avoid:['Don\'t turn it into a backward row.','Don\'t yank or use momentum.']
-  },
-  row:{
-    image:'img/seated-row.png',
-    muscles:['Mid back','Lats','Rear delts','Biceps'],
-    summary:'Horizontal pull to build thickness through the mid-back and teach good posture.',
-    setup:['Set the seat or chest pad so you can reach the handles without rounding badly.','Keep your chest proud and shoulders away from your ears.'],
-    perform:['Pull the handle toward your lower ribs or stomach.','Squeeze your shoulder blades together briefly.','Return slowly until your arms are straight and your back is stretched.'],
-    avoid:['Don\'t jerk your torso back.','Don\'t shrug the movement into your neck.']
-  },
-  shoulderPress:{
-    image:'img/shoulder-press.png',
-    muscles:['Shoulders','Triceps'],
-    summary:'Easy machine overhead press for strength in the shoulders without needing much balance.',
-    setup:['Set the seat so handles start around ear or shoulder height.','Brace your torso and keep forearms roughly vertical.'],
-    perform:['Press overhead smoothly.','Lower until elbows come back to a strong start position.'],
-    avoid:['Don\'t slam the stack down.','Don\'t arch your lower back hard.']
-  },
-  legCurl:{
-    image:'img/leg-curl.png',
-    muscles:['Hamstrings'],
-    summary:'Direct hamstring work by bending at the knee.',
-    setup:['Line up the machine pivot with your knee joint.','Set the roller pad so it sits comfortably against the lower leg/ankle area.','Brace into the seat or pad before starting.'],
-    perform:['Curl the pad smoothly.','Squeeze the hamstrings for a beat.','Lower slowly so the hamstrings stay loaded.'],
-    avoid:['Don\'t whip the weight.','Don\'t let your hips lift off the pad.']
-  },
-  hackSquat:{
-    image:'img/leg-press.png',
-    muscles:['Quads','Glutes'],
-    summary:'Machine squat pattern that lets you train legs hard without worrying about barbell balance.',
-    setup:['Place shoulders under the pads and feet around shoulder width.','Keep your whole foot flat and your back firmly supported.'],
-    perform:['Lower until you reach a comfortable depth.','Drive up through your feet and keep knees tracking over toes.'],
-    avoid:['Don\'t bounce in the bottom.','Don\'t let your knees collapse inward.']
-  },
-  legExtension:{
-    image:'img/leg-extension.png',
-    muscles:['Quads'],
-    summary:'Direct quad isolation. Brilliant for learning to feel the front of the thighs working.',
-    setup:['Align the machine pivot with your knee.','Set the pad just above your ankles and sit back into the seat.'],
-    perform:['Straighten your knees to raise the pad.','Squeeze your quads briefly at the top.','Lower back down slowly.'],
-    avoid:['Don\'t kick the weight up explosively.','Don\'t swing your hips forward.']
-  },
-  lateralRaise:{
-    image:'img/shoulder-press.png',
-    muscles:['Side delts'],
-    summary:'Lighter shoulder isolation to build shoulder width.',
-    setup:['Set the machine handles or pads to the start position that feels natural.','Keep a soft bend in the elbows.'],
-    perform:['Raise out to the side until about shoulder height.','Lower slowly and stay in control the whole time.'],
-    avoid:['Don\'t swing.','Don\'t chase silly heavy weight on this one.']
-  },
-  bicepCurl:{
-    image:'img/bicep-curl.png',
-    muscles:['Biceps','Forearms'],
-    summary:'Arm curl to build biceps and improve pulling strength support.',
-    setup:['If using a machine, line your elbows up with the pivot.','Keep chest up and upper arms still.'],
-    perform:['Curl the handle or bar up.','Squeeze the biceps at the top.','Lower with control to a full stretch.'],
-    avoid:['Don\'t rock your whole body.','Don\'t let your elbows drift around.']
-  },
-  tricepPushdown:{
-    image:'img/tricep-pushdown.png',
-    muscles:['Triceps'],
-    summary:'Straightforward arm move for the back of the upper arm.',
-    setup:['Stand tall at the cable with elbows tucked close to your sides.','Take either a rope or straight bar and set your shoulders down.'],
-    perform:['Push the handle down by straightening the arms.','Pause briefly, then return until forearms come up to about ninety degrees or slightly higher.'],
-    avoid:['Don\'t lean your whole bodyweight into it.','Don\'t let elbows travel forward each rep.']
-  },
-  calfRaise:{
-    image:'img/calf-raise.png',
-    muscles:['Calves'],
-    summary:'Simple calf work. Full stretch at the bottom and a hard squeeze at the top matter more than load.',
-    setup:['Place the balls of your feet on the platform and let the heels hang slightly if the machine allows.','Brace yourself against the pads or handles.'],
-    perform:['Rise up onto your toes as high as you can.','Pause briefly at the top.','Lower slowly into a stretch.'],
-    avoid:['Don\'t bounce the reps.','Don\'t rush the bottom position.']
-  },
-  crunch:{
-    image:'img/crunch.png',
-    muscles:['Abs'],
-    summary:'Ab work focused on curling the torso, not yanking with the arms or neck.',
-    setup:['Adjust the machine or bench so you feel supported and comfortable.','Brace your stomach lightly before moving.'],
-    perform:['Curl your ribs toward your hips.','Exhale as you crunch down.','Return under control without fully switching off your abs.'],
-    avoid:['Don\'t yank your neck.','Don\'t turn it into a hip-only movement.']
-  },
-  cardio:{
-    image:'img/treadmill.png',
-    muscles:['Heart health','Extra calorie burn'],
-    summary:'Keep cardio simple: brisk enough to work, easy enough that you could still speak in short sentences.',
-    setup:['Pick treadmill or bike unless you genuinely prefer something else.','Start easy for the first minute before building pace.'],
-    perform:['Hold a steady pace rather than sprinting yourself into the floor.','Aim to leave the gym feeling worked, not destroyed.'],
-    avoid:['Don\'t turn every cardio block into an all-out interval session.','Don\'t skip it every time.']
-  }
+const info={
+ legPress:{name:'Leg Press',muscles:['Quads','Glutes','Hamstrings'],start:'img/leg-press-start.png',finish:'img/leg-press-finish.png',summary:'A stable lower-body press that lets you train the legs hard without balancing a bar.',steps:['Set the seat so your knees are bent comfortably at the bottom.','Keep your whole foot flat and knees tracking in the same direction as your toes.','Lower under control, then press the platform away without snapping the knees straight.'],detail:['Keep your lower back against the pad.','Use a depth you can control without your hips rolling up.']},
+ chestPress:{name:'Incline Chest Press',muscles:['Chest','Front shoulders','Triceps'],start:'img/chest-press-start.svg',finish:'img/chest-press-finish.svg',summary:'A simple pressing movement for the chest with some extra work for the shoulders and triceps.',steps:['Set yourself firmly against the bench or machine pad.','Start with the handles or weights around upper-chest level.','Press smoothly, then return slowly until you feel a comfortable stretch.'],detail:['Keep your shoulders down rather than shrugging.','Do not force a range that feels uncomfortable at the shoulder.']},
+ pulldown:{name:'Underhand Lat Pulldown',muscles:['Lats','Upper back','Biceps'],start:'img/lat-pulldown-start.svg',finish:'img/lat-pulldown-finish.svg',summary:'A vertical pull for the back. The underhand grip also gives the biceps useful work.',steps:['Secure your thighs under the pad and sit tall.','Pull your elbows down toward your sides until the handle reaches the upper chest area.','Control the handle back up and allow the back to stretch.'],detail:['Keep the torso mostly still.','Do not turn the movement into a large backward lean.']},
+ row:{name:'Seated Cable Row',muscles:['Mid back','Lats','Rear shoulders','Biceps'],start:'img/seated-row-start.svg',finish:'img/seated-row-finish.svg',summary:'A horizontal pull that builds the middle of the back and complements the pulldown.',steps:['Sit tall with your chest up and shoulders relaxed.','Pull the handle toward the lower ribs or upper stomach.','Pause briefly, then return slowly until the arms are straight.'],detail:['Avoid jerking your torso backward.','Let the shoulder blades move naturally rather than keeping them pinned.']},
+ legCurl:{name:'Seated Leg Curl',muscles:['Hamstrings'],start:'img/leg-curl-start.svg',finish:'img/leg-curl-finish.svg',summary:'Direct hamstring work using a very simple knee-bending movement.',steps:['Adjust the machine so your knees line up with its pivot point.','Keep your back against the pad and curl the roller down smoothly.','Squeeze at the bottom, then return under control.'],detail:['Keep your hips down against the seat.','Use controlled reps instead of swinging the weight.']},
+ shoulderPress:{name:'Seated Shoulder Press',muscles:['Shoulders','Triceps'],start:'img/shoulder-press-start.svg',finish:'img/shoulder-press-finish.svg',summary:'A supported overhead press for building shoulder strength.',steps:['Set the seat so the handles start around shoulder or ear height.','Brace against the back pad and press upward smoothly.','Lower with control until you return to the starting position.'],detail:['Keep your lower back supported.','Do not force the elbows excessively far behind the body.']},
+ bicep:{name:'Cable Biceps Curl',muscles:['Biceps','Forearms'],start:'img/bicep-curl-start.svg',finish:'img/bicep-curl-finish.svg',summary:'Simple direct arm work using the cable station.',steps:['Stand tall with elbows close to your sides.','Curl the handle upward without moving your upper arms forward.','Squeeze briefly, then lower the handle slowly.'],detail:['Keep the torso still.','Use a weight that lets you control the bottom position.']},
+ tricep:{name:'Cable Triceps Pushdown',muscles:['Triceps'],start:'img/tricep-pushdown-start.svg',finish:'img/tricep-pushdown-finish.svg',summary:'Direct work for the back of the upper arm.',steps:['Stand tall with elbows tucked near your sides.','Push the handle down until the arms are straight.','Return under control without letting the elbows travel forward.'],detail:['Keep the shoulders relaxed.','Do not lean heavily onto the cable.']},
+ calf:{name:'Seated Calf Raise',muscles:['Calves'],start:'img/calf-raise-start.svg',finish:'img/calf-raise-finish.svg',summary:'A controlled calf movement with a clear stretch and squeeze.',steps:['Place the balls of your feet securely on the platform.','Raise your heels as high as you comfortably can.','Pause briefly, then lower slowly into a stretch.'],detail:['Do not bounce through the bottom.','A slower rep is usually better than simply adding more weight.']},
+ abs:{name:'Seated Cable Ab Crunch',muscles:['Abs'],start:'img/ab-crunch-start.svg',finish:'img/ab-crunch-finish.svg',summary:'A seated cable crunch that trains the abs without needing planks or floor work.',steps:['Sit securely and hold the cable attachment in a comfortable position.','Curl your ribs toward your hips while keeping the movement controlled.','Return slowly without completely relaxing between reps.'],detail:['Think about shortening the distance between ribs and hips.','Avoid simply pulling with the arms.']}
 };
-
-const workouts = {
-  Monday:{
-    subtitle:'Full Body A',
-    focus:'Easy starting day: one heavy leg machine, one chest press, two main pulls, shoulders and abs.',
-    warmup:['Treadmill 5 minutes at roughly 4.5–5.5 km/h with 3–5% incline.','On your first 3 exercises, do 1 lighter feeler set before the first real set.'],
-    cardio:'Incline treadmill 10 minutes at a brisk walk. Start around 5–8% incline and 4.5–5.5 km/h. If that feels rough, lower the incline before lowering the speed.',
-    tips:['Main lifts today: rest 2 minutes between hard sets.','Try to leave 2 reps in reserve on every set.'],
-    exercises:[
-      {name:'Leg Press', key:'legPress', sets:3, target:'6–8 reps'},
-      {name:'Machine Chest Press', key:'chestPress', sets:3, target:'6–8 reps'},
-      {name:'Lat Pulldown', key:'latPulldown', sets:3, target:'8–10 reps'},
-      {name:'Seated Leg Curl', key:'legCurl', sets:2, target:'10–12 reps'},
-      {name:'Seated Row', key:'row', sets:2, target:'8–10 reps'},
-      {name:'Machine Shoulder Press', key:'shoulderPress', sets:2, target:'8–10 reps'},
-      {name:'Ab Crunch', key:'crunch', sets:2, target:'10–15 reps'},
-      {name:'Cardio Finisher', key:'cardio', sets:1, target:'10 min'}
-    ]
-  },
-  Wednesday:{
-    subtitle:'Full Body B',
-    focus:'Second full-body day with extra quads plus direct arm work.',
-    warmup:['Bike 5 minutes at easy-to-moderate pace, or treadmill 5 minutes easy if you prefer.','Do 1 lighter warm-up set on hack squat / V-squat, incline press and row before your work sets.'],
-    cardio:'Bike or treadmill 12 minutes steady. If your legs are cooked from squats, use the bike and keep it at a moderate, sustainable pace.',
-    tips:['This is still a full-body day, but slightly more arm-friendly.','Hack squat and incline press are the two movements to take most seriously today.'],
-    exercises:[
-      {name:'Hack Squat / V-Squat', key:'hackSquat', sets:3, target:'8–10 reps'},
-      {name:'Incline Machine Chest Press', key:'inclineChestPress', sets:3, target:'8–10 reps'},
-      {name:'Seated Row / Chest-Supported Row', key:'row', sets:3, target:'8–10 reps'},
-      {name:'Leg Extension', key:'legExtension', sets:2, target:'10–12 reps'},
-      {name:'Bicep Curl Machine / Cable Curl', key:'bicepCurl', sets:2, target:'10–12 reps'},
-      {name:'Tricep Pushdown', key:'tricepPushdown', sets:2, target:'10–12 reps'},
-      {name:'Cardio Finisher', key:'cardio', sets:1, target:'12 min'}
-    ]
-  },
-  Friday:{
-    subtitle:'Full Body C',
-    focus:'Finish the week by repeating the basics, then hit calves and shoulders.',
-    warmup:['Treadmill 5 minutes, easy to moderate. Add a little incline if you want.','Do 1 lighter warm-up set on leg press, chest press and lat pulldown.'],
-    cardio:'Incline treadmill 12–15 minutes. Good starting point: 6–10% incline and 4–5.5 km/h. You should be breathing harder but still in control.',
-    tips:['Think clean technique, not ego lifting.','If you are especially tired, drop one set from the last accessory exercise.'],
-    exercises:[
-      {name:'Leg Press', key:'legPress', sets:3, target:'8–10 reps'},
-      {name:'Machine Chest Press', key:'chestPress', sets:3, target:'8–10 reps'},
-      {name:'Lat Pulldown', key:'latPulldown', sets:3, target:'8–10 reps'},
-      {name:'Seated Row', key:'row', sets:2, target:'8–10 reps'},
-      {name:'Calf Raise Machine', key:'calfRaise', sets:2, target:'10–15 reps'},
-      {name:'Machine Lateral Raise', key:'lateralRaise', sets:2, target:'10–15 reps'},
-      {name:'Ab Crunch', key:'crunch', sets:2, target:'10–15 reps'},
-      {name:'Cardio Finisher', key:'cardio', sets:1, target:'12–15 min'}
-    ]
-  },
-  Weekend:{
-    subtitle:'Optional +1 Day',
-    focus:'Bonus day only. The main 3 days already do the job. This is for extra calorie burn and a bit of easy accessory work.',
-    warmup:['5 minutes easy cardio. Don\'t overthink it.','Use this day only if you feel reasonably fresh. If you feel battered, skip it.'],
-    cardio:'Pick ONE: (a) treadmill 25–35 minutes at a brisk walk, or (b) bike 25 minutes steady, or (c) 10 rounds of 1 minute brisk / 1 minute easy on bike or treadmill.',
-    tips:['Keep this session easier than the main days.','This day should make you feel better, not flatten you.'],
-    exercises:[
-      {name:'Longer Cardio Block', key:'cardio', sets:1, target:'25–35 min'},
-      {name:'Bicep Curl', key:'bicepCurl', sets:2, target:'10–12 reps'},
-      {name:'Tricep Pushdown', key:'tricepPushdown', sets:2, target:'10–12 reps'},
-      {name:'Lateral Raise', key:'lateralRaise', sets:2, target:'12–15 reps'},
-      {name:'Calf Raise', key:'calfRaise', sets:2, target:'12–15 reps'},
-      {name:'Ab Crunch', key:'crunch', sets:2, target:'12–15 reps'}
-    ]
-  }
+const workouts={
+ Monday:{subtitle:'Full Body A',focus:'Main strength day with a simple push, pull and leg emphasis.',warmup:['Treadmill: 5 minutes at about 4.5–5.5 km/h.','Use roughly 3–5% incline. You should feel warmer, not tired.','Before the first set of leg press, chest press and pulldown, do one lighter practice set.'],finisher:'10 minutes incline treadmill. Start around 5–8% incline at 4.5–5.5 km/h. Keep it brisk but controlled.',exercises:[['legPress',3,'6–8'],['chestPress',3,'6–8'],['pulldown',3,'8–10'],['legCurl',2,'10–12'],['row',2,'8–10'],['shoulderPress',2,'8–10'],['abs',2,'10–15']]},
+ Wednesday:{subtitle:'Full Body B',focus:'A second full-body session with direct arm and calf work.',warmup:['Bike: 5 minutes at an easy to moderate pace.','If you prefer the treadmill, use 5 minutes at 0–3% incline.','Do one lighter practice set before the first leg press, chest press and row.'],finisher:'12 minutes steady cardio. Bike at a moderate pace, or treadmill around 4–6% incline at a brisk walk.',exercises:[['legPress',3,'8–10'],['chestPress',3,'8–10'],['row',3,'8–10'],['legCurl',2,'10–12'],['bicep',2,'10–12'],['tricep',2,'10–12'],['calf',2,'12–15']]},
+ Friday:{subtitle:'Full Body C',focus:'Repeat the important movement patterns and finish the week with balanced full-body work.',warmup:['Treadmill: 5 minutes at about 4.5–5.5 km/h.','Use 2–4% incline and gradually build the pace.','Do one lighter practice set before leg press, chest press and pulldown.'],finisher:'12–15 minutes incline treadmill. Aim for roughly 6–10% incline at 4–5.5 km/h. Reduce the incline if it becomes too demanding.',exercises:[['legPress',3,'8–10'],['chestPress',3,'8–10'],['pulldown',3,'8–10'],['row',2,'8–10'],['legCurl',2,'10–12'],['shoulderPress',2,'8–10'],['calf',2,'12–15'],['abs',2,'10–15']]},
+ Weekend:{subtitle:'Optional +1',focus:'Bonus session only. The three weekday sessions already cover the full programme.',warmup:['Start with 5 minutes of easy walking or cycling.','Only use this session when you feel reasonably recovered.'],finisher:'Make cardio the main part: 25–35 minutes of brisk walking or steady cycling. Use a pace where you can still speak in short sentences.',exercises:[['bicep',2,'10–12'],['tricep',2,'10–12'],['calf',2,'12–15'],['abs',2,'10–15']]}
 };
-
-const credits = [
-  {name:'Chest press / incline press photo', by:'Andrea Piacquadio', link:'https://www.pexels.com/photo/young-determined-sportswoman-doing-exercise-on-weight-machine-in-modern-sports-club-3768913/'},
-  {name:'Lat pulldown photo', by:'Doğu Tuncer', link:'https://www.pexels.com/photo/man-exercising-at-the-gym-17210044/'},
-  {name:'Shoulder press photo', by:'Luis Morales Torres', link:'https://www.pexels.com/photo/man-exercising-with-shoulder-press-machine-in-gym-34669288/'},
-  {name:'Leg curl photo', by:'Vika Glitter', link:'https://www.pexels.com/photo/woman-exercising-on-leg-curl-machine-in-gym-28731788/'},
-  {name:'Leg extension photo', by:'Николай Векшарев', link:'https://www.pexels.com/photo/man-exercising-his-legs-at-the-gym-19722966/'},
-  {name:'Leg press / hack squat photo', by:'Amar Preciado', link:'https://www.pexels.com/photo/woman-practicing-at-gym-13965336/'},
-  {name:'Bicep curl photo', by:'Alesia Kozik', link:'https://www.pexels.com/photo/a-man-doing-a-dumbbell-bicep-curl-7289252/'},
-  {name:'Tricep pushdown photo', by:'Carlos Mario', link:'https://www.pexels.com/photo/a-woman-doing-triceps-pushdowns-13616289/'},
-  {name:'Treadmill photo', by:'William Choquette', link:'https://www.pexels.com/photo/an-on-treadmill-1954524/'},
-  {name:'Calf raise photo', by:'Amar Preciado', link:'https://www.pexels.com/photo/calves-of-woman-at-gym-13965339/'},
-  {name:'Seated row photo', by:'moha sour', link:'https://www.pexels.com/photo/man-sitting-on-black-gym-equipment-11876626/'},
-  {name:'Crunch photo', by:'Ivan S', link:'https://www.pexels.com/photo/man-exercising-at-a-gym-4162548/'}
-];
-
-const order = ['Monday','Wednesday','Friday','Weekend'];
-let current = localStorage.getItem('gym-current') || bestDay();
-let state = JSON.parse(localStorage.getItem('gym-state') || '{}');
-let history = JSON.parse(localStorage.getItem('gym-history') || '[]');
-
-function bestDay(){
-  const d = new Date().getDay();
-  if (d===1 || d===2) return 'Monday';
-  if (d===3 || d===4) return 'Wednesday';
-  if (d===5) return 'Friday';
-  return 'Weekend';
-}
-function keyFor(day,i){ return day+'::'+i; }
-function getEntry(day,i,sets){
-  const k = keyFor(day,i);
-  if(!state[k]) state[k] = {sets:Array.from({length:sets},()=>({w:'',r:'',d:false}))};
-  while(state[k].sets.length < sets) state[k].sets.push({w:'',r:'',d:false});
-  if(state[k].sets.length > sets) state[k].sets = state[k].sets.slice(0,sets);
-  return state[k];
-}
-function save(){
-  localStorage.setItem('gym-state', JSON.stringify(state));
-  localStorage.setItem('gym-history', JSON.stringify(history));
-  localStorage.setItem('gym-current', current);
-  document.getElementById('statusPill').textContent = 'Saved locally on this device';
-}
-function lastFor(name){
-  for(const h of history){
-    const ex = h.exercises.find(x => x.name === name);
-    if(ex) return ex;
-  }
-  return null;
-}
-function esc(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function renderTabs(){
-  const el = document.getElementById('tabs');
-  el.innerHTML = order.map(day => `<button class="${day===current?'active':''}" data-day="${day}">${day}</button>`).join('');
-  el.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{current=btn.dataset.day; save(); render();});
-}
-function renderSessionPanel(){
-  const data = workouts[current];
-  const main = data.exercises.filter(e=>e.key!=='cardio').length;
-  document.getElementById('sessionPanel').innerHTML = `
-    <div class="session-head">
-      <div>
-        <h2>${current} <span class="small">· ${esc(data.subtitle)}</span></h2>
-        <p>${esc(data.focus)}</p>
-      </div>
-      <div class="mini-tags">
-        <span class="tag">${main} strength exercises</span>
-        <span class="tag">1 cardio finish</span>
-        <span class="tag">full body</span>
-      </div>
-    </div>
-    <div class="session-grid">
-      <div class="subgrid">
-        <div class="box">
-          <div class="label">Warm-up</div>
-          <ul>${data.warmup.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-        </div>
-        <div class="box">
-          <div class="label">Cardio for this day</div>
-          <p>${esc(data.cardio)}</p>
-        </div>
-      </div>
-      <div class="subgrid">
-        <div class="box">
-          <div class="label">Session notes</div>
-          <ul>${data.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-        </div>
-        <div class="box">
-          <div class="label">Good beginner rule</div>
-          <p>If a machine is taken, don\'t stand around waiting forever. Swap it for the closest similar one and move on.</p>
-        </div>
-      </div>
-    </div>`;
-}
-function renderWorkout(){
-  const root = document.getElementById('workout');
-  const data = workouts[current];
-  root.innerHTML = data.exercises.map((ex,i)=>{
-    const info = exerciseInfo[ex.key];
-    const entry = getEntry(current,i,ex.sets);
-    const prev = lastFor(ex.name);
-    return `
-      <article class="exercise">
-        <div class="exercise-header">
-          <button class="thumb img-btn" type="button" data-img="${esc(info.image)}" data-caption="${esc(ex.name)}">
-            <img src="${esc(info.image)}" alt="${esc(ex.name)}">
-            <span class="zoom">Tap to enlarge</span>
-          </button>
-          <div>
-            <div class="ex-title">${esc(ex.name)}</div>
-            <div class="target">${ex.sets>1 ? `${ex.sets} sets · ` : ''}${esc(ex.target)}</div>
-            <p>${esc(info.summary)}</p>
-            <div class="muscles">${info.muscles.map(m=>`<span class="tag">${esc(m)}</span>`).join('')}</div>
-          </div>
-        </div>
-        <div class="exercise-copy">
-          <div class="box">
-            <div class="label">Set up</div>
-            <ul>${info.setup.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-          </div>
-          <div class="box">
-            <div class="label">Do the rep like this</div>
-            <ul>${info.perform.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-          </div>
-          <div class="box">
-            <div class="label">Avoid</div>
-            <ul>${info.avoid.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-          </div>
-          <div class="box">
-            <div class="label">Quick reminder</div>
-            <p>${ex.key==='cardio' ? 'Keep the pace honest but sustainable. You are not trying to die on this section.' : 'Move the weight smoothly, feel the target muscle, and stop the set if your form turns ugly.'}</p>
-          </div>
-        </div>
-        <div class="sets">
-          <div class="set-head"><div>Set</div><div>${ex.key==='cardio' ? 'Setting' : 'Weight'}</div><div>${ex.key==='cardio' ? 'Minutes' : 'Reps'}</div><div>Done</div></div>
-          ${entry.sets.map((s,idx)=>`
-            <div class="set-row">
-              <div>${idx+1}</div>
-              <div><input type="number" inputmode="decimal" placeholder="${ex.key==='cardio'?'incline / level':'kg'}" value="${esc(s.w)}" data-day="${current}" data-ex="${i}" data-set="${idx}" data-field="w"></div>
-              <div><input type="number" inputmode="decimal" placeholder="${ex.key==='cardio'?'mins':'reps'}" value="${esc(s.r)}" data-day="${current}" data-ex="${i}" data-set="${idx}" data-field="r"></div>
-              <div class="check"><input type="checkbox" ${s.d?'checked':''} data-day="${current}" data-ex="${i}" data-set="${idx}" data-field="d"></div>
-            </div>`).join('')}
-          ${prev ? `<div class="prev"><b>Last time:</b> ${esc(prev.sets.map((s,n)=>`Set ${n+1}: ${s.w||'-'} ${ex.key==='cardio'?'mins':'kg'} × ${s.r||'-'} ${ex.key==='cardio'?'mins':'reps'}`).join(' · '))}</div>` : `<div class="prev">No previous result saved yet.</div>`}
-        </div>
-      </article>`;
-  }).join('');
-
-  root.querySelectorAll('input').forEach(input=>{
-    const handler = () => {
-      const day = input.dataset.day, ex = +input.dataset.ex, set = +input.dataset.set, field = input.dataset.field;
-      const exData = workouts[day].exercises[ex];
-      const entry = getEntry(day, ex, exData.sets);
-      entry.sets[set][field] = field==='d' ? input.checked : input.value;
-      save();
-      updateStats();
-    };
-    input.addEventListener(input.type==='checkbox' ? 'change' : 'input', handler);
-  });
-
-  root.querySelectorAll('.img-btn').forEach(btn => btn.addEventListener('click', () => openModal(btn.dataset.img, btn.dataset.caption)));
-}
-function updateStats(){
-  const list = workouts[current].exercises;
-  let total=0, done=0;
-  list.forEach((ex,i)=>{
-    const entry = getEntry(current,i,ex.sets);
-    total += ex.sets;
-    done += entry.sets.filter(s=>s.d).length;
-  });
-  document.getElementById('doneSets').textContent = done;
-  document.getElementById('totalSets').textContent = total;
-  document.getElementById('progressPct').textContent = total ? Math.round(done/total*100)+'%' : '0%';
-  document.getElementById('exerciseCount').textContent = list.length;
-}
-function renderHistory(){
-  const el = document.getElementById('history');
-  if(!history.length){ el.innerHTML = '<p class="small">No workouts saved yet.</p>'; return; }
-  el.innerHTML = history.map(h=>`<div class="history-row"><b>${esc(h.day)}</b> · ${esc(h.date)}<br><span class="small">${h.exercises.map(ex=>`${esc(ex.name)} (${ex.sets.length} set${ex.sets.length>1?'s':''})`).join(' · ')}</span></div>`).join('');
-}
-function renderCredits(){
-  document.getElementById('credits').innerHTML = credits.map(c=>`<div class="credit"><b>${esc(c.name)}</b><br><span class="small">Photo by ${esc(c.by)} · <a href="${esc(c.link)}" target="_blank" rel="noopener">source</a></span></div>`).join('');
-}
-function finishWorkout(){
-  const exercises = workouts[current].exercises.map((ex,i)=>({
-    name:ex.name,
-    key:ex.key,
-    sets:getEntry(current,i,ex.sets).sets.filter(s=>s.d || s.w || s.r).map(s=>({w:s.w,r:s.r,d:s.d}))
-  })).filter(ex=>ex.sets.length);
-  if(!exercises.length){ alert('Nothing filled in yet.'); return; }
-  history.unshift({day:current, date:new Date().toLocaleString(), exercises});
-  history = history.slice(0,30);
-  save(); renderHistory();
-  alert('Workout saved. Nice one.');
-}
-function clearToday(){
-  if(!confirm('Clear all inputs for '+current+'?')) return;
-  workouts[current].exercises.forEach((ex,i)=>{ state[keyFor(current,i)] = {sets:Array.from({length:ex.sets},()=>({w:'',r:'',d:false}))}; });
-  save(); render();
-}
-function exportBackup(){
-  const blob = new Blob([JSON.stringify({state,history,current},null,2)],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'gym-tracker-backup.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-function importBackup(file){
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const data = JSON.parse(reader.result);
-      state = data.state || {};
-      history = data.history || [];
-      current = data.current || current;
-      save(); render();
-      alert('Backup restored.');
-    }catch(e){ alert('Could not read that backup file.'); }
-  };
-  reader.readAsText(file);
-}
-function wipeAll(){
-  if(!confirm('Wipe all saved data from this device?')) return;
-  state = {}; history = []; save(); render();
-}
-function cycle(dir){
-  const idx = order.indexOf(current);
-  current = order[(idx + dir + order.length) % order.length];
-  save(); render();
-}
-function openModal(src, caption){
-  document.getElementById('modalImg').src = src;
-  document.getElementById('modalCaption').textContent = caption;
-  document.getElementById('imageModal').classList.add('open');
-}
-function closeModal(){
-  document.getElementById('imageModal').classList.remove('open');
-}
-function render(){
-  renderTabs();
-  renderSessionPanel();
-  renderWorkout();
-  updateStats();
-  renderHistory();
-  renderCredits();
-}
-
-document.getElementById('finishBtn').onclick = finishWorkout;
-document.getElementById('clearBtn').onclick = clearToday;
-document.getElementById('exportBtn').onclick = exportBackup;
-document.getElementById('importFile').addEventListener('change', e=>{ if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value=''; });
-document.getElementById('wipeBtn').onclick = wipeAll;
-document.getElementById('prevBtn').onclick = ()=>cycle(-1);
-document.getElementById('nextBtn').onclick = ()=>cycle(1);
-document.getElementById('closeModal').onclick = closeModal;
-document.getElementById('imageModal').onclick = (e)=>{ if(e.target.id==='imageModal') closeModal(); };
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
-if('serviceWorker' in navigator){ window.addEventListener('load', ()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
-render();
+const order=['Monday','Wednesday','Friday','Weekend'];
+let current=localStorage.getItem('gym-current')||bestDay();
+let state=JSON.parse(localStorage.getItem('gym-state-v5')||'{}');
+let history=JSON.parse(localStorage.getItem('gym-history')||'[]');
+function bestDay(){const d=new Date().getDay();if(d===1||d===2)return'Monday';if(d===3||d===4)return'Wednesday';if(d===5)return'Friday';return'Weekend'}
+function sk(day,i){return day+'::'+i}function ck(day){return day+'::cardio'}
+function entry(day,i,sets){const k=sk(day,i);if(!state[k])state[k]={sets:Array.from({length:sets},()=>({w:'',r:'',d:false}))};while(state[k].sets.length<sets)state[k].sets.push({w:'',r:'',d:false});state[k].sets=state[k].sets.slice(0,sets);return state[k]}
+function cardioEntry(day){const k=ck(day);if(!state[k])state[k]={minutes:'',done:false};return state[k]}
+function save(){localStorage.setItem('gym-state-v5',JSON.stringify(state));localStorage.setItem('gym-history',JSON.stringify(history));localStorage.setItem('gym-current',current);document.getElementById('statusPill').textContent='Saved on this device'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function lastFor(name){for(const h of history){const x=h.exercises?.find(e=>e.name===name);if(x)return x}return null}
+function renderTabs(){tabs.innerHTML=order.map(d=>`<button class="${d===current?'active':''}" data-day="${d}">${d}</button>`).join('');tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{current=b.dataset.day;save();render()})}
+function renderSession(){const w=workouts[current];sessionPanel.innerHTML=`<div class="session-head"><div><h2>${current} <span class="small">· ${esc(w.subtitle)}</span></h2><p>${esc(w.focus)}</p></div><span class="pill">${w.exercises.length} strength exercises</span></div><div class="session-grid"><div class="box"><div class="label">Warm-up</div><ul>${w.warmup.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="box"><div class="label">For the first 2 weeks</div><p>On exercises showing 3 sets, do only 2 working sets while you learn the machines. Keep the planned rep range the same.</p></div></div>`}
+function renderWorkout(){const w=workouts[current];workout.innerHTML=w.exercises.map((x,i)=>{const[key,sets,target]=x,o=info[key],e=entry(current,i,sets),prev=lastFor(o.name);return`<article class="exercise"><div class="ex-head"><div><div class="ex-title">${esc(o.name)}</div><div class="target">${sets} sets · ${target} reps</div><p>${esc(o.summary)}</p><div class="tags">${o.muscles.map(m=>`<span class="tag">${esc(m)}</span>`).join('')}</div></div></div><div class="art-card"><div class="art-pair"><div class="art-frame"><img src="${o.start}" alt="${esc(o.name)} starting position"><span class="art-label">START</span></div><div class="art-frame"><img src="${o.finish}" alt="${esc(o.name)} finishing position"><span class="art-label">FINISH</span></div></div><div class="art-caption">Use the illustration as a movement guide. Machine designs can vary slightly between gyms.</div></div><div class="guide"><div class="box"><div class="label">How to do it</div><ol>${o.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div><div class="box"><div class="label">Rest</div><p>${['legPress','chestPress','pulldown','row','shoulderPress'].includes(key)?'Rest about 2 minutes between working sets.':'Rest about 60–90 seconds between working sets.'}</p></div></div><details class="form-detail"><summary>More form detail</summary><ul>${o.detail.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></details><div class="sets"><div class="set-head"><div>Set</div><div>Weight</div><div>Reps</div><div>Done</div></div>${e.sets.map((s,n)=>`<div class="set-row"><div>${n+1}</div><input type="number" inputmode="decimal" placeholder="kg" value="${esc(s.w)}" data-ex="${i}" data-set="${n}" data-field="w"><input type="number" inputmode="numeric" placeholder="reps" value="${esc(s.r)}" data-ex="${i}" data-set="${n}" data-field="r"><div class="check"><input type="checkbox" ${s.d?'checked':''} data-ex="${i}" data-set="${n}" data-field="d"></div></div>`).join('')}${prev?`<div class="prev"><b>Last saved:</b> ${prev.sets.map((s,n)=>`Set ${n+1}: ${s.w||'-'} kg × ${s.r||'-'}`).join(' · ')}</div>`:`<div class="prev">No previous saved result for this exercise yet.</div>`}</div></article>`}).join('');workout.querySelectorAll('input').forEach(inp=>{const fn=()=>{const i=+inp.dataset.ex,n=+inp.dataset.set,f=inp.dataset.field,sets=workouts[current].exercises[i][1],e=entry(current,i,sets);e.sets[n][f]=f==='d'?inp.checked:inp.value;save();stats()};inp.addEventListener(inp.type==='checkbox'?'change':'input',fn)})}
+function renderCardio(){const w=workouts[current],c=cardioEntry(current);cardioPanel.innerHTML=`<div class="cardio-card"><div class="cardio-art"><img src="img/cardio.svg" alt="Treadmill cardio illustration"></div><div><div class="label">Cardio finisher</div><h3>${current==='Weekend'?'Main cardio':'After the weights'}</h3><p>${esc(w.finisher)}</p><div class="cardio-track"><input id="cardioMinutes" type="number" inputmode="decimal" placeholder="minutes" value="${esc(c.minutes)}"><div class="check"><input id="cardioDone" type="checkbox" ${c.done?'checked':''}></div></div><span class="small">Enter minutes and tick when complete.</span></div></div>`;cardioMinutes.oninput=()=>{c.minutes=cardioMinutes.value;save();stats()};cardioDone.onchange=()=>{c.done=cardioDone.checked;save();stats()}}
+function stats(){const w=workouts[current];let total=1,done=cardioEntry(current).done?1:0;w.exercises.forEach((x,i)=>{total+=x[1];done+=entry(current,i,x[1]).sets.filter(s=>s.d).length});doneSets.textContent=done;totalSets.textContent=total;progressPct.textContent=Math.round(done/total*100)+'%'}
+function renderHistory(){historyEl.innerHTML=history.length?history.slice(0,20).map(h=>`<div class="history-row"><b>${esc(h.day)}</b> · ${esc(h.date)}<br><span class="small">${h.exercises.map(e=>esc(e.name)).join(' · ')}${h.cardio?.minutes?` · Cardio ${esc(h.cardio.minutes)} min`:''}</span></div>`).join(''):'<p class="small">No workouts saved yet.</p>'}
+function renderCredits(){credits.innerHTML=`<p class="small">Everkinetic exercise diagrams via Wikimedia Commons, licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Source file pages are listed in LICENSES.md in the project.</p>`}
+function finish(){const w=workouts[current];const exercises=w.exercises.map((x,i)=>{const o=info[x[0]],e=entry(current,i,x[1]);return{name:o.name,sets:e.sets.filter(s=>s.d||s.w||s.r).map(s=>({w:s.w,r:s.r,d:s.d}))}}).filter(e=>e.sets.length);const c=cardioEntry(current);if(!exercises.length&&!c.done&&!c.minutes){alert('There is nothing to save yet.');return}history.unshift({day:current,date:new Date().toLocaleString(),exercises,cardio:{minutes:c.minutes,done:c.done}});history=history.slice(0,100);save();renderHistory();alert('Workout saved.')}
+function clearToday(){if(!confirm('Clear today\'s entries?'))return;const w=workouts[current];w.exercises.forEach((x,i)=>state[sk(current,i)]={sets:Array.from({length:x[1]},()=>({w:'',r:'',d:false}))});state[ck(current)]={minutes:'',done:false};save();render()}
+function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({state,history,current},null,2)],{type:'application/json'}));a.download='gym-tracker-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importData(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);state=d.state||{};history=d.history||[];current=d.current||current;save();render();alert('Backup restored.')}catch{alert('That backup file could not be read.')}};r.readAsText(file)}
+function wipe(){if(!confirm('Wipe all saved gym data from this device?'))return;state={};history=[];save();render()}
+function cycle(n){current=order[(order.indexOf(current)+n+order.length)%order.length];save();render()}
+function render(){renderTabs();renderSession();renderWorkout();renderCardio();stats();renderHistory();renderCredits()}
+const tabs=document.getElementById('tabs'),sessionPanel=document.getElementById('sessionPanel'),workout=document.getElementById('workout'),cardioPanel=document.getElementById('cardioPanel'),doneSets=document.getElementById('doneSets'),totalSets=document.getElementById('totalSets'),progressPct=document.getElementById('progressPct'),historyEl=document.getElementById('history'),credits=document.getElementById('credits');
+finishBtn.onclick=finish;clearBtn.onclick=clearToday;exportBtn.onclick=exportData;importFile.onchange=e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value=''};wipeBtn.onclick=wipe;prevBtn.onclick=()=>cycle(-1);nextBtn.onclick=()=>cycle(1);if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));render();
 </script>
-</body>
-</html>
+</body></html>
