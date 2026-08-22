@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0c3b2e">
+  <meta name="theme-color" content="#0f5132">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Gym Tracker">
@@ -11,203 +11,139 @@
   <title>Gym Tracker</title>
   <style>
     :root{
-      --bg:#071b14;
-      --bg2:#0b231b;
-      --panel:#102b22;
-      --panel2:#143428;
-      --panel3:#183a2d;
-      --text:#f2fbf6;
-      --muted:#b8d3c6;
-      --border:#23513f;
-      --accent:#57d88d;
-      --accent2:#7ee7a5;
-      --accent3:#183f32;
-      --danger:#8b2e39;
-      --warning:#f0c34a;
-      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --bg:#071a12;
+      --bg2:#0b241a;
+      --panel:#102d21;
+      --panel2:#143727;
+      --panel3:#193f2d;
+      --line:#245740;
+      --text:#f3fbf6;
+      --muted:#b5d1c0;
+      --accent:#55d98e;
+      --accent2:#8defb8;
+      --good:#2caf65;
+      --danger:#8f3741;
+      --shadow:0 14px 30px rgba(0,0,0,.25);
+      --radius:22px;
     }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
+      color:var(--text);
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
       background:
-        radial-gradient(circle at top right, rgba(87,216,141,.18), transparent 22%),
-        radial-gradient(circle at top left, rgba(126,231,165,.08), transparent 18%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      color:var(--text);
+        radial-gradient(circle at top right, rgba(85,217,142,.16), transparent 22%),
+        radial-gradient(circle at top left, rgba(141,239,184,.08), transparent 20%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
     }
-    .wrap{max-width:860px;margin:0 auto;padding:18px 14px 100px}
-    .hero{
-      background:linear-gradient(135deg, rgba(87,216,141,.15), rgba(87,216,141,.03));
-      border:1px solid var(--border);
-      border-radius:22px;
-      padding:18px;
+    .wrap{max-width:940px;margin:0 auto;padding:16px 14px 110px}
+    .hero,.panel,.exercise,.history-card,details{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.025));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
       box-shadow:var(--shadow);
-      margin-bottom:16px;
     }
-    h1{font-size:30px;margin:0 0 6px}
-    h2{font-size:22px;margin:0 0 6px}
-    h3{font-size:16px;margin:0}
-    p{color:var(--muted);line-height:1.45;margin:6px 0}
+    .hero{padding:18px;margin-bottom:14px}
+    .hero-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    h1{margin:0 0 6px;font-size:30px;line-height:1.05}
+    h2{margin:0;font-size:22px}
+    h3{margin:0;font-size:18px}
+    p{margin:6px 0;color:var(--muted);line-height:1.45}
     .small{font-size:12px;color:var(--muted)}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      font-size:12px;padding:8px 12px;border:1px solid var(--border);
-      border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03)
-    }
-    .guide{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px
-    }
-    .mini-card{
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--border);
-      border-radius:16px;padding:12px
-    }
-    .mini-card b{display:block;font-size:15px;margin-bottom:4px}
-    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 12px}
-    button,.btn{
-      min-height:44px;border:1px solid var(--border);border-radius:14px;
-      background:linear-gradient(180deg, var(--panel3), var(--panel2));
-      color:var(--text);font-weight:700;padding:10px 12px;cursor:pointer
-    }
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
+    .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+    .quick{padding:12px 13px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
+    .quick b{display:block;margin-bottom:4px;font-size:14px}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 12px}
+    button,.btn{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel3),var(--panel2));color:var(--text);min-height:46px;padding:10px 12px;font-weight:750;cursor:pointer}
     button:hover,.btn:hover{filter:brightness(1.05)}
-    button.active{
-      background:linear-gradient(180deg, rgba(87,216,141,.28), rgba(87,216,141,.12));
-      border-color:#4cc77f;box-shadow:0 0 0 2px rgba(87,216,141,.12) inset
-    }
-    .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
-    .metric{
-      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
-      border:1px solid var(--border);border-radius:18px;padding:14px;text-align:center
-    }
-    .metric b{display:block;font-size:22px}
-    .metric span{font-size:12px;color:var(--muted)}
-    .banner{
-      background:linear-gradient(180deg, rgba(87,216,141,.12), rgba(87,216,141,.04));
-      border:1px solid var(--border);
-      border-radius:18px;padding:14px;margin:10px 0 14px
-    }
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius:22px;
-      padding:14px;
-      margin:14px 0;
-      box-shadow:var(--shadow);
-    }
-    .exercise-top{
-      display:grid;grid-template-columns:1fr 200px;gap:14px;align-items:start
-    }
-    .exercise-name{font-size:20px;font-weight:800;margin-bottom:5px}
-    .target{color:var(--muted);font-size:13px}
-    .art{
-      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius:16px;padding:8px;min-height:150px
-    }
-    .art svg{width:100%;height:140px;display:block}
-    .info-grid{
-      display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-top:12px
-    }
-    .info-box{
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--border);
-      border-radius:16px;padding:12px
-    }
-    .label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#a4ccb7;font-weight:800;margin-bottom:6px}
-    .tags{display:flex;flex-wrap:wrap;gap:6px}
-    .tag{font-size:12px;padding:6px 9px;border-radius:999px;background:rgba(87,216,141,.1);border:1px solid rgba(87,216,141,.18);color:#dbf8e5}
+    button.active{background:linear-gradient(180deg,rgba(85,217,142,.26),rgba(85,217,142,.12));border-color:#49c97b;box-shadow:0 0 0 2px rgba(85,217,142,.12) inset}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);text-align:center}
+    .stat b{display:block;font-size:24px;margin-bottom:4px}
+    .stat span{font-size:12px;color:var(--muted)}
+    .panel{padding:16px;margin-bottom:14px}
+    .session-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
+    .session-grid{display:grid;grid-template-columns:1.15fr .95fr;gap:12px}
+    .subgrid{display:grid;gap:10px}
+    .box{padding:12px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03)}
+    .box .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9ecab0;font-weight:800;margin-bottom:6px}
     ul{margin:8px 0 0 18px;padding:0}
     li{margin:6px 0;color:var(--muted)}
-    .sets{
-      display:grid;grid-template-columns:42px 1fr 1fr 54px;gap:8px;align-items:center;margin-top:14px
-    }
-    .sets .head{font-size:12px;color:var(--muted);font-weight:700}
-    input[type=number]{
-      width:100%;min-height:44px;border:1px solid var(--border);border-radius:12px;
-      background:#0d2018;color:var(--text);padding:8px 10px;font-size:16px
-    }
+    .mini-tags,.muscles{display:flex;flex-wrap:wrap;gap:7px}
+    .tag{font-size:12px;padding:6px 9px;border-radius:999px;border:1px solid rgba(85,217,142,.2);background:rgba(85,217,142,.1);color:#e5fced}
+    .exercise{padding:14px;margin:14px 0}
+    .exercise-header{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:start}
+    .thumb{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0c2018;aspect-ratio:4/3;padding:0;min-height:auto}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .zoom{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 9px;font-size:12px;color:#fff}
+    .ex-title{font-size:20px;font-weight:850;line-height:1.12;margin-bottom:4px}
+    .target{font-size:13px;color:var(--muted);margin-bottom:8px}
+    .exercise-copy{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .sets{margin-top:14px;border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(255,255,255,.025)}
+    .set-head,.set-row{display:grid;grid-template-columns:42px 1fr 1fr 54px;gap:8px;align-items:center}
+    .set-head{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:8px}
+    .set-row{margin-top:8px}
+    input[type=number]{width:100%;min-height:44px;border:1px solid var(--line);border-radius:12px;background:#0c2018;color:var(--text);padding:8px 10px;font-size:16px}
     .check{display:flex;justify-content:center}
     input[type=checkbox]{width:24px;height:24px;accent-color:#3ed276}
-    details{
-      margin-top:12px;
-      background:rgba(255,255,255,.025);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:10px 12px
-    }
-    summary{cursor:pointer;font-weight:700}
-    .prev{
-      font-size:12px;color:var(--muted);margin-top:12px;
-      padding-top:10px;border-top:1px dashed rgba(255,255,255,.08)
-    }
-    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-    .primary{
-      background:linear-gradient(180deg, #3ccf73, #1eaa51);border-color:#42cc75;color:white
-    }
-    .good{
-      background:linear-gradient(180deg, #59d18a, #2caf65);border-color:#57d88d;color:white
-    }
-    .danger{
-      background:linear-gradient(180deg, #a53b48, #852833);border-color:#9d3945;color:white
-    }
-    .footer{
-      position:fixed;left:0;right:0;bottom:0;
-      background:rgba(7,27,20,.92);backdrop-filter:blur(12px);
-      border-top:1px solid var(--border)
-    }
-    .footer-inner{
-      max-width:860px;margin:auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-      display:grid;grid-template-columns:1fr 1fr;gap:8px
-    }
-    .history-row{border-top:1px solid rgba(255,255,255,.06);padding:10px 0}
+    .prev{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.08);font-size:13px;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .good{background:linear-gradient(180deg,#59d18a,#2caf65);border-color:#57d88d;color:#fff}
+    .danger{background:linear-gradient(180deg,#a94752,#852e37);border-color:#a94752;color:#fff}
+    details{padding:14px;margin-top:14px}
+    summary{cursor:pointer;font-weight:800}
+    .history-row{padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
     .history-row:first-child{border-top:0}
-    @media (max-width:760px){
-      .guide,.summary,.tabs,.info-grid,.exercise-top{grid-template-columns:1fr}
-      .wrap{padding-top:12px}
-      .art svg{height:130px}
+    .footer{position:fixed;left:0;right:0;bottom:0;background:rgba(7,26,18,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+    .footer-inner{max-width:940px;margin:auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .credit-list{display:grid;gap:8px;margin-top:10px}
+    .credit{padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
+    a{color:#a0f4c2}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+    .modal.open{display:flex}
+    .modal-card{max-width:min(900px,100%);max-height:100%;display:grid;gap:10px}
+    .modal-card img{max-width:100%;max-height:78vh;border-radius:18px;border:1px solid rgba(255,255,255,.15)}
+    .close-btn{justify-self:end;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+    @media (max-width:780px){
+      .quick-grid,.stats,.tabs,.session-grid,.exercise-copy{grid-template-columns:1fr}
+      .exercise-header{grid-template-columns:1fr}
+      .thumb{max-width:360px}
     }
     @media (max-width:520px){
-      .sets{grid-template-columns:34px 1fr 1fr 48px}
+      .set-head,.set-row{grid-template-columns:34px 1fr 1fr 48px}
+      h1{font-size:28px}
     }
   </style>
 </head>
 <body>
 <div class="wrap">
   <section class="hero">
-    <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap">
+    <div class="hero-top">
       <div>
         <h1>Gym Tracker</h1>
-        <p>Simple machine-based full-body plan. Hit the 3 main days and use the weekend as a bonus day only.</p>
+        <p>Simple full-body machine plan for <b>Monday / Wednesday / Friday</b> with an optional easy <b>weekend +1 day</b>. The 3 main days already cover everything.</p>
       </div>
       <span class="pill" id="statusPill">Saved locally on this device</span>
     </div>
-    <div class="guide">
-      <div class="mini-card">
-        <b>Warm-up</b>
-        <span class="small">5 minutes easy cardio, then 1–2 lighter sets before your first proper set.</span>
-      </div>
-      <div class="mini-card">
-        <b>Effort</b>
-        <span class="small">Stop with about 2 reps left in the tank. First 1–2 weeks: do only 2 working sets on the exercises that normally show 3.</span>
-      </div>
-      <div class="mini-card">
-        <b>Progress</b>
-        <span class="small">When you hit the top of the rep range on all sets, add a small bit of weight next time.</span>
-      </div>
+    <div class="quick-grid">
+      <div class="quick"><b>How hard?</b><span class="small">Pick a weight that feels challenging but still leaves about <b>2 reps in reserve</b>. If form goes to shit, the weight is too heavy.</span></div>
+      <div class="quick"><b>Rest times</b><span class="small"><b>90–120 sec</b> after bigger lifts like leg press, rows and chest press. <b>60–90 sec</b> on curls, laterals, calves and abs.</span></div>
+      <div class="quick"><b>Progress</b><span class="small">When you hit the <b>top end of the rep range on every set</b>, add a small jump next time. Usually 2.5–5 kg on machines, less on arms.</span></div>
     </div>
   </section>
 
   <div class="tabs" id="tabs"></div>
 
-  <div class="summary">
-    <div class="metric"><b id="doneSets">0</b><span>sets done</span></div>
-    <div class="metric"><b id="totalSets">0</b><span>working sets</span></div>
-    <div class="metric"><b id="progressPct">0%</b><span>session</span></div>
-    <div class="metric"><b id="exerciseCount">0</b><span>exercises</span></div>
+  <div class="stats">
+    <div class="stat"><b id="doneSets">0</b><span>sets done</span></div>
+    <div class="stat"><b id="totalSets">0</b><span>working sets</span></div>
+    <div class="stat"><b id="progressPct">0%</b><span>session done</span></div>
+    <div class="stat"><b id="exerciseCount">0</b><span>exercises</span></div>
   </div>
 
-  <div id="sessionBanner" class="banner"></div>
+  <section class="panel" id="sessionPanel"></section>
   <main id="workout"></main>
 
   <div class="actions">
@@ -230,267 +166,261 @@
       <button id="wipeBtn" class="danger">Wipe all data</button>
     </div>
   </details>
+
+  <details>
+    <summary>Photo credits</summary>
+    <p class="small">Exercise photos in this app are bundled from free-to-use Pexels images. Attribution is not required, but here's a courtesy list anyway.</p>
+    <div class="credit-list" id="credits"></div>
+  </details>
 </div>
 
 <div class="footer">
   <div class="footer-inner">
     <button id="prevBtn">← Previous</button>
-    <button id="nextBtn" class="primary">Next workout →</button>
+    <button id="nextBtn" class="good">Next workout →</button>
+  </div>
+</div>
+
+<div class="modal" id="imageModal" aria-hidden="true">
+  <div class="modal-card">
+    <button class="close-btn" id="closeModal">Close</button>
+    <img id="modalImg" alt="Exercise image">
+    <p class="small" id="modalCaption"></p>
   </div>
 </div>
 
 <script>
 const exerciseInfo = {
   legPress:{
-    art:"legPress",
-    targets:["Quads","Glutes","Hamstrings"],
-    cue:"Big lower-body press. Drive the platform away while keeping your feet planted and knees tracking over your toes.",
-    how:[
-      "Set the seat so your knees are bent comfortably at the start, not jammed into your chest.",
-      "Place feet around shoulder width on the platform.",
-      "Lower under control, then press back up without locking your knees hard."
-    ],
-    tips:["Keep your full foot on the platform.","Don't bounce out of the bottom."]
+    image:'img/leg-press.png',
+    muscles:['Quads','Glutes','Hamstrings'],
+    summary:'Main lower-body press. Great beginner leg builder without needing to balance a bar.',
+    setup:['Set the seat so your knees are bent but not jammed into your chest at the bottom.','Place feet around shoulder width and keep your whole foot planted on the platform.','Unrack safely and keep your lower back glued to the pad.'],
+    perform:['Lower under control until you get a deep but comfortable bend.','Drive the platform away through the middle of your foot.','Stop just short of hard lockout, then repeat.'],
+    avoid:['Don\'t bounce out of the bottom.','Don\'t let your knees cave in.']
   },
   chestPress:{
-    art:"chestPress",
-    targets:["Chest","Front shoulders","Triceps"],
-    cue:"Push the handles away from your chest in a smooth line.",
-    how:[
-      "Set the seat so the handles line up roughly with mid-chest.",
-      "Shoulders down and back, chest up.",
-      "Press out, control the return, and keep wrists straight."
-    ],
-    tips:["Don't shrug your shoulders up.","Use a full but comfortable range."]
+    image:'img/chest-press.png',
+    muscles:['Chest','Front delts','Triceps'],
+    summary:'Simple horizontal push to build chest and pressing strength.',
+    setup:['Set the seat so the handles line up around mid chest.','Sit right back into the pad with shoulders down and back.','Keep wrists straight and feet planted.'],
+    perform:['Push the handles away in a smooth line.','Stop just before your elbows lock fully hard.','Bring the handles back under control until you feel a stretch in the chest.'],
+    avoid:['Don\'t shrug your shoulders forward.','Don\'t cut the range short unless the machine feels awkward on your shoulders.']
   },
   inclineChestPress:{
-    art:"inclineChestPress",
-    targets:["Upper chest","Front shoulders","Triceps"],
-    cue:"Same idea as chest press, but this hits a little more upper chest.",
-    how:[
-      "Set the seat so handles start around upper chest level.",
-      "Keep shoulder blades pulled back into the pad.",
-      "Press up and away, then return under control."
-    ],
-    tips:["Don't flare elbows excessively.","Stay planted on the seat."]
+    image:'img/chest-press.png',
+    muscles:['Upper chest','Front delts','Triceps'],
+    summary:'Chest press with a slightly higher pressing angle to emphasise upper chest.',
+    setup:['Adjust the seat so the handles start at upper-chest level.','Pin your upper back into the seat and keep your chest up.'],
+    perform:['Press up and away in control.','Lower until the handles come back to a strong stretch without your shoulders rolling forward.'],
+    avoid:['Don\'t flare elbows excessively.','Don\'t lift your arse off the seat.']
   },
   latPulldown:{
-    art:"latPulldown",
-    targets:["Lats","Upper back","Biceps"],
-    cue:"Pull the bar down towards the top of your chest while keeping your chest tall.",
-    how:[
-      "Sit down and secure your knees under the pad.",
-      "Grip just outside shoulder width.",
-      "Pull elbows down to your sides, then raise the bar back slowly."
-    ],
-    tips:["Don't yank with your lower back.","Think elbows, not hands."]
+    image:'img/lat-pulldown.png',
+    muscles:['Lats','Upper back','Biceps'],
+    summary:'Vertical pull for back width. Think elbows driving down rather than arms yanking.',
+    setup:['Lock your knees under the pad and take a grip just outside shoulder width.','Sit tall with chest up and a slight lean back.'],
+    perform:['Pull the bar to the top of your chest.','Drive elbows down toward your sides.','Control the bar all the way back up and let your lats stretch.'],
+    avoid:['Don\'t turn it into a backward row.','Don\'t yank or use momentum.']
   },
   row:{
-    art:"row",
-    targets:["Mid back","Lats","Rear shoulders","Biceps"],
-    cue:"Pull the handles towards your body and squeeze your shoulder blades together.",
-    how:[
-      "Set the chest pad or seat so you can reach the handles without rounding badly.",
-      "Keep your chest up and shoulders down.",
-      "Pull to your lower ribs or stomach, pause, then return slowly."
-    ],
-    tips:["Don't turn it into a shrug.","Control the stretch forward."]
+    image:'img/seated-row.png',
+    muscles:['Mid back','Lats','Rear delts','Biceps'],
+    summary:'Horizontal pull to build thickness through the mid-back and teach good posture.',
+    setup:['Set the seat or chest pad so you can reach the handles without rounding badly.','Keep your chest proud and shoulders away from your ears.'],
+    perform:['Pull the handle toward your lower ribs or stomach.','Squeeze your shoulder blades together briefly.','Return slowly until your arms are straight and your back is stretched.'],
+    avoid:['Don\'t jerk your torso back.','Don\'t shrug the movement into your neck.']
   },
   shoulderPress:{
-    art:"shoulderPress",
-    targets:["Shoulders","Triceps"],
-    cue:"Press the handles up overhead from shoulder level.",
-    how:[
-      "Set the seat so the handles start around ear or shoulder height.",
-      "Brace your core and keep your head neutral.",
-      "Press up smoothly and return with control."
-    ],
-    tips:["Don't slam the weight down.","Keep elbows under the handles."]
+    image:'img/shoulder-press.png',
+    muscles:['Shoulders','Triceps'],
+    summary:'Easy machine overhead press for strength in the shoulders without needing much balance.',
+    setup:['Set the seat so handles start around ear or shoulder height.','Brace your torso and keep forearms roughly vertical.'],
+    perform:['Press overhead smoothly.','Lower until elbows come back to a strong start position.'],
+    avoid:['Don\'t slam the stack down.','Don\'t arch your lower back hard.']
   },
   legCurl:{
-    art:"legCurl",
-    targets:["Hamstrings"],
-    cue:"Curl the pad down or back by bending at the knee.",
-    how:[
-      "Align the machine pivot with your knee joint.",
-      "Set the pad against your lower leg or heels as the machine requires.",
-      "Curl smoothly, squeeze, and lower slowly."
-    ],
-    tips:["Don't lift your hips off the pad.","Use control, not momentum."]
+    image:'img/leg-curl.png',
+    muscles:['Hamstrings'],
+    summary:'Direct hamstring work by bending at the knee.',
+    setup:['Line up the machine pivot with your knee joint.','Set the roller pad so it sits comfortably against the lower leg/ankle area.','Brace into the seat or pad before starting.'],
+    perform:['Curl the pad smoothly.','Squeeze the hamstrings for a beat.','Lower slowly so the hamstrings stay loaded.'],
+    avoid:['Don\'t whip the weight.','Don\'t let your hips lift off the pad.']
   },
   hackSquat:{
-    art:"hackSquat",
-    targets:["Quads","Glutes"],
-    cue:"Machine squat pattern for legs without needing a barbell.",
-    how:[
-      "Set shoulders under the pads and feet shoulder width.",
-      "Lower until you reach a comfortable depth with heels down.",
-      "Drive up through your feet without letting your knees cave in."
-    ],
-    tips:["Don't bounce at the bottom.","Keep your back flat to the pad."]
+    image:'img/leg-press.png',
+    muscles:['Quads','Glutes'],
+    summary:'Machine squat pattern that lets you train legs hard without worrying about barbell balance.',
+    setup:['Place shoulders under the pads and feet around shoulder width.','Keep your whole foot flat and your back firmly supported.'],
+    perform:['Lower until you reach a comfortable depth.','Drive up through your feet and keep knees tracking over toes.'],
+    avoid:['Don\'t bounce in the bottom.','Don\'t let your knees collapse inward.']
   },
   legExtension:{
-    art:"legExtension",
-    targets:["Quads"],
-    cue:"Straighten your knees to lift the pad and squeeze your thighs.",
-    how:[
-      "Line the pivot up with your knee joint.",
-      "Set the lower pad just above your ankles.",
-      "Extend your legs, squeeze briefly, then lower under control."
-    ],
-    tips:["Don't kick the weight up.","Smooth reps work best here."]
+    image:'img/leg-extension.png',
+    muscles:['Quads'],
+    summary:'Direct quad isolation. Brilliant for learning to feel the front of the thighs working.',
+    setup:['Align the machine pivot with your knee.','Set the pad just above your ankles and sit back into the seat.'],
+    perform:['Straighten your knees to raise the pad.','Squeeze your quads briefly at the top.','Lower back down slowly.'],
+    avoid:['Don\'t kick the weight up explosively.','Don\'t swing your hips forward.']
   },
   lateralRaise:{
-    art:"lateralRaise",
-    targets:["Side shoulders"],
-    cue:"Lift your arms out to the side to build shoulder width.",
-    how:[
-      "Sit or stand with the machine set to the start position.",
-      "Raise to about shoulder height with soft elbows.",
-      "Lower slowly and stay in control."
-    ],
-    tips:["Don't swing.","You don't need huge weight."]
+    image:'img/shoulder-press.png',
+    muscles:['Side delts'],
+    summary:'Lighter shoulder isolation to build shoulder width.',
+    setup:['Set the machine handles or pads to the start position that feels natural.','Keep a soft bend in the elbows.'],
+    perform:['Raise out to the side until about shoulder height.','Lower slowly and stay in control the whole time.'],
+    avoid:['Don\'t swing.','Don\'t chase silly heavy weight on this one.']
   },
   bicepCurl:{
-    art:"bicepCurl",
-    targets:["Biceps","Forearms"],
-    cue:"Curl the handles up while keeping your upper arms still.",
-    how:[
-      "Adjust the seat so elbows line up with the machine pivot.",
-      "Keep your chest up and wrists neutral.",
-      "Curl up, squeeze, and lower under control."
-    ],
-    tips:["Don't rock your body.","Let the elbows stay fixed."]
+    image:'img/bicep-curl.png',
+    muscles:['Biceps','Forearms'],
+    summary:'Arm curl to build biceps and improve pulling strength support.',
+    setup:['If using a machine, line your elbows up with the pivot.','Keep chest up and upper arms still.'],
+    perform:['Curl the handle or bar up.','Squeeze the biceps at the top.','Lower with control to a full stretch.'],
+    avoid:['Don\'t rock your whole body.','Don\'t let your elbows drift around.']
   },
   tricepPushdown:{
-    art:"tricepPushdown",
-    targets:["Triceps"],
-    cue:"Push the bar or rope down by straightening your arms.",
-    how:[
-      "Stand tall with elbows tucked near your sides.",
-      "Push down until your arms are straight.",
-      "Return until forearms come up, but don't let elbows drift forward."
-    ],
-    tips:["Don't lean all your bodyweight into it.","Keep shoulders relaxed."]
+    image:'img/tricep-pushdown.png',
+    muscles:['Triceps'],
+    summary:'Straightforward arm move for the back of the upper arm.',
+    setup:['Stand tall at the cable with elbows tucked close to your sides.','Take either a rope or straight bar and set your shoulders down.'],
+    perform:['Push the handle down by straightening the arms.','Pause briefly, then return until forearms come up to about ninety degrees or slightly higher.'],
+    avoid:['Don\'t lean your whole bodyweight into it.','Don\'t let elbows travel forward each rep.']
   },
   calfRaise:{
-    art:"calfRaise",
-    targets:["Calves"],
-    cue:"Raise your heels high, then lower slowly into a stretch.",
-    how:[
-      "Set your shoulders or hips under the machine pad if seated or standing calf raise.",
-      "Press through the balls of your feet to rise up.",
-      "Pause at the top and lower with control."
-    ],
-    tips:["Don't bounce.","Use a full stretch at the bottom."]
+    image:'img/calf-raise.png',
+    muscles:['Calves'],
+    summary:'Simple calf work. Full stretch at the bottom and a hard squeeze at the top matter more than load.',
+    setup:['Place the balls of your feet on the platform and let the heels hang slightly if the machine allows.','Brace yourself against the pads or handles.'],
+    perform:['Rise up onto your toes as high as you can.','Pause briefly at the top.','Lower slowly into a stretch.'],
+    avoid:['Don\'t bounce the reps.','Don\'t rush the bottom position.']
   },
   crunch:{
-    art:"crunch",
-    targets:["Abs"],
-    cue:"Curl your ribs towards your hips rather than yanking with your arms.",
-    how:[
-      "Set the pad and seat to fit your body.",
-      "Brace, then crunch your torso down.",
-      "Return under control without fully relaxing."
-    ],
-    tips:["Think about squeezing your abs.","Short controlled reps are fine."]
+    image:'img/crunch.png',
+    muscles:['Abs'],
+    summary:'Ab work focused on curling the torso, not yanking with the arms or neck.',
+    setup:['Adjust the machine or bench so you feel supported and comfortable.','Brace your stomach lightly before moving.'],
+    perform:['Curl your ribs toward your hips.','Exhale as you crunch down.','Return under control without fully switching off your abs.'],
+    avoid:['Don\'t yank your neck.','Don\'t turn it into a hip-only movement.']
   },
   cardio:{
-    art:"cardio",
-    targets:["Heart health","Extra calorie burn"],
-    cue:"Easy extra cardio to help fitness and weight loss.",
-    how:[
-      "Use a pace you can sustain without dying.",
-      "Treadmill: slight incline and brisk walk works well.",
-      "Bike: steady, moderate effort."
-    ],
-    tips:["Don't overdo it after a hard leg day.","Consistency matters more than going flat out."]
+    image:'img/treadmill.png',
+    muscles:['Heart health','Extra calorie burn'],
+    summary:'Keep cardio simple: brisk enough to work, easy enough that you could still speak in short sentences.',
+    setup:['Pick treadmill or bike unless you genuinely prefer something else.','Start easy for the first minute before building pace.'],
+    perform:['Hold a steady pace rather than sprinting yourself into the floor.','Aim to leave the gym feeling worked, not destroyed.'],
+    avoid:['Don\'t turn every cardio block into an all-out interval session.','Don\'t skip it every time.']
   }
 };
 
 const workouts = {
-  Monday: {
-    subtitle: "Full Body A",
-    focus: "Simple push, pull and legs. Good all-round starter day.",
-    exercises: [
-      {name:"Leg Press", key:"legPress", sets:3, target:"6–8"},
-      {name:"Machine Chest Press", key:"chestPress", sets:3, target:"6–8"},
-      {name:"Lat Pulldown", key:"latPulldown", sets:3, target:"8–10"},
-      {name:"Seated Leg Curl", key:"legCurl", sets:3, target:"8–10"},
-      {name:"Seated Cable Row", key:"row", sets:3, target:"8–10"},
-      {name:"Machine Shoulder Press", key:"shoulderPress", sets:2, target:"8–10"},
-      {name:"Ab Crunch Machine", key:"crunch", sets:2, target:"10–15"},
-      {name:"Incline Treadmill", key:"cardio", sets:1, target:"10–20 min"}
+  Monday:{
+    subtitle:'Full Body A',
+    focus:'Easy starting day: one heavy leg machine, one chest press, two main pulls, shoulders and abs.',
+    warmup:['Treadmill 5 minutes at roughly 4.5–5.5 km/h with 3–5% incline.','On your first 3 exercises, do 1 lighter feeler set before the first real set.'],
+    cardio:'Incline treadmill 10 minutes at a brisk walk. Start around 5–8% incline and 4.5–5.5 km/h. If that feels rough, lower the incline before lowering the speed.',
+    tips:['Main lifts today: rest 2 minutes between hard sets.','Try to leave 2 reps in reserve on every set.'],
+    exercises:[
+      {name:'Leg Press', key:'legPress', sets:3, target:'6–8 reps'},
+      {name:'Machine Chest Press', key:'chestPress', sets:3, target:'6–8 reps'},
+      {name:'Lat Pulldown', key:'latPulldown', sets:3, target:'8–10 reps'},
+      {name:'Seated Leg Curl', key:'legCurl', sets:2, target:'10–12 reps'},
+      {name:'Seated Row', key:'row', sets:2, target:'8–10 reps'},
+      {name:'Machine Shoulder Press', key:'shoulderPress', sets:2, target:'8–10 reps'},
+      {name:'Ab Crunch', key:'crunch', sets:2, target:'10–15 reps'},
+      {name:'Cardio Finisher', key:'cardio', sets:1, target:'10 min'}
     ]
   },
-  Wednesday: {
-    subtitle: "Full Body B",
-    focus: "Second full-body day with extra quads, arms and shoulder work.",
-    exercises: [
-      {name:"Hack Squat / V-Squat", key:"hackSquat", sets:3, target:"8–10"},
-      {name:"Incline Machine Chest Press", key:"inclineChestPress", sets:3, target:"8–10"},
-      {name:"Chest-Supported Row Machine", key:"row", sets:3, target:"8–10"},
-      {name:"Leg Extension", key:"legExtension", sets:3, target:"10–12"},
-      {name:"Leg Curl", key:"legCurl", sets:3, target:"10–12"},
-      {name:"Machine Lateral Raise", key:"lateralRaise", sets:2, target:"10–15"},
-      {name:"Bicep Curl Machine / Cable Curl", key:"bicepCurl", sets:2, target:"10–12"},
-      {name:"Tricep Pushdown", key:"tricepPushdown", sets:2, target:"10–12"},
-      {name:"Bike / Treadmill", key:"cardio", sets:1, target:"10–20 min"}
+  Wednesday:{
+    subtitle:'Full Body B',
+    focus:'Second full-body day with extra quads plus direct arm work.',
+    warmup:['Bike 5 minutes at easy-to-moderate pace, or treadmill 5 minutes easy if you prefer.','Do 1 lighter warm-up set on hack squat / V-squat, incline press and row before your work sets.'],
+    cardio:'Bike or treadmill 12 minutes steady. If your legs are cooked from squats, use the bike and keep it at a moderate, sustainable pace.',
+    tips:['This is still a full-body day, but slightly more arm-friendly.','Hack squat and incline press are the two movements to take most seriously today.'],
+    exercises:[
+      {name:'Hack Squat / V-Squat', key:'hackSquat', sets:3, target:'8–10 reps'},
+      {name:'Incline Machine Chest Press', key:'inclineChestPress', sets:3, target:'8–10 reps'},
+      {name:'Seated Row / Chest-Supported Row', key:'row', sets:3, target:'8–10 reps'},
+      {name:'Leg Extension', key:'legExtension', sets:2, target:'10–12 reps'},
+      {name:'Bicep Curl Machine / Cable Curl', key:'bicepCurl', sets:2, target:'10–12 reps'},
+      {name:'Tricep Pushdown', key:'tricepPushdown', sets:2, target:'10–12 reps'},
+      {name:'Cardio Finisher', key:'cardio', sets:1, target:'12 min'}
     ]
   },
-  Friday: {
-    subtitle: "Full Body C",
-    focus: "Repeat the basics, finish the week strong, and cover any gaps.",
-    exercises: [
-      {name:"Leg Press", key:"legPress", sets:3, target:"8–10"},
-      {name:"Machine Chest Press", key:"chestPress", sets:3, target:"8–10"},
-      {name:"Lat Pulldown / Assisted Pull-up", key:"latPulldown", sets:3, target:"8–10"},
-      {name:"Seated Row Machine", key:"row", sets:3, target:"8–10"},
-      {name:"Leg Curl", key:"legCurl", sets:3, target:"10–12"},
-      {name:"Machine Shoulder Press", key:"shoulderPress", sets:2, target:"8–10"},
-      {name:"Calf Raise Machine", key:"calfRaise", sets:2, target:"10–15"},
-      {name:"Ab Crunch Machine", key:"crunch", sets:2, target:"10–15"},
-      {name:"Incline Treadmill", key:"cardio", sets:1, target:"10–20 min"}
+  Friday:{
+    subtitle:'Full Body C',
+    focus:'Finish the week by repeating the basics, then hit calves and shoulders.',
+    warmup:['Treadmill 5 minutes, easy to moderate. Add a little incline if you want.','Do 1 lighter warm-up set on leg press, chest press and lat pulldown.'],
+    cardio:'Incline treadmill 12–15 minutes. Good starting point: 6–10% incline and 4–5.5 km/h. You should be breathing harder but still in control.',
+    tips:['Think clean technique, not ego lifting.','If you are especially tired, drop one set from the last accessory exercise.'],
+    exercises:[
+      {name:'Leg Press', key:'legPress', sets:3, target:'8–10 reps'},
+      {name:'Machine Chest Press', key:'chestPress', sets:3, target:'8–10 reps'},
+      {name:'Lat Pulldown', key:'latPulldown', sets:3, target:'8–10 reps'},
+      {name:'Seated Row', key:'row', sets:2, target:'8–10 reps'},
+      {name:'Calf Raise Machine', key:'calfRaise', sets:2, target:'10–15 reps'},
+      {name:'Machine Lateral Raise', key:'lateralRaise', sets:2, target:'10–15 reps'},
+      {name:'Ab Crunch', key:'crunch', sets:2, target:'10–15 reps'},
+      {name:'Cardio Finisher', key:'cardio', sets:1, target:'12–15 min'}
     ]
   },
-  Weekend: {
-    subtitle: "Optional +1 day",
-    focus: "Bonus cardio and easy accessories. You can skip this and still be fine.",
-    exercises: [
-      {name:"Incline Treadmill / Bike", key:"cardio", sets:1, target:"20–30 min"},
-      {name:"Bicep Curl", key:"bicepCurl", sets:3, target:"10–12"},
-      {name:"Tricep Pushdown", key:"tricepPushdown", sets:3, target:"10–12"},
-      {name:"Lateral Raise", key:"lateralRaise", sets:3, target:"12–15"},
-      {name:"Calf Raise", key:"calfRaise", sets:3, target:"10–15"},
-      {name:"Ab Crunch Machine", key:"crunch", sets:3, target:"10–15"}
+  Weekend:{
+    subtitle:'Optional +1 Day',
+    focus:'Bonus day only. The main 3 days already do the job. This is for extra calorie burn and a bit of easy accessory work.',
+    warmup:['5 minutes easy cardio. Don\'t overthink it.','Use this day only if you feel reasonably fresh. If you feel battered, skip it.'],
+    cardio:'Pick ONE: (a) treadmill 25–35 minutes at a brisk walk, or (b) bike 25 minutes steady, or (c) 10 rounds of 1 minute brisk / 1 minute easy on bike or treadmill.',
+    tips:['Keep this session easier than the main days.','This day should make you feel better, not flatten you.'],
+    exercises:[
+      {name:'Longer Cardio Block', key:'cardio', sets:1, target:'25–35 min'},
+      {name:'Bicep Curl', key:'bicepCurl', sets:2, target:'10–12 reps'},
+      {name:'Tricep Pushdown', key:'tricepPushdown', sets:2, target:'10–12 reps'},
+      {name:'Lateral Raise', key:'lateralRaise', sets:2, target:'12–15 reps'},
+      {name:'Calf Raise', key:'calfRaise', sets:2, target:'12–15 reps'},
+      {name:'Ab Crunch', key:'crunch', sets:2, target:'12–15 reps'}
     ]
   }
 };
 
-const order = ["Monday","Wednesday","Friday","Weekend"];
-let current = localStorage.getItem("gym-current") || bestDay();
-let state = JSON.parse(localStorage.getItem("gym-state") || "{}");
-let history = JSON.parse(localStorage.getItem("gym-history") || "[]");
+const credits = [
+  {name:'Chest press / incline press photo', by:'Andrea Piacquadio', link:'https://www.pexels.com/photo/young-determined-sportswoman-doing-exercise-on-weight-machine-in-modern-sports-club-3768913/'},
+  {name:'Lat pulldown photo', by:'Doğu Tuncer', link:'https://www.pexels.com/photo/man-exercising-at-the-gym-17210044/'},
+  {name:'Shoulder press photo', by:'Luis Morales Torres', link:'https://www.pexels.com/photo/man-exercising-with-shoulder-press-machine-in-gym-34669288/'},
+  {name:'Leg curl photo', by:'Vika Glitter', link:'https://www.pexels.com/photo/woman-exercising-on-leg-curl-machine-in-gym-28731788/'},
+  {name:'Leg extension photo', by:'Николай Векшарев', link:'https://www.pexels.com/photo/man-exercising-his-legs-at-the-gym-19722966/'},
+  {name:'Leg press / hack squat photo', by:'Amar Preciado', link:'https://www.pexels.com/photo/woman-practicing-at-gym-13965336/'},
+  {name:'Bicep curl photo', by:'Alesia Kozik', link:'https://www.pexels.com/photo/a-man-doing-a-dumbbell-bicep-curl-7289252/'},
+  {name:'Tricep pushdown photo', by:'Carlos Mario', link:'https://www.pexels.com/photo/a-woman-doing-triceps-pushdowns-13616289/'},
+  {name:'Treadmill photo', by:'William Choquette', link:'https://www.pexels.com/photo/an-on-treadmill-1954524/'},
+  {name:'Calf raise photo', by:'Amar Preciado', link:'https://www.pexels.com/photo/calves-of-woman-at-gym-13965339/'},
+  {name:'Seated row photo', by:'moha sour', link:'https://www.pexels.com/photo/man-sitting-on-black-gym-equipment-11876626/'},
+  {name:'Crunch photo', by:'Ivan S', link:'https://www.pexels.com/photo/man-exercising-at-a-gym-4162548/'}
+];
+
+const order = ['Monday','Wednesday','Friday','Weekend'];
+let current = localStorage.getItem('gym-current') || bestDay();
+let state = JSON.parse(localStorage.getItem('gym-state') || '{}');
+let history = JSON.parse(localStorage.getItem('gym-history') || '[]');
 
 function bestDay(){
   const d = new Date().getDay();
-  if (d===1 || d===2) return "Monday";
-  if (d===3 || d===4) return "Wednesday";
-  if (d===5) return "Friday";
-  return "Weekend";
+  if (d===1 || d===2) return 'Monday';
+  if (d===3 || d===4) return 'Wednesday';
+  if (d===5) return 'Friday';
+  return 'Weekend';
 }
-function keyFor(day,i){ return day+"::"+i; }
+function keyFor(day,i){ return day+'::'+i; }
 function getEntry(day,i,sets){
   const k = keyFor(day,i);
-  if(!state[k]) state[k] = {sets:Array.from({length:sets},()=>({w:"",r:"",d:false}))};
-  while(state[k].sets.length < sets) state[k].sets.push({w:"",r:"",d:false});
+  if(!state[k]) state[k] = {sets:Array.from({length:sets},()=>({w:'',r:'',d:false}))};
+  while(state[k].sets.length < sets) state[k].sets.push({w:'',r:'',d:false});
+  if(state[k].sets.length > sets) state[k].sets = state[k].sets.slice(0,sets);
   return state[k];
 }
 function save(){
-  localStorage.setItem("gym-state", JSON.stringify(state));
-  localStorage.setItem("gym-history", JSON.stringify(history));
-  localStorage.setItem("gym-current", current);
-  document.getElementById("statusPill").textContent = "Saved locally on this device";
+  localStorage.setItem('gym-state', JSON.stringify(state));
+  localStorage.setItem('gym-history', JSON.stringify(history));
+  localStorage.setItem('gym-current', current);
+  document.getElementById('statusPill').textContent = 'Saved locally on this device';
 }
 function lastFor(name){
   for(const h of history){
@@ -499,386 +429,217 @@ function lastFor(name){
   }
   return null;
 }
-function art(type, label){
-  const stroke = "#82ebb0";
-  const soft = "#1d4d3b";
-  const fill = "#113627";
-  const text = "#dff8e9";
-  const commonStart = `<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
-  <rect x="1.5" y="1.5" width="197" height="137" rx="18" fill="${fill}" stroke="${soft}" />
-  <text x="100" y="126" text-anchor="middle" font-size="11" fill="${text}" font-family="system-ui, sans-serif">${label}</text>`;
-  const commonEnd = `</svg>`;
-  const maps = {
-    legPress: `
-      <line x1="28" y1="98" x2="82" y2="98" stroke="${stroke}" stroke-width="4"/>
-      <line x1="82" y1="98" x2="82" y2="56" stroke="${stroke}" stroke-width="4"/>
-      <line x1="88" y1="84" x2="132" y2="52" stroke="${stroke}" stroke-width="4"/>
-      <rect x="132" y="40" width="10" height="28" rx="2" fill="${stroke}"/>
-      <circle cx="108" cy="62" r="6" fill="${stroke}"/>
-      <line x1="108" y1="68" x2="94" y2="80" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="80" x2="84" y2="72" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="80" x2="106" y2="94" stroke="${stroke}" stroke-width="4"/>
-      <line x1="106" y1="94" x2="122" y2="86" stroke="${stroke}" stroke-width="4"/>
-    `,
-    chestPress: `
-      <rect x="28" y="52" width="10" height="46" rx="2" fill="${stroke}"/>
-      <rect x="28" y="98" width="50" height="8" rx="4" fill="${stroke}"/>
-      <rect x="70" y="70" width="8" height="28" rx="3" fill="${stroke}"/>
-      <circle cx="92" cy="60" r="6" fill="${stroke}"/>
-      <line x1="92" y1="66" x2="92" y2="86" stroke="${stroke}" stroke-width="4"/>
-      <line x1="92" y1="72" x2="112" y2="72" stroke="${stroke}" stroke-width="4"/>
-      <line x1="112" y1="72" x2="126" y2="64" stroke="${stroke}" stroke-width="4"/>
-      <line x1="92" y1="86" x2="84" y2="100" stroke="${stroke}" stroke-width="4"/>
-      <line x1="92" y1="86" x2="102" y2="100" stroke="${stroke}" stroke-width="4"/>
-      <line x1="126" y1="64" x2="145" y2="64" stroke="${stroke}" stroke-width="4"/>
-      <line x1="145" y1="64" x2="145" y2="90" stroke="${stroke}" stroke-width="4"/>
-    `,
-    inclineChestPress: `
-      <rect x="30" y="82" width="48" height="8" rx="4" fill="${stroke}"/>
-      <line x1="36" y1="82" x2="70" y2="58" stroke="${stroke}" stroke-width="8" stroke-linecap="round"/>
-      <circle cx="92" cy="53" r="6" fill="${stroke}"/>
-      <line x1="92" y1="59" x2="98" y2="78" stroke="${stroke}" stroke-width="4"/>
-      <line x1="98" y1="66" x2="118" y2="60" stroke="${stroke}" stroke-width="4"/>
-      <line x1="118" y1="60" x2="132" y2="52" stroke="${stroke}" stroke-width="4"/>
-      <line x1="98" y1="78" x2="90" y2="94" stroke="${stroke}" stroke-width="4"/>
-      <line x1="98" y1="78" x2="108" y2="94" stroke="${stroke}" stroke-width="4"/>
-      <line x1="132" y1="52" x2="146" y2="52" stroke="${stroke}" stroke-width="4"/>
-      <line x1="146" y1="52" x2="146" y2="84" stroke="${stroke}" stroke-width="4"/>
-    `,
-    latPulldown: `
-      <line x1="40" y1="30" x2="150" y2="30" stroke="${stroke}" stroke-width="4"/>
-      <line x1="48" y1="30" x2="48" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="142" y1="30" x2="142" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="90" y1="42" x2="110" y2="42" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="42" x2="96" y2="58" stroke="${stroke}" stroke-width="2"/>
-      <line x1="104" y1="42" x2="104" y2="58" stroke="${stroke}" stroke-width="2"/>
-      <circle cx="100" cy="64" r="6" fill="${stroke}"/>
-      <line x1="100" y1="70" x2="100" y2="90" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="76" x2="88" y2="58" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="76" x2="112" y2="58" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="90" x2="90" y2="104" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="90" x2="110" y2="104" stroke="${stroke}" stroke-width="4"/>
-      <rect x="84" y="94" width="32" height="6" rx="3" fill="${stroke}"/>
-    `,
-    row: `
-      <rect x="36" y="84" width="48" height="8" rx="4" fill="${stroke}"/>
-      <line x1="36" y1="84" x2="28" y2="98" stroke="${stroke}" stroke-width="4"/>
-      <line x1="84" y1="84" x2="92" y2="98" stroke="${stroke}" stroke-width="4"/>
-      <circle cx="110" cy="62" r="6" fill="${stroke}"/>
-      <line x1="110" y1="68" x2="102" y2="86" stroke="${stroke}" stroke-width="4"/>
-      <line x1="102" y1="74" x2="86" y2="72" stroke="${stroke}" stroke-width="4"/>
-      <line x1="86" y1="72" x2="72" y2="66" stroke="${stroke}" stroke-width="4"/>
-      <line x1="102" y1="86" x2="92" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="102" y1="86" x2="112" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="118" y1="68" x2="152" y2="60" stroke="${stroke}" stroke-width="3"/>
-      <rect x="152" y="55" width="10" height="10" rx="2" fill="${stroke}"/>
-    `,
-    shoulderPress: `
-      <rect x="52" y="94" width="48" height="8" rx="4" fill="${stroke}"/>
-      <rect x="70" y="66" width="10" height="28" rx="3" fill="${stroke}"/>
-      <circle cx="94" cy="52" r="6" fill="${stroke}"/>
-      <line x1="94" y1="58" x2="94" y2="82" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="66" x2="82" y2="58" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="66" x2="106" y2="58" stroke="${stroke}" stroke-width="4"/>
-      <line x1="82" y1="58" x2="82" y2="42" stroke="${stroke}" stroke-width="4"/>
-      <line x1="106" y1="58" x2="106" y2="42" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="82" x2="84" y2="98" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="82" x2="104" y2="98" stroke="${stroke}" stroke-width="4"/>
-      <rect x="72" y="36" width="18" height="6" rx="3" fill="${stroke}"/>
-      <rect x="98" y="36" width="18" height="6" rx="3" fill="${stroke}"/>
-    `,
-    legCurl: `
-      <rect x="30" y="92" width="62" height="8" rx="4" fill="${stroke}"/>
-      <line x1="76" y1="92" x2="108" y2="74" stroke="${stroke}" stroke-width="8" stroke-linecap="round"/>
-      <circle cx="108" cy="60" r="6" fill="${stroke}"/>
-      <line x1="108" y1="66" x2="96" y2="78" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="78" x2="82" y2="70" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="78" x2="112" y2="90" stroke="${stroke}" stroke-width="4"/>
-      <line x1="112" y1="90" x2="126" y2="80" stroke="${stroke}" stroke-width="4"/>
-      <rect x="122" y="74" width="10" height="18" rx="3" fill="${stroke}"/>
-    `,
-    hackSquat: `
-      <line x1="42" y1="28" x2="28" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="130" y1="28" x2="144" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="42" y1="28" x2="130" y2="28" stroke="${stroke}" stroke-width="4"/>
-      <circle cx="82" cy="52" r="6" fill="${stroke}"/>
-      <line x1="82" y1="58" x2="82" y2="78" stroke="${stroke}" stroke-width="4"/>
-      <line x1="82" y1="66" x2="66" y2="72" stroke="${stroke}" stroke-width="4"/>
-      <line x1="82" y1="66" x2="98" y2="72" stroke="${stroke}" stroke-width="4"/>
-      <line x1="82" y1="78" x2="72" y2="96" stroke="${stroke}" stroke-width="4"/>
-      <line x1="82" y1="78" x2="98" y2="88" stroke="${stroke}" stroke-width="4"/>
-      <rect x="62" y="74" width="42" height="8" rx="4" fill="${stroke}"/>
-    `,
-    legExtension: `
-      <rect x="34" y="92" width="54" height="8" rx="4" fill="${stroke}"/>
-      <rect x="80" y="72" width="8" height="20" rx="3" fill="${stroke}"/>
-      <circle cx="104" cy="60" r="6" fill="${stroke}"/>
-      <line x1="104" y1="66" x2="96" y2="84" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="72" x2="82" y2="72" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="84" x2="118" y2="84" stroke="${stroke}" stroke-width="4"/>
-      <line x1="118" y1="84" x2="134" y2="76" stroke="${stroke}" stroke-width="4"/>
-      <rect x="132" y="72" width="10" height="12" rx="3" fill="${stroke}"/>
-    `,
-    lateralRaise: `
-      <circle cx="100" cy="46" r="6" fill="${stroke}"/>
-      <line x1="100" y1="52" x2="100" y2="82" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="62" x2="72" y2="52" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="62" x2="128" y2="52" stroke="${stroke}" stroke-width="4"/>
-      <line x1="72" y1="52" x2="62" y2="58" stroke="${stroke}" stroke-width="4"/>
-      <line x1="128" y1="52" x2="138" y2="58" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="82" x2="90" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="82" x2="110" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <circle cx="60" cy="60" r="6" fill="${stroke}"/>
-      <circle cx="140" cy="60" r="6" fill="${stroke}"/>
-    `,
-    bicepCurl: `
-      <circle cx="100" cy="48" r="6" fill="${stroke}"/>
-      <line x1="100" y1="54" x2="100" y2="82" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="62" x2="84" y2="68" stroke="${stroke}" stroke-width="4"/>
-      <line x1="84" y1="68" x2="80" y2="56" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="62" x2="116" y2="68" stroke="${stroke}" stroke-width="4"/>
-      <line x1="116" y1="68" x2="120" y2="56" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="82" x2="90" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="82" x2="110" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <circle cx="80" cy="54" r="4" fill="${stroke}"/>
-      <circle cx="120" cy="54" r="4" fill="${stroke}"/>
-    `,
-    tricepPushdown: `
-      <line x1="100" y1="20" x2="100" y2="42" stroke="${stroke}" stroke-width="4"/>
-      <rect x="88" y="42" width="24" height="6" rx="3" fill="${stroke}"/>
-      <circle cx="100" cy="58" r="6" fill="${stroke}"/>
-      <line x1="100" y1="64" x2="100" y2="90" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="70" x2="90" y2="86" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="70" x2="110" y2="86" stroke="${stroke}" stroke-width="4"/>
-      <line x1="90" y1="86" x2="90" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="110" y1="86" x2="110" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="90" x2="90" y2="106" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="90" x2="110" y2="106" stroke="${stroke}" stroke-width="4"/>
-    `,
-    calfRaise: `
-      <line x1="70" y1="102" x2="130" y2="102" stroke="${stroke}" stroke-width="4"/>
-      <circle cx="96" cy="44" r="6" fill="${stroke}"/>
-      <line x1="96" y1="50" x2="96" y2="82" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="58" x2="82" y2="66" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="58" x2="110" y2="66" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="82" x2="88" y2="96" stroke="${stroke}" stroke-width="4"/>
-      <line x1="96" y1="82" x2="112" y2="96" stroke="${stroke}" stroke-width="4"/>
-      <line x1="88" y1="96" x2="80" y2="88" stroke="${stroke}" stroke-width="4"/>
-      <line x1="112" y1="96" x2="120" y2="88" stroke="${stroke}" stroke-width="4"/>
-    `,
-    crunch: `
-      <rect x="34" y="92" width="54" height="8" rx="4" fill="${stroke}"/>
-      <rect x="76" y="72" width="8" height="20" rx="3" fill="${stroke}"/>
-      <circle cx="100" cy="58" r="6" fill="${stroke}"/>
-      <path d="M100 64 Q90 72 94 84" stroke="${stroke}" stroke-width="4" fill="none"/>
-      <line x1="94" y1="84" x2="84" y2="100" stroke="${stroke}" stroke-width="4"/>
-      <line x1="94" y1="84" x2="108" y2="98" stroke="${stroke}" stroke-width="4"/>
-      <line x1="102" y1="64" x2="118" y2="60" stroke="${stroke}" stroke-width="4"/>
-      <rect x="118" y="54" width="12" height="10" rx="3" fill="${stroke}"/>
-    `,
-    cardio: `
-      <rect x="40" y="86" width="92" height="8" rx="4" fill="${stroke}"/>
-      <line x1="42" y1="86" x2="34" y2="104" stroke="${stroke}" stroke-width="4"/>
-      <line x1="128" y1="86" x2="136" y2="104" stroke="${stroke}" stroke-width="4"/>
-      <circle cx="100" cy="44" r="6" fill="${stroke}"/>
-      <line x1="100" y1="50" x2="90" y2="70" stroke="${stroke}" stroke-width="4"/>
-      <line x1="90" y1="70" x2="110" y2="76" stroke="${stroke}" stroke-width="4"/>
-      <line x1="100" y1="58" x2="112" y2="68" stroke="${stroke}" stroke-width="4"/>
-      <line x1="90" y1="70" x2="76" y2="92" stroke="${stroke}" stroke-width="4"/>
-      <line x1="110" y1="76" x2="124" y2="92" stroke="${stroke}" stroke-width="4"/>
-    `
-  };
-  return commonStart + (maps[type] || maps.cardio) + commonEnd;
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function renderTabs(){
-  const t = document.getElementById("tabs");
-  t.innerHTML = "";
-  order.forEach(day=>{
-    const b = document.createElement("button");
-    b.textContent = day;
-    b.className = day === current ? "active" : "";
-    b.addEventListener("click", ()=>{ current = day; save(); render(); });
-    t.appendChild(b);
+  const el = document.getElementById('tabs');
+  el.innerHTML = order.map(day => `<button class="${day===current?'active':''}" data-day="${day}">${day}</button>`).join('');
+  el.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{current=btn.dataset.day; save(); render();});
+}
+function renderSessionPanel(){
+  const data = workouts[current];
+  const main = data.exercises.filter(e=>e.key!=='cardio').length;
+  document.getElementById('sessionPanel').innerHTML = `
+    <div class="session-head">
+      <div>
+        <h2>${current} <span class="small">· ${esc(data.subtitle)}</span></h2>
+        <p>${esc(data.focus)}</p>
+      </div>
+      <div class="mini-tags">
+        <span class="tag">${main} strength exercises</span>
+        <span class="tag">1 cardio finish</span>
+        <span class="tag">full body</span>
+      </div>
+    </div>
+    <div class="session-grid">
+      <div class="subgrid">
+        <div class="box">
+          <div class="label">Warm-up</div>
+          <ul>${data.warmup.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+        </div>
+        <div class="box">
+          <div class="label">Cardio for this day</div>
+          <p>${esc(data.cardio)}</p>
+        </div>
+      </div>
+      <div class="subgrid">
+        <div class="box">
+          <div class="label">Session notes</div>
+          <ul>${data.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+        </div>
+        <div class="box">
+          <div class="label">Good beginner rule</div>
+          <p>If a machine is taken, don\'t stand around waiting forever. Swap it for the closest similar one and move on.</p>
+        </div>
+      </div>
+    </div>`;
+}
+function renderWorkout(){
+  const root = document.getElementById('workout');
+  const data = workouts[current];
+  root.innerHTML = data.exercises.map((ex,i)=>{
+    const info = exerciseInfo[ex.key];
+    const entry = getEntry(current,i,ex.sets);
+    const prev = lastFor(ex.name);
+    return `
+      <article class="exercise">
+        <div class="exercise-header">
+          <button class="thumb img-btn" type="button" data-img="${esc(info.image)}" data-caption="${esc(ex.name)}">
+            <img src="${esc(info.image)}" alt="${esc(ex.name)}">
+            <span class="zoom">Tap to enlarge</span>
+          </button>
+          <div>
+            <div class="ex-title">${esc(ex.name)}</div>
+            <div class="target">${ex.sets>1 ? `${ex.sets} sets · ` : ''}${esc(ex.target)}</div>
+            <p>${esc(info.summary)}</p>
+            <div class="muscles">${info.muscles.map(m=>`<span class="tag">${esc(m)}</span>`).join('')}</div>
+          </div>
+        </div>
+        <div class="exercise-copy">
+          <div class="box">
+            <div class="label">Set up</div>
+            <ul>${info.setup.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+          </div>
+          <div class="box">
+            <div class="label">Do the rep like this</div>
+            <ul>${info.perform.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+          </div>
+          <div class="box">
+            <div class="label">Avoid</div>
+            <ul>${info.avoid.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+          </div>
+          <div class="box">
+            <div class="label">Quick reminder</div>
+            <p>${ex.key==='cardio' ? 'Keep the pace honest but sustainable. You are not trying to die on this section.' : 'Move the weight smoothly, feel the target muscle, and stop the set if your form turns ugly.'}</p>
+          </div>
+        </div>
+        <div class="sets">
+          <div class="set-head"><div>Set</div><div>${ex.key==='cardio' ? 'Setting' : 'Weight'}</div><div>${ex.key==='cardio' ? 'Minutes' : 'Reps'}</div><div>Done</div></div>
+          ${entry.sets.map((s,idx)=>`
+            <div class="set-row">
+              <div>${idx+1}</div>
+              <div><input type="number" inputmode="decimal" placeholder="${ex.key==='cardio'?'incline / level':'kg'}" value="${esc(s.w)}" data-day="${current}" data-ex="${i}" data-set="${idx}" data-field="w"></div>
+              <div><input type="number" inputmode="decimal" placeholder="${ex.key==='cardio'?'mins':'reps'}" value="${esc(s.r)}" data-day="${current}" data-ex="${i}" data-set="${idx}" data-field="r"></div>
+              <div class="check"><input type="checkbox" ${s.d?'checked':''} data-day="${current}" data-ex="${i}" data-set="${idx}" data-field="d"></div>
+            </div>`).join('')}
+          ${prev ? `<div class="prev"><b>Last time:</b> ${esc(prev.sets.map((s,n)=>`Set ${n+1}: ${s.w||'-'} ${ex.key==='cardio'?'mins':'kg'} × ${s.r||'-'} ${ex.key==='cardio'?'mins':'reps'}`).join(' · '))}</div>` : `<div class="prev">No previous result saved yet.</div>`}
+        </div>
+      </article>`;
+  }).join('');
+
+  root.querySelectorAll('input').forEach(input=>{
+    const handler = () => {
+      const day = input.dataset.day, ex = +input.dataset.ex, set = +input.dataset.set, field = input.dataset.field;
+      const exData = workouts[day].exercises[ex];
+      const entry = getEntry(day, ex, exData.sets);
+      entry.sets[set][field] = field==='d' ? input.checked : input.value;
+      save();
+      updateStats();
+    };
+    input.addEventListener(input.type==='checkbox' ? 'change' : 'input', handler);
   });
+
+  root.querySelectorAll('.img-btn').forEach(btn => btn.addEventListener('click', () => openModal(btn.dataset.img, btn.dataset.caption)));
+}
+function updateStats(){
+  const list = workouts[current].exercises;
+  let total=0, done=0;
+  list.forEach((ex,i)=>{
+    const entry = getEntry(current,i,ex.sets);
+    total += ex.sets;
+    done += entry.sets.filter(s=>s.d).length;
+  });
+  document.getElementById('doneSets').textContent = done;
+  document.getElementById('totalSets').textContent = total;
+  document.getElementById('progressPct').textContent = total ? Math.round(done/total*100)+'%' : '0%';
+  document.getElementById('exerciseCount').textContent = list.length;
+}
+function renderHistory(){
+  const el = document.getElementById('history');
+  if(!history.length){ el.innerHTML = '<p class="small">No workouts saved yet.</p>'; return; }
+  el.innerHTML = history.map(h=>`<div class="history-row"><b>${esc(h.day)}</b> · ${esc(h.date)}<br><span class="small">${h.exercises.map(ex=>`${esc(ex.name)} (${ex.sets.length} set${ex.sets.length>1?'s':''})`).join(' · ')}</span></div>`).join('');
+}
+function renderCredits(){
+  document.getElementById('credits').innerHTML = credits.map(c=>`<div class="credit"><b>${esc(c.name)}</b><br><span class="small">Photo by ${esc(c.by)} · <a href="${esc(c.link)}" target="_blank" rel="noopener">source</a></span></div>`).join('');
+}
+function finishWorkout(){
+  const exercises = workouts[current].exercises.map((ex,i)=>({
+    name:ex.name,
+    key:ex.key,
+    sets:getEntry(current,i,ex.sets).sets.filter(s=>s.d || s.w || s.r).map(s=>({w:s.w,r:s.r,d:s.d}))
+  })).filter(ex=>ex.sets.length);
+  if(!exercises.length){ alert('Nothing filled in yet.'); return; }
+  history.unshift({day:current, date:new Date().toLocaleString(), exercises});
+  history = history.slice(0,30);
+  save(); renderHistory();
+  alert('Workout saved. Nice one.');
+}
+function clearToday(){
+  if(!confirm('Clear all inputs for '+current+'?')) return;
+  workouts[current].exercises.forEach((ex,i)=>{ state[keyFor(current,i)] = {sets:Array.from({length:ex.sets},()=>({w:'',r:'',d:false}))}; });
+  save(); render();
+}
+function exportBackup(){
+  const blob = new Blob([JSON.stringify({state,history,current},null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'gym-tracker-backup.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importBackup(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      state = data.state || {};
+      history = data.history || [];
+      current = data.current || current;
+      save(); render();
+      alert('Backup restored.');
+    }catch(e){ alert('Could not read that backup file.'); }
+  };
+  reader.readAsText(file);
+}
+function wipeAll(){
+  if(!confirm('Wipe all saved data from this device?')) return;
+  state = {}; history = []; save(); render();
+}
+function cycle(dir){
+  const idx = order.indexOf(current);
+  current = order[(idx + dir + order.length) % order.length];
+  save(); render();
+}
+function openModal(src, caption){
+  document.getElementById('modalImg').src = src;
+  document.getElementById('modalCaption').textContent = caption;
+  document.getElementById('imageModal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('imageModal').classList.remove('open');
 }
 function render(){
   renderTabs();
-  const info = workouts[current];
-  document.getElementById("sessionBanner").innerHTML =
-    `<strong>${current} — ${info.subtitle}</strong><br><span class="small">${info.focus}</span>`;
-  document.getElementById("exerciseCount").textContent = info.exercises.length;
-  const out = document.getElementById("workout");
-  out.innerHTML = "";
-  info.exercises.forEach((ex,i)=>{
-    const entry = getEntry(current, i, ex.sets);
-    const prev = lastFor(ex.name);
-    const meta = exerciseInfo[ex.key];
-    let rows = "";
-    for(let s=0; s<ex.sets; s++){
-      const x = entry.sets[s];
-      const cardio = ex.target.includes("min");
-      rows += `
-        <div class="${s===0?'head':''}">${s===0?'SET':''}</div>
-        <div class="${s===0?'head':''}">${s===0?(cardio?'MINUTES':'WEIGHT'):''}</div>
-        <div class="${s===0?'head':''}">${s===0?(cardio?'LEVEL / NOTE':'REPS'):''}</div>
-        <div class="${s===0?'head':''}">${s===0?'DONE':''}</div>
-        <div>${s+1}</div>
-        <input aria-label="${ex.name} set ${s+1} weight" type="number" inputmode="decimal" step="0.5" data-i="${i}" data-s="${s}" data-f="w" value="${x.w}">
-        <input aria-label="${ex.name} set ${s+1} reps" type="number" inputmode="numeric" step="1" data-i="${i}" data-s="${s}" data-f="r" value="${x.r}">
-        <div class="check"><input aria-label="${ex.name} set ${s+1} done" type="checkbox" data-i="${i}" data-s="${s}" data-f="d" ${x.d ? 'checked' : ''}></div>
-      `;
-    }
-    let prevText = "No previous numbers recorded yet.";
-    if(prev){
-      prevText = "Last time: " + prev.sets.map((x,idx)=>`S${idx+1} ${x.w||"–"} × ${x.r||"–"}`).join(" • ");
-    }
-    const card = document.createElement("section");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="exercise-top">
-        <div>
-          <div class="exercise-name">${ex.name}</div>
-          <div class="target">Target: ${ex.sets} × ${ex.target}</div>
-          <p>${meta.cue}</p>
-        </div>
-        <div class="art">${art(meta.art, ex.name)}</div>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-box">
-          <div class="label">What it hits</div>
-          <div class="tags">${meta.targets.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-          <div class="label" style="margin-top:12px">Quick guide</div>
-          <ul>${meta.how.map(h=>`<li>${h}</li>`).join("")}</ul>
-        </div>
-        <div class="info-box">
-          <div class="label">Simple tips</div>
-          <ul>${meta.tips.map(t=>`<li>${t}</li>`).join("")}</ul>
-        </div>
-      </div>
-
-      <div class="sets">${rows}</div>
-
-      <details>
-        <summary>Extra note</summary>
-        <p class="small">If the machine in your gym looks slightly different, don't panic. Match the movement pattern and set yourself up so the machine's pivot points roughly line up with your joints.</p>
-      </details>
-
-      <div class="prev">${prevText}</div>
-    `;
-    out.appendChild(card);
-  });
-
-  out.querySelectorAll("input").forEach(el=>{
-    el.addEventListener("input", updateField);
-    el.addEventListener("change", updateField);
-  });
-  updateSummary();
+  renderSessionPanel();
+  renderWorkout();
+  updateStats();
   renderHistory();
+  renderCredits();
 }
-function updateField(e){
-  const i = +e.target.dataset.i;
-  const s = +e.target.dataset.s;
-  const f = e.target.dataset.f;
-  const ex = workouts[current].exercises[i];
-  const entry = getEntry(current, i, ex.sets);
-  entry.sets[s][f] = f === "d" ? e.target.checked : e.target.value;
-  save();
-  updateSummary();
-}
-function updateSummary(){
-  let done = 0, total = 0;
-  workouts[current].exercises.forEach((ex,i)=>{
-    const entry = getEntry(current,i,ex.sets);
-    entry.sets.forEach(x=>{ total++; if(x.d) done++; });
-  });
-  document.getElementById("doneSets").textContent = done;
-  document.getElementById("totalSets").textContent = total;
-  document.getElementById("progressPct").textContent = Math.round(done / total * 100) + "%";
-}
-function clearCurrent(){
-  workouts[current].exercises.forEach((ex,i)=>delete state[keyFor(current,i)]);
-  save();
-  render();
-}
-function finishWorkout(){
-  const record = {
-    day: current,
-    date: new Date().toISOString(),
-    exercises: workouts[current].exercises.map((ex,i)=>({
-      name: ex.name,
-      sets: getEntry(current,i,ex.sets).sets.map(x=>({...x}))
-    }))
-  };
-  history.unshift(record);
-  history = history.slice(0,100);
-  clearCurrent();
-  alert("Workout saved. Nice one.");
-}
-function renderHistory(){
-  const el = document.getElementById("history");
-  if(!history.length){
-    el.innerHTML = "<p class='small'>No completed workouts yet.</p>";
-    return;
-  }
-  el.innerHTML = history.slice(0,20).map(h=>{
-    const d = new Date(h.date);
-    return `<div class="history-row"><strong>${h.day}</strong> — ${d.toLocaleDateString()}<div class="small">${
-      h.exercises.map(x=>{
-        const filled = x.sets.filter(s=>s.w||s.r).length;
-        return filled ? `${x.name}: ${x.sets.filter(s=>s.w||s.r).map(s=>`${s.w||"–"}×${s.r||"–"}`).join(", ")}` : "";
-      }).filter(Boolean).join(" · ")
-    }</div></div>`;
-  }).join("");
-}
-document.getElementById("finishBtn").addEventListener("click",()=>{
-  if(confirm("Save this workout to history and clear the session?")) finishWorkout();
-});
-document.getElementById("clearBtn").addEventListener("click",()=>{
-  if(confirm("Clear today's entered weights and reps?")) clearCurrent();
-});
-document.getElementById("prevBtn").addEventListener("click",()=>{
-  current = order[(order.indexOf(current)+order.length-1)%order.length];
-  save(); render();
-});
-document.getElementById("nextBtn").addEventListener("click",()=>{
-  current = order[(order.indexOf(current)+1)%order.length];
-  save(); render();
-});
-document.getElementById("exportBtn").addEventListener("click",()=>{
-  const blob = new Blob([JSON.stringify({state,history,current}, null, 2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "gym-tracker-backup.json";
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
-});
-document.getElementById("importFile").addEventListener("change", async e=>{
-  const f = e.target.files[0];
-  if(!f) return;
-  try{
-    const x = JSON.parse(await f.text());
-    state = x.state || {};
-    history = x.history || [];
-    current = x.current || "Monday";
-    save(); render();
-    alert("Backup imported.");
-  }catch(err){
-    alert("That backup file doesn't look valid.");
-  }
-});
-document.getElementById("wipeBtn").addEventListener("click",()=>{
-  if(confirm("Wipe ALL workout data and history? This cannot be undone.")){
-    state = {};
-    history = [];
-    save();
-    render();
-  }
-});
+
+document.getElementById('finishBtn').onclick = finishWorkout;
+document.getElementById('clearBtn').onclick = clearToday;
+document.getElementById('exportBtn').onclick = exportBackup;
+document.getElementById('importFile').addEventListener('change', e=>{ if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value=''; });
+document.getElementById('wipeBtn').onclick = wipeAll;
+document.getElementById('prevBtn').onclick = ()=>cycle(-1);
+document.getElementById('nextBtn').onclick = ()=>cycle(1);
+document.getElementById('closeModal').onclick = closeModal;
+document.getElementById('imageModal').onclick = (e)=>{ if(e.target.id==='imageModal') closeModal(); };
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
 render();
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./sw.js").catch(()=>{});
-}
 </script>
 </body>
 </html>
