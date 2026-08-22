@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111827">
+  <meta name="theme-color" content="#0c3b2e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Gym Tracker">
@@ -11,67 +11,192 @@
   <title>Gym Tracker</title>
   <style>
     :root{
-      color-scheme: light dark;
-      --bg:#0b1020; --panel:#121a2d; --panel2:#182238; --text:#f6f7fb;
-      --muted:#a9b1c3; --border:#2b3650; --accent:#7dd3fc; --good:#86efac;
-      --danger:#fca5a5; --input:#0f172a;
+      --bg:#071b14;
+      --bg2:#0b231b;
+      --panel:#102b22;
+      --panel2:#143428;
+      --panel3:#183a2d;
+      --text:#f2fbf6;
+      --muted:#b8d3c6;
+      --border:#23513f;
+      --accent:#57d88d;
+      --accent2:#7ee7a5;
+      --accent3:#183f32;
+      --danger:#8b2e39;
+      --warning:#f0c34a;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:760px;margin:0 auto;padding:18px 14px 90px}
-    h1{font-size:28px;margin:8px 0 4px}
-    h2{font-size:20px;margin:0}
-    p{color:var(--muted);line-height:1.45}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .pill{font-size:12px;padding:6px 9px;border:1px solid var(--border);border-radius:999px;color:var(--muted)}
-    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}
-    button,.btn{min-height:44px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);font-weight:700;padding:10px 12px}
-    button.active{outline:2px solid var(--accent);border-color:transparent}
-    button:active{transform:translateY(1px)}
-    .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;margin:12px 0}
-    .exercise-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-    .exercise-name{font-weight:800;font-size:17px}
-    .target{color:var(--muted);font-size:13px;margin-top:3px}
-    .sets{display:grid;grid-template-columns:42px 1fr 1fr 54px;gap:8px;align-items:center;margin-top:12px}
-    .sets .head{font-size:12px;color:var(--muted);font-weight:700}
-    input[type=number]{width:100%;min-height:42px;border:1px solid var(--border);border-radius:10px;background:var(--input);color:var(--text);padding:8px;font-size:16px}
-    .check{display:flex;justify-content:center}
-    input[type=checkbox]{width:24px;height:24px;accent-color:#22c55e}
-    .prev{font-size:12px;color:var(--muted);margin-top:10px}
-    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-    .primary{background:#0ea5e9;border-color:#0ea5e9;color:white}
-    .good{background:#15803d;border-color:#15803d;color:white}
-    .danger{background:#7f1d1d;border-color:#7f1d1d;color:white}
-    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
-    .metric{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center}
-    .metric b{display:block;font-size:20px}
-    .metric span{font-size:12px;color:var(--muted)}
-    details{margin-top:14px}
-    summary{cursor:pointer;font-weight:800}
-    .history-row{border-top:1px solid var(--border);padding:10px 0}
-    .history-row:first-child{border-top:0}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(87,216,141,.18), transparent 22%),
+        radial-gradient(circle at top left, rgba(126,231,165,.08), transparent 18%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .wrap{max-width:860px;margin:0 auto;padding:18px 14px 100px}
+    .hero{
+      background:linear-gradient(135deg, rgba(87,216,141,.15), rgba(87,216,141,.03));
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+    h1{font-size:30px;margin:0 0 6px}
+    h2{font-size:22px;margin:0 0 6px}
+    h3{font-size:16px;margin:0}
+    p{color:var(--muted);line-height:1.45;margin:6px 0}
     .small{font-size:12px;color:var(--muted)}
-    .banner{background:#11233b;border:1px solid #1f466e;padding:12px;border-radius:14px;margin:12px 0;color:#d8efff}
-    .weekend-note{font-size:14px;color:var(--muted)}
-    .footer{position:fixed;left:0;right:0;bottom:0;background:rgba(11,16,32,.95);backdrop-filter:blur(12px);border-top:1px solid var(--border)}
-    .footer-inner{max-width:760px;margin:auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;padding:8px 12px;border:1px solid var(--border);
+      border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03)
+    }
+    .guide{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px
+    }
+    .mini-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:16px;padding:12px
+    }
+    .mini-card b{display:block;font-size:15px;margin-bottom:4px}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 12px}
+    button,.btn{
+      min-height:44px;border:1px solid var(--border);border-radius:14px;
+      background:linear-gradient(180deg, var(--panel3), var(--panel2));
+      color:var(--text);font-weight:700;padding:10px 12px;cursor:pointer
+    }
+    button:hover,.btn:hover{filter:brightness(1.05)}
+    button.active{
+      background:linear-gradient(180deg, rgba(87,216,141,.28), rgba(87,216,141,.12));
+      border-color:#4cc77f;box-shadow:0 0 0 2px rgba(87,216,141,.12) inset
+    }
+    .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+    .metric{
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border:1px solid var(--border);border-radius:18px;padding:14px;text-align:center
+    }
+    .metric b{display:block;font-size:22px}
+    .metric span{font-size:12px;color:var(--muted)}
+    .banner{
+      background:linear-gradient(180deg, rgba(87,216,141,.12), rgba(87,216,141,.04));
+      border:1px solid var(--border);
+      border-radius:18px;padding:14px;margin:10px 0 14px
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:14px;
+      margin:14px 0;
+      box-shadow:var(--shadow);
+    }
+    .exercise-top{
+      display:grid;grid-template-columns:1fr 200px;gap:14px;align-items:start
+    }
+    .exercise-name{font-size:20px;font-weight:800;margin-bottom:5px}
+    .target{color:var(--muted);font-size:13px}
+    .art{
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:16px;padding:8px;min-height:150px
+    }
+    .art svg{width:100%;height:140px;display:block}
+    .info-grid{
+      display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-top:12px
+    }
+    .info-box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:16px;padding:12px
+    }
+    .label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#a4ccb7;font-weight:800;margin-bottom:6px}
+    .tags{display:flex;flex-wrap:wrap;gap:6px}
+    .tag{font-size:12px;padding:6px 9px;border-radius:999px;background:rgba(87,216,141,.1);border:1px solid rgba(87,216,141,.18);color:#dbf8e5}
+    ul{margin:8px 0 0 18px;padding:0}
+    li{margin:6px 0;color:var(--muted)}
+    .sets{
+      display:grid;grid-template-columns:42px 1fr 1fr 54px;gap:8px;align-items:center;margin-top:14px
+    }
+    .sets .head{font-size:12px;color:var(--muted);font-weight:700}
+    input[type=number]{
+      width:100%;min-height:44px;border:1px solid var(--border);border-radius:12px;
+      background:#0d2018;color:var(--text);padding:8px 10px;font-size:16px
+    }
+    .check{display:flex;justify-content:center}
+    input[type=checkbox]{width:24px;height:24px;accent-color:#3ed276}
+    details{
+      margin-top:12px;
+      background:rgba(255,255,255,.025);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px
+    }
+    summary{cursor:pointer;font-weight:700}
+    .prev{
+      font-size:12px;color:var(--muted);margin-top:12px;
+      padding-top:10px;border-top:1px dashed rgba(255,255,255,.08)
+    }
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+    .primary{
+      background:linear-gradient(180deg, #3ccf73, #1eaa51);border-color:#42cc75;color:white
+    }
+    .good{
+      background:linear-gradient(180deg, #59d18a, #2caf65);border-color:#57d88d;color:white
+    }
+    .danger{
+      background:linear-gradient(180deg, #a53b48, #852833);border-color:#9d3945;color:white
+    }
+    .footer{
+      position:fixed;left:0;right:0;bottom:0;
+      background:rgba(7,27,20,.92);backdrop-filter:blur(12px);
+      border-top:1px solid var(--border)
+    }
+    .footer-inner{
+      max-width:860px;margin:auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+      display:grid;grid-template-columns:1fr 1fr;gap:8px
+    }
+    .history-row{border-top:1px solid rgba(255,255,255,.06);padding:10px 0}
+    .history-row:first-child{border-top:0}
+    @media (max-width:760px){
+      .guide,.summary,.tabs,.info-grid,.exercise-top{grid-template-columns:1fr}
+      .wrap{padding-top:12px}
+      .art svg{height:130px}
+    }
     @media (max-width:520px){
-      .tabs{grid-template-columns:repeat(2,1fr)}
-      .summary{grid-template-columns:1fr 1fr 1fr}
       .sets{grid-template-columns:34px 1fr 1fr 48px}
-      .wrap{padding-top:10px}
     }
   </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar">
-    <div>
-      <h1>Gym Tracker</h1>
-      <div class="small">3-day full-body machine plan</div>
+  <section class="hero">
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap">
+      <div>
+        <h1>Gym Tracker</h1>
+        <p>Simple machine-based full-body plan. Hit the 3 main days and use the weekend as a bonus day only.</p>
+      </div>
+      <span class="pill" id="statusPill">Saved locally on this device</span>
     </div>
-    <span class="pill" id="statusPill">Saved locally</span>
-  </div>
+    <div class="guide">
+      <div class="mini-card">
+        <b>Warm-up</b>
+        <span class="small">5 minutes easy cardio, then 1–2 lighter sets before your first proper set.</span>
+      </div>
+      <div class="mini-card">
+        <b>Effort</b>
+        <span class="small">Stop with about 2 reps left in the tank. First 1–2 weeks: do only 2 working sets on the exercises that normally show 3.</span>
+      </div>
+      <div class="mini-card">
+        <b>Progress</b>
+        <span class="small">When you hit the top of the rep range on all sets, add a small bit of weight next time.</span>
+      </div>
+    </div>
+  </section>
 
   <div class="tabs" id="tabs"></div>
 
@@ -79,6 +204,7 @@
     <div class="metric"><b id="doneSets">0</b><span>sets done</span></div>
     <div class="metric"><b id="totalSets">0</b><span>working sets</span></div>
     <div class="metric"><b id="progressPct">0%</b><span>session</span></div>
+    <div class="metric"><b id="exerciseCount">0</b><span>exercises</span></div>
   </div>
 
   <div id="sessionBanner" class="banner"></div>
@@ -96,7 +222,7 @@
 
   <details>
     <summary>Backup / restore</summary>
-    <p class="small">Export a JSON backup occasionally. Useful before changing phones or clearing Safari website data.</p>
+    <p class="small">Export a JSON backup once in a while. Useful if you change phone or wipe Safari data.</p>
     <div class="actions">
       <button id="exportBtn">Export backup</button>
       <label class="btn" for="importFile">Import backup</label>
@@ -114,57 +240,229 @@
 </div>
 
 <script>
+const exerciseInfo = {
+  legPress:{
+    art:"legPress",
+    targets:["Quads","Glutes","Hamstrings"],
+    cue:"Big lower-body press. Drive the platform away while keeping your feet planted and knees tracking over your toes.",
+    how:[
+      "Set the seat so your knees are bent comfortably at the start, not jammed into your chest.",
+      "Place feet around shoulder width on the platform.",
+      "Lower under control, then press back up without locking your knees hard."
+    ],
+    tips:["Keep your full foot on the platform.","Don't bounce out of the bottom."]
+  },
+  chestPress:{
+    art:"chestPress",
+    targets:["Chest","Front shoulders","Triceps"],
+    cue:"Push the handles away from your chest in a smooth line.",
+    how:[
+      "Set the seat so the handles line up roughly with mid-chest.",
+      "Shoulders down and back, chest up.",
+      "Press out, control the return, and keep wrists straight."
+    ],
+    tips:["Don't shrug your shoulders up.","Use a full but comfortable range."]
+  },
+  inclineChestPress:{
+    art:"inclineChestPress",
+    targets:["Upper chest","Front shoulders","Triceps"],
+    cue:"Same idea as chest press, but this hits a little more upper chest.",
+    how:[
+      "Set the seat so handles start around upper chest level.",
+      "Keep shoulder blades pulled back into the pad.",
+      "Press up and away, then return under control."
+    ],
+    tips:["Don't flare elbows excessively.","Stay planted on the seat."]
+  },
+  latPulldown:{
+    art:"latPulldown",
+    targets:["Lats","Upper back","Biceps"],
+    cue:"Pull the bar down towards the top of your chest while keeping your chest tall.",
+    how:[
+      "Sit down and secure your knees under the pad.",
+      "Grip just outside shoulder width.",
+      "Pull elbows down to your sides, then raise the bar back slowly."
+    ],
+    tips:["Don't yank with your lower back.","Think elbows, not hands."]
+  },
+  row:{
+    art:"row",
+    targets:["Mid back","Lats","Rear shoulders","Biceps"],
+    cue:"Pull the handles towards your body and squeeze your shoulder blades together.",
+    how:[
+      "Set the chest pad or seat so you can reach the handles without rounding badly.",
+      "Keep your chest up and shoulders down.",
+      "Pull to your lower ribs or stomach, pause, then return slowly."
+    ],
+    tips:["Don't turn it into a shrug.","Control the stretch forward."]
+  },
+  shoulderPress:{
+    art:"shoulderPress",
+    targets:["Shoulders","Triceps"],
+    cue:"Press the handles up overhead from shoulder level.",
+    how:[
+      "Set the seat so the handles start around ear or shoulder height.",
+      "Brace your core and keep your head neutral.",
+      "Press up smoothly and return with control."
+    ],
+    tips:["Don't slam the weight down.","Keep elbows under the handles."]
+  },
+  legCurl:{
+    art:"legCurl",
+    targets:["Hamstrings"],
+    cue:"Curl the pad down or back by bending at the knee.",
+    how:[
+      "Align the machine pivot with your knee joint.",
+      "Set the pad against your lower leg or heels as the machine requires.",
+      "Curl smoothly, squeeze, and lower slowly."
+    ],
+    tips:["Don't lift your hips off the pad.","Use control, not momentum."]
+  },
+  hackSquat:{
+    art:"hackSquat",
+    targets:["Quads","Glutes"],
+    cue:"Machine squat pattern for legs without needing a barbell.",
+    how:[
+      "Set shoulders under the pads and feet shoulder width.",
+      "Lower until you reach a comfortable depth with heels down.",
+      "Drive up through your feet without letting your knees cave in."
+    ],
+    tips:["Don't bounce at the bottom.","Keep your back flat to the pad."]
+  },
+  legExtension:{
+    art:"legExtension",
+    targets:["Quads"],
+    cue:"Straighten your knees to lift the pad and squeeze your thighs.",
+    how:[
+      "Line the pivot up with your knee joint.",
+      "Set the lower pad just above your ankles.",
+      "Extend your legs, squeeze briefly, then lower under control."
+    ],
+    tips:["Don't kick the weight up.","Smooth reps work best here."]
+  },
+  lateralRaise:{
+    art:"lateralRaise",
+    targets:["Side shoulders"],
+    cue:"Lift your arms out to the side to build shoulder width.",
+    how:[
+      "Sit or stand with the machine set to the start position.",
+      "Raise to about shoulder height with soft elbows.",
+      "Lower slowly and stay in control."
+    ],
+    tips:["Don't swing.","You don't need huge weight."]
+  },
+  bicepCurl:{
+    art:"bicepCurl",
+    targets:["Biceps","Forearms"],
+    cue:"Curl the handles up while keeping your upper arms still.",
+    how:[
+      "Adjust the seat so elbows line up with the machine pivot.",
+      "Keep your chest up and wrists neutral.",
+      "Curl up, squeeze, and lower under control."
+    ],
+    tips:["Don't rock your body.","Let the elbows stay fixed."]
+  },
+  tricepPushdown:{
+    art:"tricepPushdown",
+    targets:["Triceps"],
+    cue:"Push the bar or rope down by straightening your arms.",
+    how:[
+      "Stand tall with elbows tucked near your sides.",
+      "Push down until your arms are straight.",
+      "Return until forearms come up, but don't let elbows drift forward."
+    ],
+    tips:["Don't lean all your bodyweight into it.","Keep shoulders relaxed."]
+  },
+  calfRaise:{
+    art:"calfRaise",
+    targets:["Calves"],
+    cue:"Raise your heels high, then lower slowly into a stretch.",
+    how:[
+      "Set your shoulders or hips under the machine pad if seated or standing calf raise.",
+      "Press through the balls of your feet to rise up.",
+      "Pause at the top and lower with control."
+    ],
+    tips:["Don't bounce.","Use a full stretch at the bottom."]
+  },
+  crunch:{
+    art:"crunch",
+    targets:["Abs"],
+    cue:"Curl your ribs towards your hips rather than yanking with your arms.",
+    how:[
+      "Set the pad and seat to fit your body.",
+      "Brace, then crunch your torso down.",
+      "Return under control without fully relaxing."
+    ],
+    tips:["Think about squeezing your abs.","Short controlled reps are fine."]
+  },
+  cardio:{
+    art:"cardio",
+    targets:["Heart health","Extra calorie burn"],
+    cue:"Easy extra cardio to help fitness and weight loss.",
+    how:[
+      "Use a pace you can sustain without dying.",
+      "Treadmill: slight incline and brisk walk works well.",
+      "Bike: steady, moderate effort."
+    ],
+    tips:["Don't overdo it after a hard leg day.","Consistency matters more than going flat out."]
+  }
+};
+
 const workouts = {
   Monday: {
     subtitle: "Full Body A",
+    focus: "Simple push, pull and legs. Good all-round starter day.",
     exercises: [
-      ["Leg Press",3,"6–8"],
-      ["Machine Chest Press",3,"6–8"],
-      ["Lat Pulldown",3,"8–10"],
-      ["Seated Leg Curl",3,"8–10"],
-      ["Seated Cable Row",3,"8–10"],
-      ["Machine Shoulder Press",2,"8–10"],
-      ["Ab Crunch Machine",2,"10–15"],
-      ["Incline Treadmill",1,"10–20 min"]
+      {name:"Leg Press", key:"legPress", sets:3, target:"6–8"},
+      {name:"Machine Chest Press", key:"chestPress", sets:3, target:"6–8"},
+      {name:"Lat Pulldown", key:"latPulldown", sets:3, target:"8–10"},
+      {name:"Seated Leg Curl", key:"legCurl", sets:3, target:"8–10"},
+      {name:"Seated Cable Row", key:"row", sets:3, target:"8–10"},
+      {name:"Machine Shoulder Press", key:"shoulderPress", sets:2, target:"8–10"},
+      {name:"Ab Crunch Machine", key:"crunch", sets:2, target:"10–15"},
+      {name:"Incline Treadmill", key:"cardio", sets:1, target:"10–20 min"}
     ]
   },
   Wednesday: {
     subtitle: "Full Body B",
+    focus: "Second full-body day with extra quads, arms and shoulder work.",
     exercises: [
-      ["Hack Squat / V-Squat",3,"8–10"],
-      ["Incline Machine Chest Press",3,"8–10"],
-      ["Chest-Supported Row Machine",3,"8–10"],
-      ["Leg Extension",3,"10–12"],
-      ["Leg Curl",3,"10–12"],
-      ["Machine Lateral Raise",2,"10–15"],
-      ["Bicep Curl Machine / Cable Curl",2,"10–12"],
-      ["Tricep Pushdown",2,"10–12"],
-      ["Bike / Treadmill",1,"10–20 min"]
+      {name:"Hack Squat / V-Squat", key:"hackSquat", sets:3, target:"8–10"},
+      {name:"Incline Machine Chest Press", key:"inclineChestPress", sets:3, target:"8–10"},
+      {name:"Chest-Supported Row Machine", key:"row", sets:3, target:"8–10"},
+      {name:"Leg Extension", key:"legExtension", sets:3, target:"10–12"},
+      {name:"Leg Curl", key:"legCurl", sets:3, target:"10–12"},
+      {name:"Machine Lateral Raise", key:"lateralRaise", sets:2, target:"10–15"},
+      {name:"Bicep Curl Machine / Cable Curl", key:"bicepCurl", sets:2, target:"10–12"},
+      {name:"Tricep Pushdown", key:"tricepPushdown", sets:2, target:"10–12"},
+      {name:"Bike / Treadmill", key:"cardio", sets:1, target:"10–20 min"}
     ]
   },
   Friday: {
     subtitle: "Full Body C",
+    focus: "Repeat the basics, finish the week strong, and cover any gaps.",
     exercises: [
-      ["Leg Press",3,"8–10"],
-      ["Machine Chest Press",3,"8–10"],
-      ["Lat Pulldown / Assisted Pull-up",3,"8–10"],
-      ["Seated Row Machine",3,"8–10"],
-      ["Leg Curl",3,"10–12"],
-      ["Machine Shoulder Press",2,"8–10"],
-      ["Calf Raise Machine",2,"10–15"],
-      ["Ab Crunch Machine",2,"10–15"],
-      ["Incline Treadmill",1,"10–20 min"]
+      {name:"Leg Press", key:"legPress", sets:3, target:"8–10"},
+      {name:"Machine Chest Press", key:"chestPress", sets:3, target:"8–10"},
+      {name:"Lat Pulldown / Assisted Pull-up", key:"latPulldown", sets:3, target:"8–10"},
+      {name:"Seated Row Machine", key:"row", sets:3, target:"8–10"},
+      {name:"Leg Curl", key:"legCurl", sets:3, target:"10–12"},
+      {name:"Machine Shoulder Press", key:"shoulderPress", sets:2, target:"8–10"},
+      {name:"Calf Raise Machine", key:"calfRaise", sets:2, target:"10–15"},
+      {name:"Ab Crunch Machine", key:"crunch", sets:2, target:"10–15"},
+      {name:"Incline Treadmill", key:"cardio", sets:1, target:"10–20 min"}
     ]
   },
   Weekend: {
-    subtitle: "Optional — nothing essential",
+    subtitle: "Optional +1 day",
+    focus: "Bonus cardio and easy accessories. You can skip this and still be fine.",
     exercises: [
-      ["Incline Treadmill / Bike",1,"20–30 min"],
-      ["Bicep Curl",3,"10–12"],
-      ["Tricep Pushdown",3,"10–12"],
-      ["Lateral Raise",3,"12–15"],
-      ["Calf Raise",3,"10–15"],
-      ["Ab Crunch Machine",3,"10–15"]
+      {name:"Incline Treadmill / Bike", key:"cardio", sets:1, target:"20–30 min"},
+      {name:"Bicep Curl", key:"bicepCurl", sets:3, target:"10–12"},
+      {name:"Tricep Pushdown", key:"tricepPushdown", sets:3, target:"10–12"},
+      {name:"Lateral Raise", key:"lateralRaise", sets:3, target:"12–15"},
+      {name:"Calf Raise", key:"calfRaise", sets:3, target:"10–15"},
+      {name:"Ab Crunch Machine", key:"crunch", sets:3, target:"10–15"}
     ]
   }
 };
@@ -183,124 +481,352 @@ function bestDay(){
 }
 function keyFor(day,i){ return day+"::"+i; }
 function getEntry(day,i,sets){
-  const k=keyFor(day,i);
-  if(!state[k]) state[k]={sets:Array.from({length:sets},()=>({w:"",r:"",d:false}))};
-  while(state[k].sets.length<sets) state[k].sets.push({w:"",r:"",d:false});
+  const k = keyFor(day,i);
+  if(!state[k]) state[k] = {sets:Array.from({length:sets},()=>({w:"",r:"",d:false}))};
+  while(state[k].sets.length < sets) state[k].sets.push({w:"",r:"",d:false});
   return state[k];
 }
 function save(){
-  localStorage.setItem("gym-state",JSON.stringify(state));
-  localStorage.setItem("gym-current",current);
-  localStorage.setItem("gym-history",JSON.stringify(history));
-  document.getElementById("statusPill").textContent="Saved locally";
+  localStorage.setItem("gym-state", JSON.stringify(state));
+  localStorage.setItem("gym-history", JSON.stringify(history));
+  localStorage.setItem("gym-current", current);
+  document.getElementById("statusPill").textContent = "Saved locally on this device";
 }
 function lastFor(name){
   for(const h of history){
-    const ex=h.exercises.find(x=>x.name===name);
+    const ex = h.exercises.find(x => x.name === name);
     if(ex) return ex;
   }
   return null;
 }
+function art(type, label){
+  const stroke = "#82ebb0";
+  const soft = "#1d4d3b";
+  const fill = "#113627";
+  const text = "#dff8e9";
+  const commonStart = `<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+  <rect x="1.5" y="1.5" width="197" height="137" rx="18" fill="${fill}" stroke="${soft}" />
+  <text x="100" y="126" text-anchor="middle" font-size="11" fill="${text}" font-family="system-ui, sans-serif">${label}</text>`;
+  const commonEnd = `</svg>`;
+  const maps = {
+    legPress: `
+      <line x1="28" y1="98" x2="82" y2="98" stroke="${stroke}" stroke-width="4"/>
+      <line x1="82" y1="98" x2="82" y2="56" stroke="${stroke}" stroke-width="4"/>
+      <line x1="88" y1="84" x2="132" y2="52" stroke="${stroke}" stroke-width="4"/>
+      <rect x="132" y="40" width="10" height="28" rx="2" fill="${stroke}"/>
+      <circle cx="108" cy="62" r="6" fill="${stroke}"/>
+      <line x1="108" y1="68" x2="94" y2="80" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="80" x2="84" y2="72" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="80" x2="106" y2="94" stroke="${stroke}" stroke-width="4"/>
+      <line x1="106" y1="94" x2="122" y2="86" stroke="${stroke}" stroke-width="4"/>
+    `,
+    chestPress: `
+      <rect x="28" y="52" width="10" height="46" rx="2" fill="${stroke}"/>
+      <rect x="28" y="98" width="50" height="8" rx="4" fill="${stroke}"/>
+      <rect x="70" y="70" width="8" height="28" rx="3" fill="${stroke}"/>
+      <circle cx="92" cy="60" r="6" fill="${stroke}"/>
+      <line x1="92" y1="66" x2="92" y2="86" stroke="${stroke}" stroke-width="4"/>
+      <line x1="92" y1="72" x2="112" y2="72" stroke="${stroke}" stroke-width="4"/>
+      <line x1="112" y1="72" x2="126" y2="64" stroke="${stroke}" stroke-width="4"/>
+      <line x1="92" y1="86" x2="84" y2="100" stroke="${stroke}" stroke-width="4"/>
+      <line x1="92" y1="86" x2="102" y2="100" stroke="${stroke}" stroke-width="4"/>
+      <line x1="126" y1="64" x2="145" y2="64" stroke="${stroke}" stroke-width="4"/>
+      <line x1="145" y1="64" x2="145" y2="90" stroke="${stroke}" stroke-width="4"/>
+    `,
+    inclineChestPress: `
+      <rect x="30" y="82" width="48" height="8" rx="4" fill="${stroke}"/>
+      <line x1="36" y1="82" x2="70" y2="58" stroke="${stroke}" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="92" cy="53" r="6" fill="${stroke}"/>
+      <line x1="92" y1="59" x2="98" y2="78" stroke="${stroke}" stroke-width="4"/>
+      <line x1="98" y1="66" x2="118" y2="60" stroke="${stroke}" stroke-width="4"/>
+      <line x1="118" y1="60" x2="132" y2="52" stroke="${stroke}" stroke-width="4"/>
+      <line x1="98" y1="78" x2="90" y2="94" stroke="${stroke}" stroke-width="4"/>
+      <line x1="98" y1="78" x2="108" y2="94" stroke="${stroke}" stroke-width="4"/>
+      <line x1="132" y1="52" x2="146" y2="52" stroke="${stroke}" stroke-width="4"/>
+      <line x1="146" y1="52" x2="146" y2="84" stroke="${stroke}" stroke-width="4"/>
+    `,
+    latPulldown: `
+      <line x1="40" y1="30" x2="150" y2="30" stroke="${stroke}" stroke-width="4"/>
+      <line x1="48" y1="30" x2="48" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="142" y1="30" x2="142" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="90" y1="42" x2="110" y2="42" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="42" x2="96" y2="58" stroke="${stroke}" stroke-width="2"/>
+      <line x1="104" y1="42" x2="104" y2="58" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="100" cy="64" r="6" fill="${stroke}"/>
+      <line x1="100" y1="70" x2="100" y2="90" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="76" x2="88" y2="58" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="76" x2="112" y2="58" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="90" x2="90" y2="104" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="90" x2="110" y2="104" stroke="${stroke}" stroke-width="4"/>
+      <rect x="84" y="94" width="32" height="6" rx="3" fill="${stroke}"/>
+    `,
+    row: `
+      <rect x="36" y="84" width="48" height="8" rx="4" fill="${stroke}"/>
+      <line x1="36" y1="84" x2="28" y2="98" stroke="${stroke}" stroke-width="4"/>
+      <line x1="84" y1="84" x2="92" y2="98" stroke="${stroke}" stroke-width="4"/>
+      <circle cx="110" cy="62" r="6" fill="${stroke}"/>
+      <line x1="110" y1="68" x2="102" y2="86" stroke="${stroke}" stroke-width="4"/>
+      <line x1="102" y1="74" x2="86" y2="72" stroke="${stroke}" stroke-width="4"/>
+      <line x1="86" y1="72" x2="72" y2="66" stroke="${stroke}" stroke-width="4"/>
+      <line x1="102" y1="86" x2="92" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="102" y1="86" x2="112" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="118" y1="68" x2="152" y2="60" stroke="${stroke}" stroke-width="3"/>
+      <rect x="152" y="55" width="10" height="10" rx="2" fill="${stroke}"/>
+    `,
+    shoulderPress: `
+      <rect x="52" y="94" width="48" height="8" rx="4" fill="${stroke}"/>
+      <rect x="70" y="66" width="10" height="28" rx="3" fill="${stroke}"/>
+      <circle cx="94" cy="52" r="6" fill="${stroke}"/>
+      <line x1="94" y1="58" x2="94" y2="82" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="66" x2="82" y2="58" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="66" x2="106" y2="58" stroke="${stroke}" stroke-width="4"/>
+      <line x1="82" y1="58" x2="82" y2="42" stroke="${stroke}" stroke-width="4"/>
+      <line x1="106" y1="58" x2="106" y2="42" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="82" x2="84" y2="98" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="82" x2="104" y2="98" stroke="${stroke}" stroke-width="4"/>
+      <rect x="72" y="36" width="18" height="6" rx="3" fill="${stroke}"/>
+      <rect x="98" y="36" width="18" height="6" rx="3" fill="${stroke}"/>
+    `,
+    legCurl: `
+      <rect x="30" y="92" width="62" height="8" rx="4" fill="${stroke}"/>
+      <line x1="76" y1="92" x2="108" y2="74" stroke="${stroke}" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="108" cy="60" r="6" fill="${stroke}"/>
+      <line x1="108" y1="66" x2="96" y2="78" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="78" x2="82" y2="70" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="78" x2="112" y2="90" stroke="${stroke}" stroke-width="4"/>
+      <line x1="112" y1="90" x2="126" y2="80" stroke="${stroke}" stroke-width="4"/>
+      <rect x="122" y="74" width="10" height="18" rx="3" fill="${stroke}"/>
+    `,
+    hackSquat: `
+      <line x1="42" y1="28" x2="28" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="130" y1="28" x2="144" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="42" y1="28" x2="130" y2="28" stroke="${stroke}" stroke-width="4"/>
+      <circle cx="82" cy="52" r="6" fill="${stroke}"/>
+      <line x1="82" y1="58" x2="82" y2="78" stroke="${stroke}" stroke-width="4"/>
+      <line x1="82" y1="66" x2="66" y2="72" stroke="${stroke}" stroke-width="4"/>
+      <line x1="82" y1="66" x2="98" y2="72" stroke="${stroke}" stroke-width="4"/>
+      <line x1="82" y1="78" x2="72" y2="96" stroke="${stroke}" stroke-width="4"/>
+      <line x1="82" y1="78" x2="98" y2="88" stroke="${stroke}" stroke-width="4"/>
+      <rect x="62" y="74" width="42" height="8" rx="4" fill="${stroke}"/>
+    `,
+    legExtension: `
+      <rect x="34" y="92" width="54" height="8" rx="4" fill="${stroke}"/>
+      <rect x="80" y="72" width="8" height="20" rx="3" fill="${stroke}"/>
+      <circle cx="104" cy="60" r="6" fill="${stroke}"/>
+      <line x1="104" y1="66" x2="96" y2="84" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="72" x2="82" y2="72" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="84" x2="118" y2="84" stroke="${stroke}" stroke-width="4"/>
+      <line x1="118" y1="84" x2="134" y2="76" stroke="${stroke}" stroke-width="4"/>
+      <rect x="132" y="72" width="10" height="12" rx="3" fill="${stroke}"/>
+    `,
+    lateralRaise: `
+      <circle cx="100" cy="46" r="6" fill="${stroke}"/>
+      <line x1="100" y1="52" x2="100" y2="82" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="62" x2="72" y2="52" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="62" x2="128" y2="52" stroke="${stroke}" stroke-width="4"/>
+      <line x1="72" y1="52" x2="62" y2="58" stroke="${stroke}" stroke-width="4"/>
+      <line x1="128" y1="52" x2="138" y2="58" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="82" x2="90" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="82" x2="110" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <circle cx="60" cy="60" r="6" fill="${stroke}"/>
+      <circle cx="140" cy="60" r="6" fill="${stroke}"/>
+    `,
+    bicepCurl: `
+      <circle cx="100" cy="48" r="6" fill="${stroke}"/>
+      <line x1="100" y1="54" x2="100" y2="82" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="62" x2="84" y2="68" stroke="${stroke}" stroke-width="4"/>
+      <line x1="84" y1="68" x2="80" y2="56" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="62" x2="116" y2="68" stroke="${stroke}" stroke-width="4"/>
+      <line x1="116" y1="68" x2="120" y2="56" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="82" x2="90" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="82" x2="110" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <circle cx="80" cy="54" r="4" fill="${stroke}"/>
+      <circle cx="120" cy="54" r="4" fill="${stroke}"/>
+    `,
+    tricepPushdown: `
+      <line x1="100" y1="20" x2="100" y2="42" stroke="${stroke}" stroke-width="4"/>
+      <rect x="88" y="42" width="24" height="6" rx="3" fill="${stroke}"/>
+      <circle cx="100" cy="58" r="6" fill="${stroke}"/>
+      <line x1="100" y1="64" x2="100" y2="90" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="70" x2="90" y2="86" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="70" x2="110" y2="86" stroke="${stroke}" stroke-width="4"/>
+      <line x1="90" y1="86" x2="90" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="110" y1="86" x2="110" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="90" x2="90" y2="106" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="90" x2="110" y2="106" stroke="${stroke}" stroke-width="4"/>
+    `,
+    calfRaise: `
+      <line x1="70" y1="102" x2="130" y2="102" stroke="${stroke}" stroke-width="4"/>
+      <circle cx="96" cy="44" r="6" fill="${stroke}"/>
+      <line x1="96" y1="50" x2="96" y2="82" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="58" x2="82" y2="66" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="58" x2="110" y2="66" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="82" x2="88" y2="96" stroke="${stroke}" stroke-width="4"/>
+      <line x1="96" y1="82" x2="112" y2="96" stroke="${stroke}" stroke-width="4"/>
+      <line x1="88" y1="96" x2="80" y2="88" stroke="${stroke}" stroke-width="4"/>
+      <line x1="112" y1="96" x2="120" y2="88" stroke="${stroke}" stroke-width="4"/>
+    `,
+    crunch: `
+      <rect x="34" y="92" width="54" height="8" rx="4" fill="${stroke}"/>
+      <rect x="76" y="72" width="8" height="20" rx="3" fill="${stroke}"/>
+      <circle cx="100" cy="58" r="6" fill="${stroke}"/>
+      <path d="M100 64 Q90 72 94 84" stroke="${stroke}" stroke-width="4" fill="none"/>
+      <line x1="94" y1="84" x2="84" y2="100" stroke="${stroke}" stroke-width="4"/>
+      <line x1="94" y1="84" x2="108" y2="98" stroke="${stroke}" stroke-width="4"/>
+      <line x1="102" y1="64" x2="118" y2="60" stroke="${stroke}" stroke-width="4"/>
+      <rect x="118" y="54" width="12" height="10" rx="3" fill="${stroke}"/>
+    `,
+    cardio: `
+      <rect x="40" y="86" width="92" height="8" rx="4" fill="${stroke}"/>
+      <line x1="42" y1="86" x2="34" y2="104" stroke="${stroke}" stroke-width="4"/>
+      <line x1="128" y1="86" x2="136" y2="104" stroke="${stroke}" stroke-width="4"/>
+      <circle cx="100" cy="44" r="6" fill="${stroke}"/>
+      <line x1="100" y1="50" x2="90" y2="70" stroke="${stroke}" stroke-width="4"/>
+      <line x1="90" y1="70" x2="110" y2="76" stroke="${stroke}" stroke-width="4"/>
+      <line x1="100" y1="58" x2="112" y2="68" stroke="${stroke}" stroke-width="4"/>
+      <line x1="90" y1="70" x2="76" y2="92" stroke="${stroke}" stroke-width="4"/>
+      <line x1="110" y1="76" x2="124" y2="92" stroke="${stroke}" stroke-width="4"/>
+    `
+  };
+  return commonStart + (maps[type] || maps.cardio) + commonEnd;
+}
 function renderTabs(){
-  const t=document.getElementById("tabs"); t.innerHTML="";
+  const t = document.getElementById("tabs");
+  t.innerHTML = "";
   order.forEach(day=>{
-    const b=document.createElement("button");
-    b.textContent=day; b.className=day===current?"active":"";
-    b.addEventListener("click",()=>{current=day;save();render();});
+    const b = document.createElement("button");
+    b.textContent = day;
+    b.className = day === current ? "active" : "";
+    b.addEventListener("click", ()=>{ current = day; save(); render(); });
     t.appendChild(b);
   });
 }
 function render(){
   renderTabs();
-  const info=workouts[current];
+  const info = workouts[current];
   document.getElementById("sessionBanner").innerHTML =
-    "<strong>"+current+" — "+info.subtitle+"</strong><br><span class='small'>First 1–2 weeks: do only 2 working sets on exercises that normally show 3.</span>";
-  const out=document.getElementById("workout"); out.innerHTML="";
+    `<strong>${current} — ${info.subtitle}</strong><br><span class="small">${info.focus}</span>`;
+  document.getElementById("exerciseCount").textContent = info.exercises.length;
+  const out = document.getElementById("workout");
+  out.innerHTML = "";
   info.exercises.forEach((ex,i)=>{
-    const [name,sets,target]=ex;
-    const entry=getEntry(current,i,sets);
-    const prev=lastFor(name);
-    const card=document.createElement("section");
-    card.className="card";
-    let rows="";
-    for(let s=0;s<sets;s++){
-      const x=entry.sets[s];
-      const cardio = target.includes("min");
+    const entry = getEntry(current, i, ex.sets);
+    const prev = lastFor(ex.name);
+    const meta = exerciseInfo[ex.key];
+    let rows = "";
+    for(let s=0; s<ex.sets; s++){
+      const x = entry.sets[s];
+      const cardio = ex.target.includes("min");
       rows += `
         <div class="${s===0?'head':''}">${s===0?'SET':''}</div>
         <div class="${s===0?'head':''}">${s===0?(cardio?'MINUTES':'WEIGHT'):''}</div>
         <div class="${s===0?'head':''}">${s===0?(cardio?'LEVEL / NOTE':'REPS'):''}</div>
         <div class="${s===0?'head':''}">${s===0?'DONE':''}</div>
         <div>${s+1}</div>
-        <input aria-label="${name} set ${s+1} weight" type="number" inputmode="decimal" step="0.5" data-i="${i}" data-s="${s}" data-f="w" value="${x.w}">
-        <input aria-label="${name} set ${s+1} reps" type="number" inputmode="numeric" step="1" data-i="${i}" data-s="${s}" data-f="r" value="${x.r}">
-        <div class="check"><input aria-label="${name} set ${s+1} done" type="checkbox" data-i="${i}" data-s="${s}" data-f="d" ${x.d?'checked':''}></div>
+        <input aria-label="${ex.name} set ${s+1} weight" type="number" inputmode="decimal" step="0.5" data-i="${i}" data-s="${s}" data-f="w" value="${x.w}">
+        <input aria-label="${ex.name} set ${s+1} reps" type="number" inputmode="numeric" step="1" data-i="${i}" data-s="${s}" data-f="r" value="${x.r}">
+        <div class="check"><input aria-label="${ex.name} set ${s+1} done" type="checkbox" data-i="${i}" data-s="${s}" data-f="d" ${x.d ? 'checked' : ''}></div>
       `;
     }
-    let prevText="No previous session yet";
+    let prevText = "No previous numbers recorded yet.";
     if(prev){
-      prevText="Last time: "+prev.sets.map((x,idx)=>`S${idx+1} ${x.w||"–"}kg × ${x.r||"–"}`).join(" • ");
+      prevText = "Last time: " + prev.sets.map((x,idx)=>`S${idx+1} ${x.w||"–"} × ${x.r||"–"}`).join(" • ");
     }
-    card.innerHTML=`
-      <div class="exercise-head">
-        <div><div class="exercise-name">${name}</div><div class="target">Target: ${sets} × ${target}</div></div>
+    const card = document.createElement("section");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="exercise-top">
+        <div>
+          <div class="exercise-name">${ex.name}</div>
+          <div class="target">Target: ${ex.sets} × ${ex.target}</div>
+          <p>${meta.cue}</p>
+        </div>
+        <div class="art">${art(meta.art, ex.name)}</div>
       </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="label">What it hits</div>
+          <div class="tags">${meta.targets.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+          <div class="label" style="margin-top:12px">Quick guide</div>
+          <ul>${meta.how.map(h=>`<li>${h}</li>`).join("")}</ul>
+        </div>
+        <div class="info-box">
+          <div class="label">Simple tips</div>
+          <ul>${meta.tips.map(t=>`<li>${t}</li>`).join("")}</ul>
+        </div>
+      </div>
+
       <div class="sets">${rows}</div>
-      <div class="prev">${prevText}</div>`;
+
+      <details>
+        <summary>Extra note</summary>
+        <p class="small">If the machine in your gym looks slightly different, don't panic. Match the movement pattern and set yourself up so the machine's pivot points roughly line up with your joints.</p>
+      </details>
+
+      <div class="prev">${prevText}</div>
+    `;
     out.appendChild(card);
   });
 
   out.querySelectorAll("input").forEach(el=>{
-    el.addEventListener("input",updateField);
-    el.addEventListener("change",updateField);
+    el.addEventListener("input", updateField);
+    el.addEventListener("change", updateField);
   });
   updateSummary();
   renderHistory();
 }
 function updateField(e){
-  const i=+e.target.dataset.i, s=+e.target.dataset.s, f=e.target.dataset.f;
-  const sets=workouts[current].exercises[i][1];
-  const entry=getEntry(current,i,sets);
-  entry.sets[s][f] = f==="d" ? e.target.checked : e.target.value;
-  save(); updateSummary();
+  const i = +e.target.dataset.i;
+  const s = +e.target.dataset.s;
+  const f = e.target.dataset.f;
+  const ex = workouts[current].exercises[i];
+  const entry = getEntry(current, i, ex.sets);
+  entry.sets[s][f] = f === "d" ? e.target.checked : e.target.value;
+  save();
+  updateSummary();
 }
 function updateSummary(){
-  let done=0,total=0;
+  let done = 0, total = 0;
   workouts[current].exercises.forEach((ex,i)=>{
-    const entry=getEntry(current,i,ex[1]);
-    entry.sets.forEach(x=>{total++; if(x.d)done++;});
+    const entry = getEntry(current,i,ex.sets);
+    entry.sets.forEach(x=>{ total++; if(x.d) done++; });
   });
-  document.getElementById("doneSets").textContent=done;
-  document.getElementById("totalSets").textContent=total;
-  document.getElementById("progressPct").textContent=Math.round(done/total*100)+"%";
+  document.getElementById("doneSets").textContent = done;
+  document.getElementById("totalSets").textContent = total;
+  document.getElementById("progressPct").textContent = Math.round(done / total * 100) + "%";
 }
 function clearCurrent(){
   workouts[current].exercises.forEach((ex,i)=>delete state[keyFor(current,i)]);
-  save();render();
+  save();
+  render();
 }
 function finishWorkout(){
-  const record={
-    day:current,
-    date:new Date().toISOString(),
-    exercises:workouts[current].exercises.map((ex,i)=>({
-      name:ex[0],
-      sets:getEntry(current,i,ex[1]).sets.map(x=>({...x}))
+  const record = {
+    day: current,
+    date: new Date().toISOString(),
+    exercises: workouts[current].exercises.map((ex,i)=>({
+      name: ex.name,
+      sets: getEntry(current,i,ex.sets).sets.map(x=>({...x}))
     }))
   };
   history.unshift(record);
-  history=history.slice(0,100);
+  history = history.slice(0,100);
   clearCurrent();
   alert("Workout saved. Nice one.");
 }
 function renderHistory(){
-  const el=document.getElementById("history");
-  if(!history.length){el.innerHTML="<p class='small'>No completed workouts yet.</p>";return;}
-  el.innerHTML=history.slice(0,20).map(h=>{
-    const d=new Date(h.date);
+  const el = document.getElementById("history");
+  if(!history.length){
+    el.innerHTML = "<p class='small'>No completed workouts yet.</p>";
+    return;
+  }
+  el.innerHTML = history.slice(0,20).map(h=>{
+    const d = new Date(h.date);
     return `<div class="history-row"><strong>${h.day}</strong> — ${d.toLocaleDateString()}<div class="small">${
       h.exercises.map(x=>{
-        const filled=x.sets.filter(s=>s.w||s.r).length;
-        return filled?`${x.name}: ${x.sets.filter(s=>s.w||s.r).map(s=>`${s.w||"–"}×${s.r||"–"}`).join(", ")}`:"";
+        const filled = x.sets.filter(s=>s.w||s.r).length;
+        return filled ? `${x.name}: ${x.sets.filter(s=>s.w||s.r).map(s=>`${s.w||"–"}×${s.r||"–"}`).join(", ")}` : "";
       }).filter(Boolean).join(" · ")
     }</div></div>`;
   }).join("");
@@ -309,35 +835,46 @@ document.getElementById("finishBtn").addEventListener("click",()=>{
   if(confirm("Save this workout to history and clear the session?")) finishWorkout();
 });
 document.getElementById("clearBtn").addEventListener("click",()=>{
-  if(confirm("Clear today's entered weights/reps?")) clearCurrent();
+  if(confirm("Clear today's entered weights and reps?")) clearCurrent();
 });
 document.getElementById("prevBtn").addEventListener("click",()=>{
-  current=order[(order.indexOf(current)+order.length-1)%order.length];save();render();
+  current = order[(order.indexOf(current)+order.length-1)%order.length];
+  save(); render();
 });
 document.getElementById("nextBtn").addEventListener("click",()=>{
-  current=order[(order.indexOf(current)+1)%order.length];save();render();
+  current = order[(order.indexOf(current)+1)%order.length];
+  save(); render();
 });
 document.getElementById("exportBtn").addEventListener("click",()=>{
-  const blob=new Blob([JSON.stringify({state,history,current},null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);a.download="gym-tracker-backup.json";a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  const blob = new Blob([JSON.stringify({state,history,current}, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "gym-tracker-backup.json";
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
 });
-document.getElementById("importFile").addEventListener("change",async e=>{
-  const f=e.target.files[0]; if(!f)return;
+document.getElementById("importFile").addEventListener("change", async e=>{
+  const f = e.target.files[0];
+  if(!f) return;
   try{
-    const x=JSON.parse(await f.text());
-    if(!x || typeof x!=="object") throw new Error();
-    state=x.state||{};history=x.history||[];current=x.current||"Monday";save();render();
+    const x = JSON.parse(await f.text());
+    state = x.state || {};
+    history = x.history || [];
+    current = x.current || "Monday";
+    save(); render();
     alert("Backup imported.");
-  }catch{alert("That backup file doesn't look valid.");}
+  }catch(err){
+    alert("That backup file doesn't look valid.");
+  }
 });
 document.getElementById("wipeBtn").addEventListener("click",()=>{
   if(confirm("Wipe ALL workout data and history? This cannot be undone.")){
-    state={};history=[];save();render();
+    state = {};
+    history = [];
+    save();
+    render();
   }
 });
-
 render();
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("./sw.js").catch(()=>{});
