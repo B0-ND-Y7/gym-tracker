@@ -164,7 +164,7 @@ def main():
     ap.add_argument('--count',type=int,default=TARGET_COUNT)
     ap.add_argument('--dry-run',action='store_true')
     args=ap.parse_args()
-    print('Gym Tracker media builder v10')
+    print('Gym Tracker media builder v11')
     source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
     lookup_path=source/'exercise-gif-lookup.json'
     if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
