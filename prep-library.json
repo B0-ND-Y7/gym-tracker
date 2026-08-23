@@ -13,7 +13,13 @@
     ],
     "image": "images/1167-3uj0Ozg.jpg",
     "gif_url": "videos/1167-3uj0Ozg.gif",
-    "key": "chest_opener"
+    "key": "chest_opener",
+    "phase": "dynamic",
+    "tags": [
+      "chest",
+      "shoulders"
+    ],
+    "dose": "8–10 reps"
   },
   {
     "id": "3021",
@@ -29,7 +35,13 @@
     ],
     "image": "images/3021-jV65tKx.jpg",
     "gif_url": "videos/3021-jV65tKx.gif",
-    "key": "scapular_push"
+    "key": "scapular_push",
+    "phase": "dynamic",
+    "tags": [
+      "chest",
+      "shoulders"
+    ],
+    "dose": "8–10 reps"
   },
   {
     "id": "0688",
@@ -46,7 +58,14 @@
     ],
     "image": "images/0688-uTBt1HV.jpg",
     "gif_url": "videos/0688-uTBt1HV.gif",
-    "key": "scapular_pull"
+    "key": "scapular_pull",
+    "phase": "dynamic",
+    "tags": [
+      "back",
+      "lats",
+      "shoulders"
+    ],
+    "dose": "6–10 reps"
   },
   {
     "id": "1460",
@@ -63,7 +82,14 @@
     ],
     "image": "images/1460-IZVHb27.jpg",
     "gif_url": "videos/1460-IZVHb27.gif",
-    "key": "walking_lunge"
+    "key": "walking_lunge",
+    "phase": "dynamic",
+    "tags": [
+      "quads",
+      "glutes",
+      "hips"
+    ],
+    "dose": "6 each side"
   },
   {
     "id": "1368",
@@ -78,7 +104,13 @@
     ],
     "image": "images/1368-uL9CsKm.jpg",
     "gif_url": "videos/1368-uL9CsKm.gif",
-    "key": "ankle_circles"
+    "key": "ankle_circles",
+    "phase": "dynamic",
+    "tags": [
+      "calves",
+      "ankles"
+    ],
+    "dose": "8 each way"
   },
   {
     "id": "1271",
@@ -93,7 +125,13 @@
     ],
     "image": "images/1271-Uto7l43.jpg",
     "gif_url": "videos/1271-Uto7l43.gif",
-    "key": "chest_stretch"
+    "key": "chest_stretch",
+    "phase": "static",
+    "tags": [
+      "chest",
+      "shoulders"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "0669",
@@ -109,7 +147,13 @@
     ],
     "image": "images/0669-xifhB5W.jpg",
     "gif_url": "videos/0669-xifhB5W.gif",
-    "key": "shoulder_stretch"
+    "key": "shoulder_stretch",
+    "phase": "static",
+    "tags": [
+      "shoulders",
+      "rear_shoulders"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "0643",
@@ -124,7 +168,13 @@
     ],
     "image": "images/0643-Z5YStHW.jpg",
     "gif_url": "videos/0643-Z5YStHW.gif",
-    "key": "triceps_stretch"
+    "key": "triceps_stretch",
+    "phase": "static",
+    "tags": [
+      "triceps",
+      "shoulders"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "1346",
@@ -140,7 +190,13 @@
     ],
     "image": "images/1346-f38OEuO.jpg",
     "gif_url": "videos/1346-f38OEuO.gif",
-    "key": "lat_stretch"
+    "key": "lat_stretch",
+    "phase": "static",
+    "tags": [
+      "back",
+      "lats"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "1511",
@@ -155,7 +211,12 @@
     ],
     "image": "images/1511-99rWm7w.jpg",
     "gif_url": "videos/1511-99rWm7w.gif",
-    "key": "hamstring_stretch"
+    "key": "hamstring_stretch",
+    "phase": "static",
+    "tags": [
+      "hamstrings"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "0613",
@@ -170,7 +231,12 @@
     ],
     "image": "images/0613-BWnJR72.jpg",
     "gif_url": "videos/0613-BWnJR72.gif",
-    "key": "quad_stretch"
+    "key": "quad_stretch",
+    "phase": "static",
+    "tags": [
+      "quads"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "1398",
@@ -186,7 +252,13 @@
     ],
     "image": "images/1398-qOKcgVP.jpg",
     "gif_url": "videos/1398-qOKcgVP.gif",
-    "key": "calf_stretch"
+    "key": "calf_stretch",
+    "phase": "static",
+    "tags": [
+      "calves",
+      "ankles"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "1424",
@@ -201,7 +273,13 @@
     ],
     "image": "images/1424-DeDThfG.jpg",
     "gif_url": "videos/1424-DeDThfG.gif",
-    "key": "glute_stretch"
+    "key": "glute_stretch",
+    "phase": "static",
+    "tags": [
+      "glutes",
+      "hips"
+    ],
+    "dose": "30 sec each side"
   },
   {
     "id": "1564",
@@ -217,6 +295,263 @@
     ],
     "image": "images/1564-tFGKm99.jpg",
     "gif_url": "videos/1564-tFGKm99.gif",
-    "key": "hip_flexor_stretch"
+    "key": "hip_flexor_stretch",
+    "phase": "static",
+    "tags": [
+      "hips",
+      "quads"
+    ],
+    "dose": "30 sec each side"
+  },
+  {
+    "id": "3011",
+    "filename": "3011-GdMa1ET.gif",
+    "name": "incline scapula push up",
+    "category": "chest",
+    "equipment": "body weight",
+    "target": "serratus anterior",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "image": "images/3011-GdMa1ET.jpg",
+    "gif_url": "videos/3011-GdMa1ET.gif",
+    "key": "pool_dynamic_3011-GdMa1ET",
+    "phase": "dynamic",
+    "tags": [
+      "chest",
+      "shoulders"
+    ],
+    "dose": "8–10 controlled reps",
+    "pool_label": "dynamic chest / shoulders"
+  },
+  {
+    "id": "3655",
+    "filename": "3655-J9zIWig.gif",
+    "name": "walking high knees lunge",
+    "category": "cardio",
+    "equipment": "body weight",
+    "target": "cardiovascular system",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
+    "image": "images/3655-J9zIWig.jpg",
+    "gif_url": "videos/3655-J9zIWig.gif",
+    "key": "pool_dynamic_3655-J9zIWig",
+    "phase": "dynamic",
+    "tags": [
+      "quads",
+      "glutes",
+      "hips"
+    ],
+    "dose": "6–10 reps",
+    "pool_label": "dynamic squat / lunge"
+  },
+  {
+    "id": "3470",
+    "filename": "3470-kMzUs9Y.gif",
+    "name": "forward lunge (male)",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/3470-kMzUs9Y.jpg",
+    "gif_url": "videos/3470-kMzUs9Y.gif",
+    "key": "pool_dynamic_3470-kMzUs9Y",
+    "phase": "dynamic",
+    "tags": [
+      "quads",
+      "glutes",
+      "hips"
+    ],
+    "dose": "6–10 reps",
+    "pool_label": "dynamic squat / lunge"
+  },
+  {
+    "id": "0817",
+    "filename": "0817-uOV3Itw.gif",
+    "name": "triceps stretch",
+    "category": "upper arms",
+    "equipment": "body weight",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0817-uOV3Itw.jpg",
+    "gif_url": "videos/0817-uOV3Itw.gif",
+    "key": "pool_static_0817-uOV3Itw",
+    "phase": "static",
+    "tags": [
+      "triceps",
+      "shoulders"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "triceps stretch"
+  },
+  {
+    "id": "0794",
+    "filename": "0794-1jXLYEw.gif",
+    "name": "standing lateral stretch",
+    "category": "back",
+    "equipment": "body weight",
+    "target": "lats",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "obliques"
+    ],
+    "image": "images/0794-1jXLYEw.jpg",
+    "gif_url": "videos/0794-1jXLYEw.gif",
+    "key": "pool_static_0794-1jXLYEw",
+    "phase": "static",
+    "tags": [
+      "back",
+      "lats"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "lat / back stretch"
+  },
+  {
+    "id": "1365",
+    "filename": "1365-GSDioYu.gif",
+    "name": "upper back stretch",
+    "category": "back",
+    "equipment": "body weight",
+    "target": "upper back",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/1365-GSDioYu.jpg",
+    "gif_url": "videos/1365-GSDioYu.gif",
+    "key": "pool_static_1365-GSDioYu",
+    "phase": "static",
+    "tags": [
+      "back",
+      "lats"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "lat / back stretch"
+  },
+  {
+    "id": "1405",
+    "filename": "1405-chfnQnM.gif",
+    "name": "back pec stretch",
+    "category": "back",
+    "equipment": "body weight",
+    "target": "lats",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "chest"
+    ],
+    "image": "images/1405-chfnQnM.jpg",
+    "gif_url": "videos/1405-chfnQnM.gif",
+    "key": "pool_static_1405-chfnQnM",
+    "phase": "static",
+    "tags": [
+      "back",
+      "lats"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "lat / back stretch"
+  },
+  {
+    "id": "1576",
+    "filename": "1576-sU5BrfP.gif",
+    "name": "leg up hamstring stretch",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "hamstrings",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes"
+    ],
+    "image": "images/1576-sU5BrfP.jpg",
+    "gif_url": "videos/1576-sU5BrfP.gif",
+    "key": "pool_static_1576-sU5BrfP",
+    "phase": "static",
+    "tags": [
+      "hamstrings"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "hamstring stretch"
+  },
+  {
+    "id": "1377",
+    "filename": "1377-m0tCHqc.gif",
+    "name": "calf stretch with hands against wall",
+    "category": "lower legs",
+    "equipment": "body weight",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "image": "images/1377-m0tCHqc.jpg",
+    "gif_url": "videos/1377-m0tCHqc.gif",
+    "key": "pool_static_1377-m0tCHqc",
+    "phase": "static",
+    "tags": [
+      "calves",
+      "ankles"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "calf stretch"
+  },
+  {
+    "id": "1390",
+    "filename": "1390-17bqEXD.gif",
+    "name": "seated calf stretch (male)",
+    "category": "lower legs",
+    "equipment": "body weight",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "image": "images/1390-17bqEXD.jpg",
+    "gif_url": "videos/1390-17bqEXD.gif",
+    "key": "pool_static_1390-17bqEXD",
+    "phase": "static",
+    "tags": [
+      "calves",
+      "ankles"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "calf stretch"
+  },
+  {
+    "id": "1407",
+    "filename": "1407-PzNxakt.gif",
+    "name": "calf push stretch with hands against wall",
+    "category": "lower legs",
+    "equipment": "body weight",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "image": "images/1407-PzNxakt.jpg",
+    "gif_url": "videos/1407-PzNxakt.gif",
+    "key": "pool_static_1407-PzNxakt",
+    "phase": "static",
+    "tags": [
+      "calves",
+      "ankles"
+    ],
+    "dose": "30 sec each side",
+    "pool_label": "calf stretch"
   }
 ]

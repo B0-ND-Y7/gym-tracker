@@ -60,6 +60,93 @@ PREP_SPECS = {
     "hip_flexor_stretch": {"patterns":[["kneeling","hip","flexor"],["standing","hip","flexor"],["hip","flexor","stretch"]],"exclude":["exercise ball","stability ball","ball","band","machine","cable","weighted"]},
 }
 
+
+# Broader prep/stretch pool. These are additional to the named fallbacks above.
+# The app chooses only movements whose tags match the exercises in the current
+# workout, so upper-body days cannot accidentally pull in lower-body stretches.
+PREP_META = {
+    "arm_circles":{"phase":"dynamic","tags":["shoulders"],"dose":"10 each way"},
+    "shoulder_rolls":{"phase":"dynamic","tags":["shoulders"],"dose":"10 each way"},
+    "chest_opener":{"phase":"dynamic","tags":["chest","shoulders"],"dose":"8–10 reps"},
+    "thoracic_rotation":{"phase":"dynamic","tags":["back","lats","shoulders"],"dose":"6–8 each side"},
+    "scapular_push":{"phase":"dynamic","tags":["chest","shoulders"],"dose":"8–10 reps"},
+    "scapular_pull":{"phase":"dynamic","tags":["back","lats","shoulders"],"dose":"6–10 reps"},
+    "leg_swings":{"phase":"dynamic","tags":["hamstrings","hips","quads"],"dose":"8–10 each leg"},
+    "walking_lunge":{"phase":"dynamic","tags":["quads","glutes","hips"],"dose":"6 each side"},
+    "bodyweight_squat":{"phase":"dynamic","tags":["quads","glutes","hips"],"dose":"8–10 reps"},
+    "hip_circles":{"phase":"dynamic","tags":["hips","glutes"],"dose":"8 each way"},
+    "knee_hugs":{"phase":"dynamic","tags":["hips","glutes","hamstrings"],"dose":"6 each side"},
+    "high_knees":{"phase":"dynamic","tags":["hips","quads","calves"],"dose":"20–30 sec"},
+    "ankle_circles":{"phase":"dynamic","tags":["calves","ankles"],"dose":"8 each way"},
+    "chest_stretch":{"phase":"static","tags":["chest","shoulders"],"dose":"30 sec each side"},
+    "shoulder_stretch":{"phase":"static","tags":["shoulders","rear_shoulders"],"dose":"30 sec each side"},
+    "triceps_stretch":{"phase":"static","tags":["triceps","shoulders"],"dose":"30 sec each side"},
+    "lat_stretch":{"phase":"static","tags":["back","lats"],"dose":"30 sec each side"},
+    "hamstring_stretch":{"phase":"static","tags":["hamstrings"],"dose":"30 sec each side"},
+    "quad_stretch":{"phase":"static","tags":["quads"],"dose":"30 sec each side"},
+    "calf_stretch":{"phase":"static","tags":["calves","ankles"],"dose":"30 sec each side"},
+    "glute_stretch":{"phase":"static","tags":["glutes","hips"],"dose":"30 sec each side"},
+    "hip_flexor_stretch":{"phase":"static","tags":["hips","quads"],"dose":"30 sec each side"},
+}
+
+PREP_POOL_SPECS = [
+    # Dynamic upper body
+    {"label":"dynamic chest / shoulders","phase":"dynamic","tags":["chest","shoulders"],"dose":"8–10 controlled reps","quota":4,
+     "patterns":[["dynamic","chest","stretch"],["chest","opener"],["arm","swing"],["scapula","push"],["scapular","push"]],
+     "exclude":["machine","cable","dumbbell","barbell","band","roller","lying","weighted"]},
+    {"label":"dynamic shoulders","phase":"dynamic","tags":["shoulders","rear_shoulders"],"dose":"8–10 each way","quota":4,
+     "patterns":[["arm","circle"],["shoulder","circle"],["shoulder","roll"],["wall","slide"],["shoulder","mobility"]],
+     "exclude":["machine","cable","dumbbell","barbell","band","roller","internal","external","weighted"]},
+    {"label":"dynamic upper back","phase":"dynamic","tags":["back","lats","shoulders"],"dose":"6–8 each side","quota":4,
+     "patterns":[["thoracic","rotation"],["torso","rotation"],["upper","back","rotation"],["thread","needle"],["reach","sky"],["scapula","pull"],["scapular","pull"]],
+     "exclude":["machine","cable","dumbbell","barbell","band","weighted"]},
+    # Dynamic lower body
+    {"label":"dynamic hips / legs","phase":"dynamic","tags":["hips","hamstrings","quads"],"dose":"8–10 each side","quota":5,
+     "patterns":[["leg","swing"],["straight","leg","kick"],["walking","high","kick"],["hip","opener"],["hip","circle"],["knee","hug"],["leg","cradle"]],
+     "exclude":["machine","cable","dumbbell","barbell","band","lying","weighted","wall"]},
+    {"label":"dynamic squat / lunge","phase":"dynamic","tags":["quads","glutes","hips"],"dose":"6–10 reps","quota":5,
+     "patterns":[["walking","lunge"],["forward","lunge"],["reverse","lunge"],["bodyweight","squat"],["body","weight","squat"],["air","squat"]],
+     "exclude":["jump","drop","plyometric","pistol","sissy","curtsey","curtsy","cossack","barbell","dumbbell","smith","hack","row","weighted"]},
+    {"label":"dynamic ankles / calves","phase":"dynamic","tags":["calves","ankles"],"dose":"8–10 each side","quota":3,
+     "patterns":[["ankle","circle"],["ankle","rotation"],["ankle","mobility"]],
+     "exclude":["machine","cable","dumbbell","barbell","band","weighted"]},
+    # Static upper body
+    {"label":"chest stretch","phase":"static","tags":["chest","shoulders"],"dose":"30 sec each side","quota":4,
+     "patterns":[["chest","stretch"],["pectoralis","stretch"],["front","shoulder","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"shoulder stretch","phase":"static","tags":["shoulders","rear_shoulders"],"dose":"30 sec each side","quota":4,
+     "patterns":[["rear","deltoid","stretch"],["posterior","shoulder","stretch"],["cross","body","shoulder"],["shoulder","stretch"]],
+     "exclude":["ball","band","machine","cable","roller","weighted","dynamic"]},
+    {"label":"triceps stretch","phase":"static","tags":["triceps","shoulders"],"dose":"30 sec each side","quota":3,
+     "patterns":[["triceps","stretch"],["tricep","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"lat / back stretch","phase":"static","tags":["back","lats"],"dose":"30 sec each side","quota":4,
+     "patterns":[["lat","stretch"],["lats","stretch"],["back","stretch"]],
+     "exclude":["lower back","ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"biceps / forearm stretch","phase":"static","tags":["biceps"],"dose":"30 sec each side","quota":3,
+     "patterns":[["biceps","stretch"],["bicep","stretch"],["forearm","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+    # Static lower body
+    {"label":"hamstring stretch","phase":"static","tags":["hamstrings"],"dose":"30 sec each side","quota":5,
+     "patterns":[["hamstring","stretch"],["hamstrings","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"quad stretch","phase":"static","tags":["quads"],"dose":"30 sec each side","quota":4,
+     "patterns":[["quadriceps","stretch"],["quad","stretch"]],
+     "exclude":["all fours","squad","ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"calf stretch","phase":"static","tags":["calves","ankles"],"dose":"30 sec each side","quota":4,
+     "patterns":[["calf","stretch"],["calves","stretch"],["achilles","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"glute stretch","phase":"static","tags":["glutes","hips"],"dose":"30 sec each side","quota":4,
+     "patterns":[["glute","stretch"],["gluteus","stretch"],["figure","four","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"hip flexor stretch","phase":"static","tags":["hips","quads"],"dose":"30 sec each side","quota":4,
+     "patterns":[["hip","flexor","stretch"],["hip","flexor"]],
+     "exclude":["exercise ball","stability ball","ball","band","machine","cable","weighted","dynamic"]},
+    {"label":"adductor / groin stretch","phase":"static","tags":["hips","adductors"],"dose":"30 sec each side","quota":3,
+     "patterns":[["adductor","stretch"],["groin","stretch"],["inner","thigh","stretch"]],
+     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+]
+
 def norm(v:str)->str:
     v=(v or '').lower().replace('&',' and ')
     v=re.sub(r'[^a-z0-9]+',' ',v)
@@ -157,14 +244,40 @@ def prep_candidates(lookup,spec,limit=5):
         if len(out)>=limit:break
     return out
 
+
+def prep_pool_candidates(lookup,spec,used):
+    patterns=spec.get('patterns',[])
+    excludes=[norm(x) for x in spec.get('exclude',[])]
+    allowed={"body weight","other",""}
+    ranked=[]
+    for filename,rec in lookup.items():
+        if filename in used: continue
+        name=norm(rec.get('name','')); equipment=norm(rec.get('equipment',''))
+        if equipment not in allowed: continue
+        if any(x and x in name for x in excludes): continue
+        best=None
+        for rank,g in enumerate(patterns):
+            if not contains_all(name,g): continue
+            sc=240-rank*22-max(0,len(name.split())-6)*4
+            if equipment=='body weight': sc+=28
+            if 'stretch' in name: sc+=12 if spec.get('phase')=='static' else 0
+            if spec.get('phase')=='dynamic' and any(x in name for x in ['dynamic','circle','rotation','swing','lunge','squat','mobility','scapula','scapular']): sc+=12
+            gnorm=' '.join(norm(x) for x in g)
+            if name==gnorm: sc+=45
+            elif name.startswith(gnorm) or name.endswith(gnorm): sc+=18
+            best=sc; break
+        if best is not None: ranked.append((best,filename,rec))
+    ranked.sort(reverse=True,key=lambda x:(x[0],x[1]))
+    return ranked
+
 def main():
-    ap=argparse.ArgumentParser(description='Build Gym Tracker v10 exercise + prep media libraries from your local exercise GIF collection.')
+    ap=argparse.ArgumentParser(description='Build Gym Tracker v11.1 exercise + dynamic prep/stretch media libraries from your local exercise GIF collection.')
     ap.add_argument('--source',default='~/gym-exercise-lookup')
     ap.add_argument('--dest',default='.')
     ap.add_argument('--count',type=int,default=TARGET_COUNT)
     ap.add_argument('--dry-run',action='store_true')
     args=ap.parse_args()
-    print('Gym Tracker media builder v11')
+    print('Gym Tracker media builder v11.1')
     source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
     lookup_path=source/'exercise-gif-lookup.json'
     if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
@@ -209,7 +322,25 @@ def main():
             prep_report.append(f'{key:22} | NOT FOUND{suffix}');continue
         m=media_item(rec,fn,source,instructions,key=key)
         if not m:prep_report.append(f'{key:22} | MEDIA MISSING | {fn}');continue
-        item,gif_src,img_src=m;prep.append(item);prep_media.append((item,gif_src,img_src));prep_used.add(fn);prep_report.append(f'{key:22} | {fn:24} | {item["name"]}')
+        item,gif_src,img_src=m
+        meta=PREP_META.get(key,{})
+        item.update({"phase":meta.get("phase","dynamic"),"tags":meta.get("tags",[]),"dose":meta.get("dose","")})
+        prep.append(item);prep_media.append((item,gif_src,img_src));prep_used.add(fn)
+        prep_report.append(f'{key:22} | {fn:24} | {item["name"]} | {item["phase"]} | {",".join(item["tags"])}')
+
+    # Add a broader, strictly filtered pool so the app can rotate prep and
+    # stretches week to week while still matching the muscles trained that day.
+    for spec in PREP_POOL_SPECS:
+        added=0
+        for sc,fn,rec in prep_pool_candidates(lookup,spec,prep_used):
+            if added>=spec.get("quota",3): break
+            key=f'pool_{spec["phase"]}_{Path(fn).stem}'
+            m=media_item(rec,fn,source,instructions,key=key)
+            if not m: continue
+            item,gif_src,img_src=m
+            item.update({"phase":spec["phase"],"tags":spec["tags"],"dose":spec["dose"],"pool_label":spec["label"]})
+            prep.append(item);prep_media.append((item,gif_src,img_src));prep_used.add(fn);added+=1
+            prep_report.append(f'{key:22} | {fn:24} | {item["name"]} | {item["phase"]} | {",".join(item["tags"])}')
 
     print(f'Selected {len(mainlib)} main exercises and {len(prep)} prep/stretch movements.\n')
     for role in ROLE_SPECS:print(f'  {role:18}: {sum(1 for x in mainlib if x["role"]==role)}')

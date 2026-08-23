@@ -1,22 +1,33 @@
 arm_circles            | NOT FOUND
 shoulder_rolls         | NOT FOUND
-chest_opener           | 1167-3uj0Ozg.gif         | dynamic chest stretch (male)
+chest_opener           | 1167-3uj0Ozg.gif         | dynamic chest stretch (male) | dynamic | chest,shoulders
 thoracic_rotation      | NOT FOUND
-scapular_push          | 3021-jV65tKx.gif         | scapula push-up
-scapular_pull          | 0688-uTBt1HV.gif         | scapular pull-up
+scapular_push          | 3021-jV65tKx.gif         | scapula push-up | dynamic | chest,shoulders
+scapular_pull          | 0688-uTBt1HV.gif         | scapular pull-up | dynamic | back,lats,shoulders
 leg_swings             | NOT FOUND
-walking_lunge          | 1460-IZVHb27.gif         | walking lunge
+walking_lunge          | 1460-IZVHb27.gif         | walking lunge | dynamic | quads,glutes,hips
 bodyweight_squat       | NOT FOUND
 hip_circles            | NOT FOUND
 knee_hugs              | NOT FOUND
 high_knees             | NOT FOUND
-ankle_circles          | 1368-uL9CsKm.gif         | ankle circles
-chest_stretch          | 1271-Uto7l43.gif         | chest and front of shoulder stretch
-shoulder_stretch       | 0669-xifhB5W.gif         | rear deltoid stretch
-triceps_stretch        | 0643-Z5YStHW.gif         | overhead triceps stretch
-lat_stretch            | 1346-f38OEuO.gif         | kneeling lat stretch
-hamstring_stretch      | 1511-99rWm7w.gif         | hamstring stretch
-quad_stretch           | 0613-BWnJR72.gif         | lying (side) quads stretch
-calf_stretch           | 1398-qOKcgVP.gif         | standing calves calf stretch
-glute_stretch          | 1424-DeDThfG.gif         | seated glute stretch
-hip_flexor_stretch     | 1564-tFGKm99.gif         | intermediate hip flexor and quad stretch
+ankle_circles          | 1368-uL9CsKm.gif         | ankle circles | dynamic | calves,ankles
+chest_stretch          | 1271-Uto7l43.gif         | chest and front of shoulder stretch | static | chest,shoulders
+shoulder_stretch       | 0669-xifhB5W.gif         | rear deltoid stretch | static | shoulders,rear_shoulders
+triceps_stretch        | 0643-Z5YStHW.gif         | overhead triceps stretch | static | triceps,shoulders
+lat_stretch            | 1346-f38OEuO.gif         | kneeling lat stretch | static | back,lats
+hamstring_stretch      | 1511-99rWm7w.gif         | hamstring stretch | static | hamstrings
+quad_stretch           | 0613-BWnJR72.gif         | lying (side) quads stretch | static | quads
+calf_stretch           | 1398-qOKcgVP.gif         | standing calves calf stretch | static | calves,ankles
+glute_stretch          | 1424-DeDThfG.gif         | seated glute stretch | static | glutes,hips
+hip_flexor_stretch     | 1564-tFGKm99.gif         | intermediate hip flexor and quad stretch | static | hips,quads
+pool_dynamic_3011-GdMa1ET | 3011-GdMa1ET.gif         | incline scapula push up | dynamic | chest,shoulders
+pool_dynamic_3655-J9zIWig | 3655-J9zIWig.gif         | walking high knees lunge | dynamic | quads,glutes,hips
+pool_dynamic_3470-kMzUs9Y | 3470-kMzUs9Y.gif         | forward lunge (male) | dynamic | quads,glutes,hips
+pool_static_0817-uOV3Itw | 0817-uOV3Itw.gif         | triceps stretch | static | triceps,shoulders
+pool_static_0794-1jXLYEw | 0794-1jXLYEw.gif         | standing lateral stretch | static | back,lats
+pool_static_1365-GSDioYu | 1365-GSDioYu.gif         | upper back stretch | static | back,lats
+pool_static_1405-chfnQnM | 1405-chfnQnM.gif         | back pec stretch | static | back,lats
+pool_static_1576-sU5BrfP | 1576-sU5BrfP.gif         | leg up hamstring stretch | static | hamstrings
+pool_static_1377-m0tCHqc | 1377-m0tCHqc.gif         | calf stretch with hands against wall | static | calves,ankles
+pool_static_1390-17bqEXD | 1390-17bqEXD.gif         | seated calf stretch (male) | static | calves,ankles
+pool_static_1407-PzNxakt | 1407-PzNxakt.gif         | calf push stretch with hands against wall | static | calves,ankles
