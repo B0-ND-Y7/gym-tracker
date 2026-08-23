@@ -283,13 +283,13 @@ def prep_pool_candidates(lookup,spec,used):
     return ranked
 
 def main():
-    ap=argparse.ArgumentParser(description='Build Gym Tracker v12 exercise + dynamic prep/stretch media libraries from your local exercise GIF collection.')
+    ap=argparse.ArgumentParser(description='Build Gym Tracker v12.1 exercise + dynamic prep/stretch media libraries from your local exercise GIF collection.')
     ap.add_argument('--source',default='~/gym-exercise-lookup')
     ap.add_argument('--dest',default='.')
     ap.add_argument('--count',type=int,default=TARGET_COUNT)
     ap.add_argument('--dry-run',action='store_true')
     args=ap.parse_args()
-    print('Gym Tracker media builder v12.0')
+    print('Gym Tracker media builder v12.1')
     source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
     lookup_path=source/'exercise-gif-lookup.json'
     if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
@@ -370,15 +370,30 @@ def main():
     if args.dry_run:return 0
 
     vd=dest/'videos';im=dest/'images'
-    if vd.exists():shutil.rmtree(vd)
-    if im.exists():shutil.rmtree(im)
-    vd.mkdir(parents=True);im.mkdir(parents=True)
+    # Do not prune generated media here. Older workouts stored in the iPhone/PWA
+    # can still reference media from an earlier curated library. Keeping those
+    # files is cheap and prevents an app update from breaking an in-progress or
+    # historical workout. A future explicit prune command can remove unused
+    # files after the user has exported/cleared old data.
+    vd.mkdir(parents=True,exist_ok=True);im.mkdir(parents=True,exist_ok=True)
     # Deduplicate files that happen to be used both in main and prep libraries.
     copied=set()
     for item,gif_src,img_src in main_media+prep_media:
         for srcp,rel in [(gif_src,item['gif_url']),(img_src,item['image'])]:
             if rel in copied:continue
             shutil.copy2(srcp,dest/rel);copied.add(rel)
+    # Validate the exact paths that will be written to the JSON libraries before
+    # publishing them. This makes a missing GIF/JPG a build failure instead of
+    # a broken card appearing later on the phone.
+    missing=[]
+    for item in mainlib+prep:
+        for field in ('gif_url','image'):
+            rel=item.get(field)
+            if rel and not (dest/rel).is_file():missing.append(f'{item.get("name",item.get("filename","?"))}: {rel}')
+    if missing:
+        print('ERROR: generated library references missing media:',file=sys.stderr)
+        for line in missing:print(f'  {line}',file=sys.stderr)
+        return 4
     (dest/'exercise-library.json').write_text(json.dumps(mainlib,ensure_ascii=False,indent=2),encoding='utf-8')
     (dest/'prep-library.json').write_text(json.dumps(prep,ensure_ascii=False,indent=2),encoding='utf-8')
     (dest/'exercise-library-selection.txt').write_text('\n'.join(report)+'\n',encoding='utf-8')

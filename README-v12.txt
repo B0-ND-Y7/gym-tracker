@@ -1,4 +1,4 @@
-Gym Tracker v12.0 — stable baseline
+Gym Tracker v12.1 — stable baseline
 
 What is included
 - Rolling split: Upper Push -> Upper Pull -> Legs A -> Lower Body B
