@@ -2,20 +2,20 @@ push_horizontal    | 0577-T0yTjgW.gif         | lever chest press | leverage mac
 push_horizontal    | 0576-DOoWcnA.gif         | lever chest press | leverage machine
 push_horizontal    | 3758-WbNq5Xu.gif         | lever standing chest press | leverage machine
 push_horizontal    | 1301-wDN97Ca.gif         | machine inner chest press | leverage machine
-push_horizontal    | 0290-3d7wHyd.gif         | dumbbell bench seated press | dumbbell
 push_horizontal    | 0748-trqKQv2.gif         | smith bench press | smith machine
 push_horizontal    | 1308-zoOvPcx.gif         | smith wide grip bench press | smith machine
+push_horizontal    | 0289-SpYC0Kp.gif         | dumbbell bench press | dumbbell
 push_incline       | 1299-jHAnWmT.gif         | lever incline chest press | leverage machine
 push_incline       | 1479-o17Jfkt.gif         | lever incline chest press v. 2 | leverage machine
 push_incline       | 0757-5v7KYld.gif         | smith incline bench press | smith machine
 push_incline       | 0314-ns0SIbU.gif         | dumbbell incline bench press | dumbbell
-push_incline       | 1623-8eqjhOl.gif         | dumbbell palms in incline bench press | dumbbell
 push_incline       | 0758-78VqWQK.gif         | smith incline reverse-grip press | smith machine
+push_incline       | 0047-3TZduzM.gif         | barbell incline bench press | barbell
 push_fly           | 0596-v3xmPAR.gif         | lever seated fly | leverage machine
-push_fly           | 1320-UFGF6gk.gif         | cable rope crossover seated row | cable
 push_fly           | 0227-Pr9Rhf4.gif         | cable standing fly | cable
 push_fly           | 1269-UKWTJWR.gif         | cable standing up straight crossovers | cable
 push_fly           | 1270-j7XMAyn.gif         | cable upper chest crossovers | cable
+push_fly           | 0158-7saC5zz.gif         | cable decline fly | cable
 push_vertical      | 0587-CggQhII.gif         | lever military press | leverage machine
 push_vertical      | 0603-67n3r98.gif         | lever shoulder press | leverage machine
 push_vertical      | 0869-vqsbmL0.gif         | lever shoulder press v. 2 | leverage machine
@@ -63,10 +63,10 @@ pull_biceps        | 1615-OAguZoG.gif         | lever hammer grip preacher curl 
 pull_biceps        | 0592-b6hQYMb.gif         | lever preacher curl | leverage machine
 pull_biceps        | 1614-ye84CTU.gif         | lever preacher curl v. 2 | leverage machine
 pull_biceps        | 1616-kj3hy6W.gif         | lever reverse grip preacher curl | leverage machine
-pull_biceps        | 0599-Zg3XY7P.gif         | lever seated leg curl | leverage machine
 pull_biceps        | 1639-PcPe0P5.gif         | cable rope hammer preacher curl | cable
 pull_biceps        | 0575-q6y3OhV.gif         | lever bicep curl | leverage machine
-pull_biceps        | 0582-nnmCTLN.gif         | lever kneeling leg curl | leverage machine
+pull_biceps        | 0165-HPlPoQA.gif         | cable hammer curl (with rope) | cable
+pull_biceps        | 0195-P2lNrGL.gif         | cable preacher curl | cable
 lower_compound     | 0739-10Z2DXU.gif         | sled 45в° leg press | sled machine
 lower_compound     | 1464-yn2lLSI.gif         | sled 45в° leg press (back pov) | sled machine
 lower_compound     | 1463-2Qh2J1e.gif         | sled 45° leg press (side pov) | sled machine
@@ -77,14 +77,13 @@ lower_compound     | 0755-ZuPXtCK.gif         | smith hack squat | smith machine
 lower_compound     | 2287-V07qpXy.gif         | lever alternate leg press | leverage machine
 lower_quad         | 0585-my33uHU.gif         | lever leg extension | leverage machine
 lower_ham_curl     | 0586-17lJ1kr.gif         | lever lying leg curl | leverage machine
+lower_ham_curl     | 0599-Zg3XY7P.gif         | lever seated leg curl | leverage machine
+lower_ham_curl     | 0582-nnmCTLN.gif         | lever kneeling leg curl | leverage machine
 lower_ham_curl     | 3235-zHEpuuc.gif         | cable assisted inverse leg curl | cable
 lower_ham_curl     | 2400-0rHfvy9.gif         | inverse leg curl (on pull-up cable machine) | body weight
-lower_ham_curl     | 1770-sJFIDIp.gif         | biceps leg concentration curl | body weight
 lower_ham_curl     | 0496-ms7tjSG.gif         | inverse leg curl (bench support) | body weight
-lower_ham_curl     | 0697-GwYwElT.gif         | self assisted inverse leg curl | body weight
 lower_hinge        | 0085-wQ2c4XD.gif         | barbell romanian deadlift | barbell
 lower_hinge        | 0573-rUXfn3R.gif         | lever back extension | leverage machine
-lower_hinge        | 1720-yg8Totb.gif         | barbell lying back of the head tricep extension | barbell
 lower_hinge        | 1459-rR0LJzx.gif         | dumbbell romanian deadlift | dumbbell
 lower_hinge        | 0432-5eLRITT.gif         | dumbbell stiff leg deadlift | dumbbell
 lower_glute        | 1409-qKBpF7I.gif         | barbell glute bridge | barbell
@@ -100,7 +99,8 @@ lower_calf         | 1385-IeDEXTe.gif         | lever seated squat calf raise on
 lower_calf         | 0594-bOOdeyc.gif         | lever seated calf raise | leverage machine
 lower_calf         | 0605-ykUOVze.gif         | lever standing calf raise | leverage machine
 lower_calf         | 0773-6MaEjVA.gif         | smith standing leg calf raise | smith machine
-pull_biceps        | 3195-UXpKJoq.gif         | lever lying two-one leg curl | leverage machine
 pull_vertical      | 2330-LEprlgG.gif         | cable lat pulldown full range of motion | cable
 pull_vertical      | 0017-kiJ4Z2K.gif         | assisted pull-up | leverage machine
 pull_vertical      | 1431-7OeHptV.gif         | assisted standing chin-up | leverage machine
+pull_vertical      | 1432-f4xtKBj.gif         | assisted standing pull-up | leverage machine
+pull_vertical      | 0572-MaMuGH6.gif         | lever assisted chin-up | leverage machine

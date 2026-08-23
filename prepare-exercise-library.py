@@ -6,30 +6,37 @@ from pathlib import Path
 TARGET_COUNT = 106
 
 ROLE_SPECS = {
-    "push_horizontal": {"quota":7,"any":[["chest","press"],["bench","press"]],"prefer":["leverage machine","smith machine","dumbbell","barbell","cable"],"boost":["seated","lever","machine","horizontal"],"exclude":["incline","decline","single arm","one arm","alternating","close grip","floor","ball"]},
-    "push_incline": {"quota":6,"all":["incline","press"],"prefer":["leverage machine","smith machine","dumbbell","barbell"],"boost":["chest","bench"],"exclude":["single arm","one arm","alternating","ball"]},
-    "push_fly": {"quota":5,"any":[["fly"],["crossover"],["pec","deck"]],"prefer":["leverage machine","cable","dumbbell"],"boost":["chest","seated","standing"],"exclude":["reverse","rear","single arm","one arm","ball"]},
-    "push_vertical": {"quota":6,"any":[["shoulder","press"],["military","press"]],"prefer":["leverage machine","smith machine","dumbbell","barbell"],"boost":["seated","machine","lever"],"exclude":["single arm","one arm","alternating","behind neck","ball"]},
-    "push_lateral": {"quota":5,"all":["lateral","raise"],"prefer":["leverage machine","cable","dumbbell"],"boost":["seated","lever","machine"],"exclude":["bent","rear","single arm","one arm","ball"]},
-    "push_triceps": {"quota":7,"any":[["triceps","pushdown"],["triceps","extension"],["tricep","pushdown"],["tricep","extension"],["assisted","dip"]],"prefer":["cable","leverage machine","assisted","ez barbell","dumbbell"],"boost":["rope","bar","seated","lever"],"exclude":["single arm","one arm","kickback","bench dip","ball"]},
-    "pull_vertical": {"quota":8,"any":[["pulldown"],["pull up"],["pullup"],["chin up"],["chinup"]],"prefer":["cable","leverage machine","assisted"],"boost":["lat","wide","neutral","close grip","assisted"],"exclude":["single arm","one arm","behind neck","straight arm","band"]},
-    "pull_row": {"quota":11,"any":[["row"]],"prefer":["leverage machine","cable","smith machine","dumbbell","barbell"],"boost":["seated","chest supported","lever","machine"],"exclude":["upright row","single arm","one arm","renegade","inverted","ball"]},
-    "pull_rear": {"quota":6,"any":[["reverse","fly"],["rear","delt"],["face","pull"]],"prefer":["leverage machine","cable","dumbbell"],"boost":["seated","machine","lever"],"exclude":["single arm","one arm","ball"]},
-    "pull_biceps": {"quota":8,"any":[["curl"]],"prefer":["leverage machine","cable","ez barbell","dumbbell","barbell"],"boost":["preacher","biceps","seated","lever","machine","hammer"],"exclude":["wrist","reverse wrist","single arm","one arm","concentration","ball","zottman"]},
-    "lower_compound": {"quota":8,"any":[["leg","press"],["hack","squat"],["smith","squat"],["belt","squat"],["squat"]],"prefer":["sled machine","leverage machine","smith machine","barbell"],"boost":["45","hack","smith","lever","machine"],"exclude":["single leg","one leg","pistol","sissy","jump","overhead","front squat","calf"]},
-    "lower_quad": {"quota":5,"all":["leg","extension"],"prefer":["leverage machine","cable"],"boost":["lever","machine","seated"],"exclude":["single leg","one leg","band"]},
-    "lower_ham_curl": {"quota":6,"all":["leg","curl"],"prefer":["leverage machine","cable"],"boost":["seated","lying","lever","machine"],"exclude":["single leg","one leg","ball","band"]},
-    "lower_hinge": {"quota":5,"any":[["romanian","deadlift"],["stiff","leg","deadlift"],["stiff","legged","deadlift"],["back","extension"]],"prefer":["smith machine","barbell","dumbbell","leverage machine","weighted"],"boost":["smith","45","lever","machine"],"exclude":["single leg","one leg","kettlebell","band","ball"]},
-    "lower_glute": {"quota":5,"any":[["hip","thrust"],["glute","bridge"],["glute","drive"]],"prefer":["leverage machine","smith machine","barbell","weighted"],"boost":["lever","machine","smith"],"exclude":["single leg","one leg","band","ball"]},
-    "lower_hip": {"quota":4,"any":[["hip","abduction"],["hip","adduction"],["abductor"],["adductor"]],"prefer":["leverage machine","cable"],"boost":["seated","lever","machine"],"exclude":["single leg","one leg","band","lying"]},
-    "lower_calf": {"quota":4,"all":["calf","raise"],"prefer":["leverage machine","sled machine","smith machine","dumbbell"],"boost":["standing","seated","lever","machine"],"exclude":["single leg","one leg","donkey","jump"]},
+    "push_horizontal": {"quota":7,"category_any":["chest"],"any":[["chest","press"],["bench","press"]],"prefer":["leverage machine","smith machine","dumbbell","barbell","cable"],"boost":["seated","lever","machine","horizontal"],"exclude":["incline","decline","single arm","one arm","alternating","close grip","floor","ball"]},
+    "push_incline": {"quota":6,"category_any":["chest"],"all":["incline","press"],"prefer":["leverage machine","smith machine","dumbbell","barbell"],"boost":["chest","bench"],"exclude":["single arm","one arm","alternating","ball"]},
+    "push_fly": {"quota":5,"category_any":["chest"],"any":[["fly"],["crossover"],["pec","deck"]],"prefer":["leverage machine","cable","dumbbell"],"boost":["chest","seated","standing"],"exclude":["reverse","rear","single arm","one arm","ball"]},
+    "push_vertical": {"quota":6,"category_any":["shoulders"],"any":[["shoulder","press"],["military","press"]],"prefer":["leverage machine","smith machine","dumbbell","barbell"],"boost":["seated","machine","lever"],"exclude":["single arm","one arm","alternating","behind neck","ball"]},
+    "push_lateral": {"quota":5,"category_any":["shoulders"],"all":["lateral","raise"],"prefer":["leverage machine","cable","dumbbell"],"boost":["seated","lever","machine"],"exclude":["bent","rear","single arm","one arm","ball"]},
+    "push_triceps": {"quota":7,"category_any":["upper arms"],"meta_any":["triceps","tricep"],"any":[["triceps","pushdown"],["triceps","extension"],["tricep","pushdown"],["tricep","extension"],["assisted","dip"]],"prefer":["cable","leverage machine","assisted","ez barbell","dumbbell"],"boost":["rope","bar","seated","lever"],"exclude":["single arm","one arm","kickback","bench dip","ball"]},
+    "pull_vertical": {"quota":8,"category_any":["back"],"any":[["pulldown"],["pull up"],["pullup"],["chin up"],["chinup"]],"prefer":["cable","leverage machine","assisted"],"boost":["lat","wide","neutral","close grip","assisted"],"exclude":["single arm","one arm","behind neck","straight arm","band"]},
+    "pull_row": {"quota":11,"category_any":["back"],"any":[["row"]],"prefer":["leverage machine","cable","smith machine","dumbbell","barbell"],"boost":["seated","chest supported","lever","machine"],"exclude":["upright row","single arm","one arm","renegade","inverted","ball"]},
+    "pull_rear": {"quota":6,"category_any":["shoulders","back"],"any":[["reverse","fly"],["rear","delt"],["face","pull"]],"prefer":["leverage machine","cable","dumbbell"],"boost":["seated","machine","lever"],"exclude":["single arm","one arm","ball"]},
+    "pull_biceps": {"quota":8,"category_any":["upper arms"],"meta_any":["biceps","bicep","brachialis"],"any":[["curl"]],"prefer":["leverage machine","cable","ez barbell","dumbbell","barbell"],"boost":["preacher","biceps","seated","lever","machine","hammer"],"exclude":["wrist","reverse wrist","single arm","one arm","concentration","ball","zottman","leg curl"]},
+    "lower_compound": {"quota":8,"category_any":["upper legs"],"any":[["leg","press"],["hack","squat"],["smith","squat"],["belt","squat"],["squat"]],"prefer":["sled machine","leverage machine","smith machine","barbell"],"boost":["45","hack","smith","lever","machine"],"exclude":["single leg","one leg","pistol","sissy","jump","overhead","front squat","calf"]},
+    "lower_quad": {"quota":5,"category_any":["upper legs"],"meta_any":["quadriceps","quads"],"all":["leg","extension"],"prefer":["leverage machine","cable"],"boost":["lever","machine","seated"],"exclude":["single leg","one leg","band"]},
+    "lower_ham_curl": {"quota":6,"category_any":["upper legs"],"meta_any":["hamstrings","hamstring"],"all":["leg","curl"],"prefer":["leverage machine","cable"],"boost":["seated","lying","lever","machine"],"exclude":["single leg","one leg","ball","band"]},
+    "lower_hinge": {"quota":5,"category_any":["upper legs","back"],"any":[["romanian","deadlift"],["stiff","leg","deadlift"],["stiff","legged","deadlift"],["back","extension"]],"prefer":["smith machine","barbell","dumbbell","leverage machine","weighted"],"boost":["smith","45","lever","machine"],"exclude":["single leg","one leg","kettlebell","band","ball"]},
+    "lower_glute": {"quota":5,"category_any":["upper legs"],"meta_any":["glute","glutes","gluteus"],"any":[["hip","thrust"],["glute","bridge"],["glute","drive"]],"prefer":["leverage machine","smith machine","barbell","weighted"],"boost":["lever","machine","smith"],"exclude":["single leg","one leg","band","ball"]},
+    "lower_hip": {"quota":4,"category_any":["upper legs"],"any":[["hip","abduction"],["hip","adduction"],["abductor"],["adductor"]],"prefer":["leverage machine","cable"],"boost":["seated","lever","machine"],"exclude":["single leg","one leg","band","lying"]},
+    "lower_calf": {"quota":4,"category_any":["lower legs"],"meta_any":["calves","calf","gastrocnemius","soleus"],"all":["calf","raise"],"prefer":["leverage machine","sled machine","smith machine","dumbbell"],"boost":["standing","seated","lever","machine"],"exclude":["single leg","one leg","donkey","jump"]},
 }
+
+ROLE_RECOMMENDED_MIN = {
+    "push_horizontal":4,"push_incline":3,"push_fly":3,"push_vertical":4,"push_lateral":3,"push_triceps":4,
+    "pull_vertical":5,"pull_row":5,"pull_rear":3,"pull_biceps":4,
+    "lower_compound":4,"lower_quad":2,"lower_ham_curl":3,"lower_hinge":3,"lower_glute":3,"lower_hip":2,"lower_calf":2,
+}
+
 
 ALLOWED_EQUIPMENT={"leverage machine","cable","sled machine","smith machine","dumbbell","barbell","ez barbell","assisted","weighted","body weight","other"}
 GLOBAL_EXCLUDE=["kettlebell","band","stability ball","bosu","medicine ball","resistance band","jump","burpee","handstand","muscle up","snatch","clean and jerk","olympic","pistol","sissy","dragon flag","wheel rollout","neck","wrist roller"]
 
 # These are searched against the user's full 1,324-entry lookup. The first good
-# match is used. If a particular movement is not present, v9 falls back to text.
+# match is used. If a particular movement is not present, the app falls back to clear text guidance.
 PREP_SPECS = {
     # Dynamic prep: prefer simple body-weight movements and reject machine/
     # resistance variants that merely happen to contain the same words.
@@ -155,8 +162,13 @@ def norm(v:str)->str:
 def contains_all(text,parts): return all(norm(x) in text for x in parts)
 
 def matches(rec,spec):
-    name=norm(rec.get('name','')); equipment=norm(rec.get('equipment',''))
+    name=norm(rec.get('name','')); equipment=norm(rec.get('equipment','')); category=norm(rec.get('category',''))
+    metadata=norm(' '.join(str(rec.get(k,'')) for k in ('name','category','target','muscle_group'))+' '+' '.join(str(x) for x in (rec.get('secondary_muscles') or [])))
     if equipment not in ALLOWED_EQUIPMENT:return False
+    cats={norm(x) for x in spec.get('category_any',[])}
+    if cats and category not in cats:return False
+    meta_terms=[norm(x) for x in spec.get('meta_any',[])]
+    if meta_terms and not any(x and x in metadata for x in meta_terms):return False
     if any(norm(x) in name for x in GLOBAL_EXCLUDE):return False
     if any(norm(x) in name for x in spec.get('exclude',[])):return False
     if spec.get('all') and not contains_all(name,spec['all']):return False
@@ -271,13 +283,13 @@ def prep_pool_candidates(lookup,spec,used):
     return ranked
 
 def main():
-    ap=argparse.ArgumentParser(description='Build Gym Tracker v11.1 exercise + dynamic prep/stretch media libraries from your local exercise GIF collection.')
+    ap=argparse.ArgumentParser(description='Build Gym Tracker v12 exercise + dynamic prep/stretch media libraries from your local exercise GIF collection.')
     ap.add_argument('--source',default='~/gym-exercise-lookup')
     ap.add_argument('--dest',default='.')
     ap.add_argument('--count',type=int,default=TARGET_COUNT)
     ap.add_argument('--dry-run',action='store_true')
     args=ap.parse_args()
-    print('Gym Tracker media builder v11.1')
+    print('Gym Tracker media builder v12.0')
     source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
     lookup_path=source/'exercise-gif-lookup.json'
     if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
@@ -304,6 +316,15 @@ def main():
             if len(selected)>=args.count:break
             if fn in used:continue
             selected.append((role,fn,rec,sc));role_counts[role]+=1;used.add(fn)
+    under=[]
+    for role,min_count in ROLE_RECOMMENDED_MIN.items():
+        actual=role_counts.get(role,0)
+        if actual<min_count:under.append((role,actual,min_count))
+    if under:
+        print('WARNING: some movement categories have limited variety in this dataset:',file=sys.stderr)
+        for role,actual,min_count in under:print(f'  {role}: {actual} found; {min_count}+ recommended',file=sys.stderr)
+        print('The app will still work and can use nearby compatible roles where configured.',file=sys.stderr)
+    if len(selected)<args.count:print(f'WARNING: requested {args.count} exercises but found {len(selected)} after strict filtering.',file=sys.stderr)
     if len(selected)<90:print(f'ERROR: only found {len(selected)} suitable exercises',file=sys.stderr);return 2
 
     mainlib=[];main_media=[];report=[]
