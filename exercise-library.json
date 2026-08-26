@@ -112,6 +112,134 @@
     "role": "push_horizontal"
   },
   {
+    "id": "1624",
+    "filename": "1624-UIbGx6H.gif",
+    "name": "dumbbell reverse bench press",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "image": "images/1624-UIbGx6H.jpg",
+    "gif_url": "videos/1624-UIbGx6H.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "2144",
+    "filename": "2144-nIR4Rwl.gif",
+    "name": "cable seated chest press",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/2144-nIR4Rwl.jpg",
+    "gif_url": "videos/2144-nIR4Rwl.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "0025",
+    "filename": "0025-EIeI8Vf.gif",
+    "name": "barbell bench press",
+    "category": "chest",
+    "equipment": "barbell",
+    "target": "pectorals",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "image": "images/0025-EIeI8Vf.jpg",
+    "gif_url": "videos/0025-EIeI8Vf.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "0045",
+    "filename": "0045-GXoaSgn.gif",
+    "name": "barbell guillotine bench press",
+    "category": "chest",
+    "equipment": "barbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/0045-GXoaSgn.jpg",
+    "gif_url": "videos/0045-GXoaSgn.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "0122",
+    "filename": "0122-JsKq9so.gif",
+    "name": "barbell wide bench press",
+    "category": "chest",
+    "equipment": "barbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/0122-JsKq9so.jpg",
+    "gif_url": "videos/0122-JsKq9so.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "1258",
+    "filename": "1258-945zpRg.gif",
+    "name": "barbell wide reverse grip bench press",
+    "category": "chest",
+    "equipment": "barbell",
+    "target": "pectorals",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "image": "images/1258-945zpRg.jpg",
+    "gif_url": "videos/1258-945zpRg.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "0151",
+    "filename": "0151-7xI5MXA.gif",
+    "name": "cable bench press",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "image": "images/0151-7xI5MXA.jpg",
+    "gif_url": "videos/0151-7xI5MXA.gif",
+    "role": "push_horizontal"
+  },
+  {
+    "id": "0757",
+    "filename": "0757-5v7KYld.gif",
+    "name": "smith incline bench press",
+    "category": "chest",
+    "equipment": "smith machine",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/0757-5v7KYld.jpg",
+    "gif_url": "videos/0757-5v7KYld.gif",
+    "role": "push_incline"
+  },
+  {
     "id": "1299",
     "filename": "1299-jHAnWmT.gif",
     "name": "lever incline chest press",
@@ -144,19 +272,19 @@
     "role": "push_incline"
   },
   {
-    "id": "0757",
-    "filename": "0757-5v7KYld.gif",
-    "name": "smith incline bench press",
+    "id": "0758",
+    "filename": "0758-78VqWQK.gif",
+    "name": "smith incline reverse-grip press",
     "category": "chest",
     "equipment": "smith machine",
     "target": "pectorals",
-    "muscle_group": "shoulders",
+    "muscle_group": "triceps",
     "secondary_muscles": [
-      "shoulders",
-      "triceps"
+      "triceps",
+      "shoulders"
     ],
-    "image": "images/0757-5v7KYld.jpg",
-    "gif_url": "videos/0757-5v7KYld.gif",
+    "image": "images/0758-78VqWQK.jpg",
+    "gif_url": "videos/0758-78VqWQK.gif",
     "role": "push_incline"
   },
   {
@@ -176,22 +304,6 @@
     "role": "push_incline"
   },
   {
-    "id": "0758",
-    "filename": "0758-78VqWQK.gif",
-    "name": "smith incline reverse-grip press",
-    "category": "chest",
-    "equipment": "smith machine",
-    "target": "pectorals",
-    "muscle_group": "triceps",
-    "secondary_muscles": [
-      "triceps",
-      "shoulders"
-    ],
-    "image": "images/0758-78VqWQK.jpg",
-    "gif_url": "videos/0758-78VqWQK.gif",
-    "role": "push_incline"
-  },
-  {
     "id": "0047",
     "filename": "0047-3TZduzM.gif",
     "name": "barbell incline bench press",
@@ -205,6 +317,86 @@
     ],
     "image": "images/0047-3TZduzM.jpg",
     "gif_url": "videos/0047-3TZduzM.gif",
+    "role": "push_incline"
+  },
+  {
+    "id": "1257",
+    "filename": "1257-DU7I633.gif",
+    "name": "barbell reverse grip incline bench press",
+    "category": "chest",
+    "equipment": "barbell",
+    "target": "pectorals",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "shoulders"
+    ],
+    "image": "images/1257-DU7I633.jpg",
+    "gif_url": "videos/1257-DU7I633.gif",
+    "role": "push_incline"
+  },
+  {
+    "id": "3545",
+    "filename": "3545-TVdivgY.gif",
+    "name": "dumbbell incline alternate press",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/3545-TVdivgY.jpg",
+    "gif_url": "videos/3545-TVdivgY.gif",
+    "role": "push_incline"
+  },
+  {
+    "id": "0321",
+    "filename": "0321-PG1kcIb.gif",
+    "name": "dumbbell incline hammer press",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/0321-PG1kcIb.jpg",
+    "gif_url": "videos/0321-PG1kcIb.gif",
+    "role": "push_incline"
+  },
+  {
+    "id": "0324",
+    "filename": "0324-OVLmUuL.gif",
+    "name": "dumbbell incline palm-in press",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/0324-OVLmUuL.jpg",
+    "gif_url": "videos/0324-OVLmUuL.gif",
+    "role": "push_incline"
+  },
+  {
+    "id": "0169",
+    "filename": "0169-Vh0GsK4.gif",
+    "name": "cable incline bench press",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "deltoids",
+    "secondary_muscles": [
+      "deltoids",
+      "triceps"
+    ],
+    "image": "images/0169-Vh0GsK4.jpg",
+    "gif_url": "videos/0169-Vh0GsK4.gif",
     "role": "push_incline"
   },
   {
@@ -288,6 +480,132 @@
     "role": "push_fly"
   },
   {
+    "id": "0171",
+    "filename": "0171-tBWXbIT.gif",
+    "name": "cable incline fly",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "deltoids",
+    "secondary_muscles": [
+      "deltoids",
+      "triceps"
+    ],
+    "image": "images/0171-tBWXbIT.jpg",
+    "gif_url": "videos/0171-tBWXbIT.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0179",
+    "filename": "0179-FVmZVhk.gif",
+    "name": "cable low fly",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "deltoids",
+    "secondary_muscles": [
+      "deltoids",
+      "triceps"
+    ],
+    "image": "images/0179-FVmZVhk.jpg",
+    "gif_url": "videos/0179-FVmZVhk.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0185",
+    "filename": "0185-lJJ7Yq8.gif",
+    "name": "cable lying fly",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "deltoids",
+    "secondary_muscles": [
+      "deltoids",
+      "triceps"
+    ],
+    "image": "images/0185-lJJ7Yq8.jpg",
+    "gif_url": "videos/0185-lJJ7Yq8.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0188",
+    "filename": "0188-xLYSdtg.gif",
+    "name": "cable middle fly",
+    "category": "chest",
+    "equipment": "cable",
+    "target": "pectorals",
+    "muscle_group": "deltoids",
+    "secondary_muscles": [
+      "deltoids",
+      "triceps"
+    ],
+    "image": "images/0188-xLYSdtg.jpg",
+    "gif_url": "videos/0188-xLYSdtg.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0302",
+    "filename": "0302-xXm4nYq.gif",
+    "name": "dumbbell decline fly",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0302-xXm4nYq.jpg",
+    "gif_url": "videos/0302-xXm4nYq.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0307",
+    "filename": "0307-reFHapa.gif",
+    "name": "dumbbell decline twist fly",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "image": "images/0307-reFHapa.jpg",
+    "gif_url": "videos/0307-reFHapa.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0308",
+    "filename": "0308-yz9nUhF.gif",
+    "name": "dumbbell fly",
+    "category": "chest",
+    "equipment": "dumbbell",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0308-yz9nUhF.jpg",
+    "gif_url": "videos/0308-yz9nUhF.gif",
+    "role": "push_fly"
+  },
+  {
+    "id": "0765",
+    "filename": "0765-xUwnBMT.gif",
+    "name": "smith seated shoulder press",
+    "category": "shoulders",
+    "equipment": "smith machine",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/0765-xUwnBMT.jpg",
+    "gif_url": "videos/0765-xUwnBMT.gif",
+    "role": "push_vertical"
+  },
+  {
     "id": "0587",
     "filename": "0587-CggQhII.gif",
     "name": "lever military press",
@@ -352,9 +670,9 @@
     "role": "push_vertical"
   },
   {
-    "id": "0765",
-    "filename": "0765-xUwnBMT.gif",
-    "name": "smith seated shoulder press",
+    "id": "0766",
+    "filename": "0766-903mzG8.gif",
+    "name": "smith shoulder press",
     "category": "shoulders",
     "equipment": "smith machine",
     "target": "delts",
@@ -363,8 +681,40 @@
       "triceps",
       "upper back"
     ],
-    "image": "images/0765-xUwnBMT.jpg",
-    "gif_url": "videos/0765-xUwnBMT.gif",
+    "image": "images/0766-903mzG8.jpg",
+    "gif_url": "videos/0766-903mzG8.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "0772",
+    "filename": "0772-ht8xDrP.gif",
+    "name": "smith standing behind head military press",
+    "category": "shoulders",
+    "equipment": "smith machine",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/0772-ht8xDrP.jpg",
+    "gif_url": "videos/0772-ht8xDrP.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "0774",
+    "filename": "0774-jjUPrze.gif",
+    "name": "smith standing military press",
+    "category": "shoulders",
+    "equipment": "smith machine",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/0774-jjUPrze.jpg",
+    "gif_url": "videos/0774-jjUPrze.gif",
     "role": "push_vertical"
   },
   {
@@ -381,6 +731,86 @@
     ],
     "image": "images/0405-znQUdHY.jpg",
     "gif_url": "videos/0405-znQUdHY.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "0404",
+    "filename": "0404-f1jf47L.gif",
+    "name": "dumbbell seated shoulder press (parallel grip)",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/0404-f1jf47L.jpg",
+    "gif_url": "videos/0404-f1jf47L.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "0086",
+    "filename": "0086-ngPpyRS.gif",
+    "name": "barbell seated behind head military press",
+    "category": "shoulders",
+    "equipment": "barbell",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/0086-ngPpyRS.jpg",
+    "gif_url": "videos/0086-ngPpyRS.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "1456",
+    "filename": "1456-wdRZISl.gif",
+    "name": "barbell standing close grip military press",
+    "category": "shoulders",
+    "equipment": "barbell",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/1456-wdRZISl.jpg",
+    "gif_url": "videos/1456-wdRZISl.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "1457",
+    "filename": "1457-Kyd9Rz5.gif",
+    "name": "barbell standing wide military press",
+    "category": "shoulders",
+    "equipment": "barbell",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/1457-Kyd9Rz5.jpg",
+    "gif_url": "videos/1457-Kyd9Rz5.gif",
+    "role": "push_vertical"
+  },
+  {
+    "id": "0148",
+    "filename": "0148-KHPZL0b.gif",
+    "name": "cable alternate shoulder press",
+    "category": "shoulders",
+    "equipment": "cable",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "image": "images/0148-KHPZL0b.jpg",
+    "gif_url": "videos/0148-KHPZL0b.gif",
     "role": "push_vertical"
   },
   {
@@ -462,6 +892,69 @@
     "image": "images/0311-AQ0mC4Y.jpg",
     "gif_url": "videos/0311-AQ0mC4Y.gif",
     "role": "push_lateral"
+  },
+  {
+    "id": "0334",
+    "filename": "0334-DsgkuIt.gif",
+    "name": "dumbbell lateral raise",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "traps",
+    "secondary_muscles": [
+      "traps"
+    ],
+    "image": "images/0334-DsgkuIt.jpg",
+    "gif_url": "videos/0334-DsgkuIt.gif",
+    "role": "push_lateral"
+  },
+  {
+    "id": "0335",
+    "filename": "0335-xMjBKwn.gif",
+    "name": "dumbbell lateral to front raise",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "biceps"
+    ],
+    "image": "images/0335-xMjBKwn.jpg",
+    "gif_url": "videos/0335-xMjBKwn.gif",
+    "role": "push_lateral"
+  },
+  {
+    "id": "3237",
+    "filename": "3237-eXMFHww.gif",
+    "name": "landmine lateral raise",
+    "category": "shoulders",
+    "equipment": "barbell",
+    "target": "delts",
+    "muscle_group": "traps",
+    "secondary_muscles": [
+      "traps",
+      "upper back"
+    ],
+    "image": "images/3237-eXMFHww.jpg",
+    "gif_url": "videos/3237-eXMFHww.gif",
+    "role": "push_lateral"
+  },
+  {
+    "id": "1451",
+    "filename": "1451-BRImeP8.gif",
+    "name": "lever seated dip",
+    "category": "upper arms",
+    "equipment": "leverage machine",
+    "target": "triceps",
+    "muscle_group": "chest",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "image": "images/1451-BRImeP8.jpg",
+    "gif_url": "videos/1451-BRImeP8.gif",
+    "role": "push_triceps"
   },
   {
     "id": "0194",
@@ -554,6 +1047,22 @@
     "role": "push_triceps"
   },
   {
+    "id": "0591",
+    "filename": "0591-D5yqP2p.gif",
+    "name": "lever overhand triceps dip",
+    "category": "upper arms",
+    "equipment": "leverage machine",
+    "target": "triceps",
+    "muscle_group": "chest",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "image": "images/0591-D5yqP2p.jpg",
+    "gif_url": "videos/0591-D5yqP2p.gif",
+    "role": "push_triceps"
+  },
+  {
     "id": "0607",
     "filename": "0607-Ser9eQp.gif",
     "name": "lever triceps extension",
@@ -566,6 +1075,141 @@
     ],
     "image": "images/0607-Ser9eQp.jpg",
     "gif_url": "videos/0607-Ser9eQp.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "0453",
+    "filename": "0453-iaapw0g.gif",
+    "name": "ez barbell seated triceps extension",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0453-iaapw0g.jpg",
+    "gif_url": "videos/0453-iaapw0g.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "0149",
+    "filename": "0149-Gchi5Tr.gif",
+    "name": "cable alternate triceps extension",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0149-Gchi5Tr.jpg",
+    "gif_url": "videos/0149-Gchi5Tr.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "1722",
+    "filename": "1722-1xHyxys.gif",
+    "name": "cable high pulley overhead tricep extension",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/1722-1xHyxys.jpg",
+    "gif_url": "videos/1722-1xHyxys.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "0173",
+    "filename": "0173-Hx1WC8I.gif",
+    "name": "cable incline triceps extension",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0173-Hx1WC8I.jpg",
+    "gif_url": "videos/0173-Hx1WC8I.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "0186",
+    "filename": "0186-uxJcFUU.gif",
+    "name": "cable lying triceps extension v. 2",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0186-uxJcFUU.jpg",
+    "gif_url": "videos/0186-uxJcFUU.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "2406",
+    "filename": "2406-ThKP69G.gif",
+    "name": "cable reverse grip triceps pushdown (sz-bar) (with arm blaster)",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "triceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/2406-ThKP69G.jpg",
+    "gif_url": "videos/2406-ThKP69G.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "2186",
+    "filename": "2186-CQHoDm0.gif",
+    "name": "ez barbell decline triceps extension",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/2186-CQHoDm0.jpg",
+    "gif_url": "videos/2186-CQHoDm0.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "0449",
+    "filename": "0449-KyLtiLT.gif",
+    "name": "ez barbell incline triceps extension",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/0449-KyLtiLT.jpg",
+    "gif_url": "videos/0449-KyLtiLT.gif",
+    "role": "push_triceps"
+  },
+  {
+    "id": "1752",
+    "filename": "1752-o8aOcrz.gif",
+    "name": "smith machine incline tricep extension",
+    "category": "upper arms",
+    "equipment": "smith machine",
+    "target": "triceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/1752-o8aOcrz.jpg",
+    "gif_url": "videos/1752-o8aOcrz.gif",
     "role": "push_triceps"
   },
   {
@@ -582,6 +1226,22 @@
     ],
     "image": "images/0015-vrhHa6D.jpg",
     "gif_url": "videos/0015-vrhHa6D.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "0673",
+    "filename": "0673-ecpY0rH.gif",
+    "name": "reverse grip machine lat pulldown",
+    "category": "back",
+    "equipment": "leverage machine",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0673-ecpY0rH.jpg",
+    "gif_url": "videos/0673-ecpY0rH.gif",
     "role": "pull_vertical"
   },
   {
@@ -700,20 +1360,85 @@
     "role": "pull_vertical"
   },
   {
-    "id": "0571",
-    "filename": "0571-w2oRpuH.gif",
-    "name": "lever alternating narrow grip seated row",
+    "id": "2330",
+    "filename": "2330-LEprlgG.gif",
+    "name": "cable lat pulldown full range of motion",
+    "category": "back",
+    "equipment": "cable",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "rhomboids",
+      "rear deltoids"
+    ],
+    "image": "images/2330-LEprlgG.jpg",
+    "gif_url": "videos/2330-LEprlgG.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "0017",
+    "filename": "0017-kiJ4Z2K.gif",
+    "name": "assisted pull-up",
     "category": "back",
     "equipment": "leverage machine",
-    "target": "upper back",
+    "target": "lats",
     "muscle_group": "biceps",
     "secondary_muscles": [
       "biceps",
       "forearms"
     ],
-    "image": "images/0571-w2oRpuH.jpg",
-    "gif_url": "videos/0571-w2oRpuH.gif",
-    "role": "pull_row"
+    "image": "images/0017-kiJ4Z2K.jpg",
+    "gif_url": "videos/0017-kiJ4Z2K.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "1431",
+    "filename": "1431-7OeHptV.gif",
+    "name": "assisted standing chin-up",
+    "category": "back",
+    "equipment": "leverage machine",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1431-7OeHptV.jpg",
+    "gif_url": "videos/1431-7OeHptV.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "1432",
+    "filename": "1432-f4xtKBj.gif",
+    "name": "assisted standing pull-up",
+    "category": "back",
+    "equipment": "leverage machine",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1432-f4xtKBj.jpg",
+    "gif_url": "videos/1432-f4xtKBj.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "0572",
+    "filename": "0572-MaMuGH6.gif",
+    "name": "lever assisted chin-up",
+    "category": "back",
+    "equipment": "leverage machine",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0572-MaMuGH6.jpg",
+    "gif_url": "videos/0572-MaMuGH6.gif",
+    "role": "pull_vertical"
   },
   {
     "id": "0588",
@@ -876,6 +1601,168 @@
     "role": "pull_row"
   },
   {
+    "id": "0160",
+    "filename": "0160-veXwo0D.gif",
+    "name": "cable floor seated wide-grip row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0160-veXwo0D.jpg",
+    "gif_url": "videos/0160-veXwo0D.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0180",
+    "filename": "0180-hvV79Si.gif",
+    "name": "cable low seated row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0180-hvV79Si.jpg",
+    "gif_url": "videos/0180-hvV79Si.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1320",
+    "filename": "1320-UFGF6gk.gif",
+    "name": "cable rope crossover seated row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1320-UFGF6gk.jpg",
+    "gif_url": "videos/1320-UFGF6gk.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1321",
+    "filename": "1321-c8oybX6.gif",
+    "name": "cable rope elevated seated row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1321-c8oybX6.jpg",
+    "gif_url": "videos/1321-c8oybX6.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1323",
+    "filename": "1323-SJqRxOt.gif",
+    "name": "cable rope seated row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1323-SJqRxOt.jpg",
+    "gif_url": "videos/1323-SJqRxOt.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0213",
+    "filename": "0213-pwt0pnM.gif",
+    "name": "cable seated high row (v-bar)",
+    "category": "back",
+    "equipment": "cable",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "rhomboids",
+      "rear deltoids"
+    ],
+    "image": "images/0213-pwt0pnM.jpg",
+    "gif_url": "videos/0213-pwt0pnM.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0861",
+    "filename": "0861-fUBheHs.gif",
+    "name": "cable seated row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0861-fUBheHs.jpg",
+    "gif_url": "videos/0861-fUBheHs.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0218",
+    "filename": "0218-qcY50ZD.gif",
+    "name": "cable seated wide-grip row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0218-qcY50ZD.jpg",
+    "gif_url": "videos/0218-qcY50ZD.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0239",
+    "filename": "0239-Tq6gbK6.gif",
+    "name": "cable straight back seated row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms",
+      "shoulders"
+    ],
+    "image": "images/0239-Tq6gbK6.jpg",
+    "gif_url": "videos/0239-Tq6gbK6.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0208",
+    "filename": "0208-PNtsX17.gif",
+    "name": "cable reverse-grip straight back seated high row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0208-PNtsX17.jpg",
+    "gif_url": "videos/0208-PNtsX17.gif",
+    "role": "pull_row"
+  },
+  {
     "id": "0602",
     "filename": "0602-myfUsKf.gif",
     "name": "lever seated reverse fly",
@@ -972,6 +1859,103 @@
     ],
     "image": "images/0225-P5p0j8B.jpg",
     "gif_url": "videos/0225-P5p0j8B.gif",
+    "role": "pull_rear"
+  },
+  {
+    "id": "0233",
+    "filename": "0233-ZfyAGhK.gif",
+    "name": "cable standing rear delt row (with rope)",
+    "category": "shoulders",
+    "equipment": "cable",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids",
+      "biceps"
+    ],
+    "image": "images/0233-ZfyAGhK.jpg",
+    "gif_url": "videos/0233-ZfyAGhK.gif",
+    "role": "pull_rear"
+  },
+  {
+    "id": "1328",
+    "filename": "1328-XUUD0Fs.gif",
+    "name": "dumbbell lying rear delt row",
+    "category": "back",
+    "equipment": "dumbbell",
+    "target": "upper back",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "biceps"
+    ],
+    "image": "images/1328-XUUD0Fs.jpg",
+    "gif_url": "videos/1328-XUUD0Fs.gif",
+    "role": "pull_rear"
+  },
+  {
+    "id": "2292",
+    "filename": "2292-mu5Guxt.gif",
+    "name": "dumbbell rear delt raise",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids"
+    ],
+    "image": "images/2292-mu5Guxt.jpg",
+    "gif_url": "videos/2292-mu5Guxt.gif",
+    "role": "pull_rear"
+  },
+  {
+    "id": "0377",
+    "filename": "0377-EKXOMEh.gif",
+    "name": "dumbbell rear delt row_shoulder",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids"
+    ],
+    "image": "images/0377-EKXOMEh.jpg",
+    "gif_url": "videos/0377-EKXOMEh.gif",
+    "role": "pull_rear"
+  },
+  {
+    "id": "0383",
+    "filename": "0383-EAs3xL9.gif",
+    "name": "dumbbell reverse fly",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids"
+    ],
+    "image": "images/0383-EAs3xL9.jpg",
+    "gif_url": "videos/0383-EAs3xL9.gif",
+    "role": "pull_rear"
+  },
+  {
+    "id": "0386",
+    "filename": "0386-prbWx1D.gif",
+    "name": "dumbbell rotation reverse fly",
+    "category": "shoulders",
+    "equipment": "dumbbell",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids"
+    ],
+    "image": "images/0386-prbWx1D.jpg",
+    "gif_url": "videos/0386-prbWx1D.gif",
     "role": "pull_rear"
   },
   {
@@ -1092,6 +2076,157 @@
     ],
     "image": "images/0195-P2lNrGL.jpg",
     "gif_url": "videos/0195-P2lNrGL.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0209",
+    "filename": "0209-IwX5NqK.gif",
+    "name": "cable reverse preacher curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0209-IwX5NqK.jpg",
+    "gif_url": "videos/0209-IwX5NqK.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1641",
+    "filename": "1641-8oYqOt9.gif",
+    "name": "cable seated curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1641-8oYqOt9.jpg",
+    "gif_url": "videos/1641-8oYqOt9.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1643",
+    "filename": "1643-DpWMFP5.gif",
+    "name": "cable seated overhead curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms",
+      "shoulders"
+    ],
+    "image": "images/1643-DpWMFP5.jpg",
+    "gif_url": "videos/1643-DpWMFP5.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1646",
+    "filename": "1646-fy7Tgy4.gif",
+    "name": "dumbbell alternate hammer preacher curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1646-fy7Tgy4.jpg",
+    "gif_url": "videos/1646-fy7Tgy4.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1648",
+    "filename": "1648-6em2Dxj.gif",
+    "name": "dumbbell alternate seated hammer curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1648-6em2Dxj.jpg",
+    "gif_url": "videos/1648-6em2Dxj.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1678",
+    "filename": "1678-IGtBdNT.gif",
+    "name": "dumbbell seated hammer curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1678-IGtBdNT.jpg",
+    "gif_url": "videos/1678-IGtBdNT.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0393",
+    "filename": "0393-KXyoEtA.gif",
+    "name": "dumbbell seated inner biceps curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0393-KXyoEtA.jpg",
+    "gif_url": "videos/0393-KXyoEtA.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0402",
+    "filename": "0402-7D5bgLT.gif",
+    "name": "dumbbell seated preacher curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0402-7D5bgLT.jpg",
+    "gif_url": "videos/0402-7D5bgLT.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "3547",
+    "filename": "3547-OeL23VY.gif",
+    "name": "dumbbell seated biceps curl to shoulder press",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "image": "images/3547-OeL23VY.jpg",
+    "gif_url": "videos/3547-OeL23VY.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1627",
+    "filename": "1627-hacCyUv.gif",
+    "name": "ez barbell close grip preacher curl",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1627-hacCyUv.jpg",
+    "gif_url": "videos/1627-hacCyUv.gif",
     "role": "pull_biceps"
   },
   {
@@ -1230,6 +2365,300 @@
     "role": "lower_compound"
   },
   {
+    "id": "0744",
+    "filename": "0744-9n2149Z.gif",
+    "name": "sled lying squat",
+    "category": "upper legs",
+    "equipment": "sled machine",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0744-9n2149Z.jpg",
+    "gif_url": "videos/0744-9n2149Z.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0750",
+    "filename": "0750-Gu2rNJd.gif",
+    "name": "smith chair squat",
+    "category": "upper legs",
+    "equipment": "smith machine",
+    "target": "quads",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0750-Gu2rNJd.jpg",
+    "gif_url": "videos/0750-Gu2rNJd.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "3281",
+    "filename": "3281-NNoHCEA.gif",
+    "name": "smith full squat",
+    "category": "upper legs",
+    "equipment": "smith machine",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/3281-NNoHCEA.jpg",
+    "gif_url": "videos/3281-NNoHCEA.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0760",
+    "filename": "0760-7zdxRTl.gif",
+    "name": "smith leg press",
+    "category": "upper legs",
+    "equipment": "smith machine",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0760-7zdxRTl.jpg",
+    "gif_url": "videos/0760-7zdxRTl.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "1434",
+    "filename": "1434-RGLscZM.gif",
+    "name": "smith low bar squat",
+    "category": "upper legs",
+    "equipment": "smith machine",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/1434-RGLscZM.jpg",
+    "gif_url": "videos/1434-RGLscZM.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0770",
+    "filename": "0770-jFtipLl.gif",
+    "name": "smith squat",
+    "category": "upper legs",
+    "equipment": "smith machine",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0770-jFtipLl.jpg",
+    "gif_url": "videos/0770-jFtipLl.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "3142",
+    "filename": "3142-dzz6BiV.gif",
+    "name": "smith sumo squat",
+    "category": "upper legs",
+    "equipment": "smith machine",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/3142-dzz6BiV.jpg",
+    "gif_url": "videos/3142-dzz6BiV.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0046",
+    "filename": "0046-5VCj6iH.gif",
+    "name": "barbell hack squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0046-5VCj6iH.jpg",
+    "gif_url": "videos/0046-5VCj6iH.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0026",
+    "filename": "0026-W9pFVv1.gif",
+    "name": "barbell bench squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "quads",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0026-W9pFVv1.jpg",
+    "gif_url": "videos/0026-W9pFVv1.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0039",
+    "filename": "0039-IeTIEqg.gif",
+    "name": "barbell front chest squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves",
+      "core"
+    ],
+    "image": "images/0039-IeTIEqg.jpg",
+    "gif_url": "videos/0039-IeTIEqg.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0043",
+    "filename": "0043-qXTaZnJ.gif",
+    "name": "barbell full squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves",
+      "core"
+    ],
+    "image": "images/0043-qXTaZnJ.jpg",
+    "gif_url": "videos/0043-qXTaZnJ.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "1461",
+    "filename": "1461-DhMl549.gif",
+    "name": "barbell full squat (back pov)",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves",
+      "core"
+    ],
+    "image": "images/1461-DhMl549.jpg",
+    "gif_url": "videos/1461-DhMl549.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "1462",
+    "filename": "1462-iYzB0Cz.gif",
+    "name": "barbell full squat (side pov)",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves",
+      "core"
+    ],
+    "image": "images/1462-iYzB0Cz.jpg",
+    "gif_url": "videos/1462-iYzB0Cz.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "1436",
+    "filename": "1436-Gnfo4FM.gif",
+    "name": "barbell high bar squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves",
+      "core"
+    ],
+    "image": "images/1436-Gnfo4FM.jpg",
+    "gif_url": "videos/1436-Gnfo4FM.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0051",
+    "filename": "0051-pkSoCW9.gif",
+    "name": "barbell jefferson squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0051-pkSoCW9.jpg",
+    "gif_url": "videos/0051-pkSoCW9.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "1435",
+    "filename": "1435-bTpEUcm.gif",
+    "name": "barbell low bar squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/1435-bTpEUcm.jpg",
+    "gif_url": "videos/1435-bTpEUcm.gif",
+    "role": "lower_compound"
+  },
+  {
+    "id": "0063",
+    "filename": "0063-elhhVgj.gif",
+    "name": "barbell narrow stance squat",
+    "category": "upper legs",
+    "equipment": "barbell",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "image": "images/0063-elhhVgj.jpg",
+    "gif_url": "videos/0063-elhhVgj.gif",
+    "role": "lower_compound"
+  },
+  {
     "id": "0585",
     "filename": "0585-my33uHU.gif",
     "name": "lever leg extension",
@@ -1272,21 +2701,6 @@
     ],
     "image": "images/0599-Zg3XY7P.jpg",
     "gif_url": "videos/0599-Zg3XY7P.gif",
-    "role": "lower_ham_curl"
-  },
-  {
-    "id": "0582",
-    "filename": "0582-nnmCTLN.gif",
-    "name": "lever kneeling leg curl",
-    "category": "upper legs",
-    "equipment": "leverage machine",
-    "target": "hamstrings",
-    "muscle_group": "glutes",
-    "secondary_muscles": [
-      "glutes"
-    ],
-    "image": "images/0582-nnmCTLN.jpg",
-    "gif_url": "videos/0582-nnmCTLN.gif",
     "role": "lower_ham_curl"
   },
   {
@@ -1335,6 +2749,54 @@
     ],
     "image": "images/0496-ms7tjSG.jpg",
     "gif_url": "videos/0496-ms7tjSG.gif",
+    "role": "lower_ham_curl"
+  },
+  {
+    "id": "0697",
+    "filename": "0697-GwYwElT.gif",
+    "name": "self assisted inverse leg curl",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "hamstrings",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "image": "images/0697-GwYwElT.jpg",
+    "gif_url": "videos/0697-GwYwElT.gif",
+    "role": "lower_ham_curl"
+  },
+  {
+    "id": "1766",
+    "filename": "1766-ZSY3MsL.gif",
+    "name": "self assisted inverse leg curl",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "hamstrings",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "image": "images/1766-ZSY3MsL.jpg",
+    "gif_url": "videos/1766-ZSY3MsL.gif",
+    "role": "lower_ham_curl"
+  },
+  {
+    "id": "0696",
+    "filename": "0696-E4PwJqI.gif",
+    "name": "self assisted inverse leg curl (on floor)",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "hamstrings",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "image": "images/0696-E4PwJqI.jpg",
+    "gif_url": "videos/0696-E4PwJqI.gif",
     "role": "lower_ham_curl"
   },
   {
@@ -1546,6 +3008,54 @@
     "role": "lower_hip"
   },
   {
+    "id": "0710",
+    "filename": "0710-7WaDzyL.gif",
+    "name": "side hip abduction",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "abductors",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "quadriceps"
+    ],
+    "image": "images/0710-7WaDzyL.jpg",
+    "gif_url": "videos/0710-7WaDzyL.gif",
+    "role": "lower_hip"
+  },
+  {
+    "id": "1775",
+    "filename": "1775-VO2qeJg.gif",
+    "name": "side plank hip adduction",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "adductors",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques",
+      "glutes"
+    ],
+    "image": "images/1775-VO2qeJg.jpg",
+    "gif_url": "videos/1775-VO2qeJg.gif",
+    "role": "lower_hip"
+  },
+  {
+    "id": "1427",
+    "filename": "1427-mQ1tBXn.gif",
+    "name": "straight leg outer hip abductor",
+    "category": "upper legs",
+    "equipment": "body weight",
+    "target": "abductors",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "image": "images/1427-mQ1tBXn.jpg",
+    "gif_url": "videos/1427-mQ1tBXn.gif",
+    "role": "lower_hip"
+  },
+  {
     "id": "1385",
     "filename": "1385-IeDEXTe.gif",
     "name": "lever seated squat calf raise on leg press machine",
@@ -1611,9 +3121,208 @@
     "role": "lower_calf"
   },
   {
-    "id": "2330",
-    "filename": "2330-LEprlgG.gif",
-    "name": "cable lat pulldown full range of motion",
+    "id": "0763",
+    "filename": "0763-ywaNfuh.gif",
+    "name": "smith reverse calf raises",
+    "category": "lower legs",
+    "equipment": "smith machine",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "image": "images/0763-ywaNfuh.jpg",
+    "gif_url": "videos/0763-ywaNfuh.gif",
+    "role": "lower_calf"
+  },
+  {
+    "id": "0212",
+    "filename": "0212-8xUv4J7.gif",
+    "name": "cable seated crunch",
+    "category": "waist",
+    "equipment": "cable",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "image": "images/0212-8xUv4J7.jpg",
+    "gif_url": "videos/0212-8xUv4J7.gif",
+    "role": "core"
+  },
+  {
+    "id": "1452",
+    "filename": "1452-Wgaz7pm.gif",
+    "name": "lever seated crunch",
+    "category": "waist",
+    "equipment": "leverage machine",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "image": "images/1452-Wgaz7pm.jpg",
+    "gif_url": "videos/1452-Wgaz7pm.gif",
+    "role": "core"
+  },
+  {
+    "id": "0595",
+    "filename": "0595-ZnJHhMk.gif",
+    "name": "lever seated crunch (chest pad)",
+    "category": "waist",
+    "equipment": "leverage machine",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "image": "images/0595-ZnJHhMk.jpg",
+    "gif_url": "videos/0595-ZnJHhMk.gif",
+    "role": "core"
+  },
+  {
+    "id": "3760",
+    "filename": "3760-eXFXCY0.gif",
+    "name": "lever seated crunch v. 2",
+    "category": "waist",
+    "equipment": "leverage machine",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques",
+      "hip flexors"
+    ],
+    "image": "images/3760-eXFXCY0.jpg",
+    "gif_url": "videos/3760-eXFXCY0.gif",
+    "role": "core"
+  },
+  {
+    "id": "0600",
+    "filename": "0600-PQ2AtC3.gif",
+    "name": "lever seated leg raise crunch",
+    "category": "waist",
+    "equipment": "leverage machine",
+    "target": "abs",
+    "muscle_group": "hip flexors",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "image": "images/0600-PQ2AtC3.jpg",
+    "gif_url": "videos/0600-PQ2AtC3.gif",
+    "role": "core"
+  },
+  {
+    "id": "0873",
+    "filename": "0873-RqOtqD7.gif",
+    "name": "cable reverse crunch",
+    "category": "waist",
+    "equipment": "cable",
+    "target": "abs",
+    "muscle_group": "hip flexors",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "image": "images/0873-RqOtqD7.jpg",
+    "gif_url": "videos/0873-RqOtqD7.gif",
+    "role": "core"
+  },
+  {
+    "id": "0223",
+    "filename": "0223-q2ADGqV.gif",
+    "name": "cable side crunch",
+    "category": "waist",
+    "equipment": "cable",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "image": "images/0223-q2ADGqV.jpg",
+    "gif_url": "videos/0223-q2ADGqV.gif",
+    "role": "core"
+  },
+  {
+    "id": "0226",
+    "filename": "0226-jpgqxiS.gif",
+    "name": "cable standing crunch",
+    "category": "waist",
+    "equipment": "cable",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "image": "images/0226-jpgqxiS.jpg",
+    "gif_url": "videos/0226-jpgqxiS.gif",
+    "role": "core"
+  },
+  {
+    "id": "0874",
+    "filename": "0874-XU3ePuv.gif",
+    "name": "cable standing crunch (with rope attachment)",
+    "category": "waist",
+    "equipment": "cable",
+    "target": "abs",
+    "muscle_group": "obliques",
+    "secondary_muscles": [
+      "obliques"
+    ],
+    "image": "images/0874-XU3ePuv.jpg",
+    "gif_url": "videos/0874-XU3ePuv.gif",
+    "role": "core"
+  },
+  {
+    "id": "0242",
+    "filename": "0242-TXtXc84.gif",
+    "name": "cable tuck reverse crunch",
+    "category": "waist",
+    "equipment": "cable",
+    "target": "abs",
+    "muscle_group": "hip flexors",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "image": "images/0242-TXtXc84.jpg",
+    "gif_url": "videos/0242-TXtXc84.gif",
+    "role": "core"
+  },
+  {
+    "id": "2736",
+    "filename": "2736-ky8FLU8.gif",
+    "name": "lever reverse grip lateral pulldown",
+    "category": "back",
+    "equipment": "leverage machine",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "rhomboids",
+      "rear deltoids"
+    ],
+    "image": "images/2736-ky8FLU8.jpg",
+    "gif_url": "videos/2736-ky8FLU8.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "0198",
+    "filename": "0198-RVwzP10.gif",
+    "name": "cable pulldown",
+    "category": "back",
+    "equipment": "cable",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/0198-RVwzP10.jpg",
+    "gif_url": "videos/0198-RVwzP10.gif",
+    "role": "pull_vertical"
+  },
+  {
+    "id": "0205",
+    "filename": "0205-SpsOSXk.gif",
+    "name": "cable rear pulldown",
     "category": "back",
     "equipment": "cable",
     "target": "lats",
@@ -1623,72 +3332,642 @@
       "rhomboids",
       "rear deltoids"
     ],
-    "image": "images/2330-LEprlgG.jpg",
-    "gif_url": "videos/2330-LEprlgG.gif",
+    "image": "images/0205-SpsOSXk.jpg",
+    "gif_url": "videos/0205-SpsOSXk.gif",
     "role": "pull_vertical"
   },
   {
-    "id": "0017",
-    "filename": "0017-kiJ4Z2K.gif",
-    "name": "assisted pull-up",
+    "id": "0245",
+    "filename": "0245-xBYcQHj.gif",
+    "name": "cable underhand pulldown",
     "category": "back",
-    "equipment": "leverage machine",
+    "equipment": "cable",
     "target": "lats",
     "muscle_group": "biceps",
     "secondary_muscles": [
       "biceps",
       "forearms"
     ],
-    "image": "images/0017-kiJ4Z2K.jpg",
-    "gif_url": "videos/0017-kiJ4Z2K.gif",
+    "image": "images/0245-xBYcQHj.jpg",
+    "gif_url": "videos/0245-xBYcQHj.gif",
     "role": "pull_vertical"
   },
   {
-    "id": "1431",
-    "filename": "1431-7OeHptV.gif",
-    "name": "assisted standing chin-up",
+    "id": "1359",
+    "filename": "1359-ZX9UZmj.gif",
+    "name": "smith bent over row",
+    "category": "back",
+    "equipment": "smith machine",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1359-ZX9UZmj.jpg",
+    "gif_url": "videos/1359-ZX9UZmj.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0761",
+    "filename": "0761-JGKowMS.gif",
+    "name": "smith narrow row",
+    "category": "back",
+    "equipment": "smith machine",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "rear deltoids"
+    ],
+    "image": "images/0761-JGKowMS.jpg",
+    "gif_url": "videos/0761-JGKowMS.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1361",
+    "filename": "1361-aaxA3cm.gif",
+    "name": "smith reverse grip bent over row",
+    "category": "back",
+    "equipment": "smith machine",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "image": "images/1361-aaxA3cm.jpg",
+    "gif_url": "videos/1361-aaxA3cm.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0452",
+    "filename": "0452-vBNyir7.gif",
+    "name": "ez barbell reverse grip preacher curl",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0452-vBNyir7.jpg",
+    "gif_url": "videos/0452-vBNyir7.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1458",
+    "filename": "1458-jtFKbt5.gif",
+    "name": "ez barbell seated curls",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1458-jtFKbt5.jpg",
+    "gif_url": "videos/1458-jtFKbt5.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1394",
+    "filename": "1394-Lsqrgh4.gif",
+    "name": "smith reverse calf raises",
+    "category": "lower legs",
+    "equipment": "smith machine",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "image": "images/1394-Lsqrgh4.jpg",
+    "gif_url": "videos/1394-Lsqrgh4.gif",
+    "role": "lower_calf"
+  },
+  {
+    "id": "2404",
+    "filename": "2404-tJ5nYqo.gif",
+    "name": "ez-bar biceps curl (with arm blaster)",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/2404-tJ5nYqo.jpg",
+    "gif_url": "videos/2404-tJ5nYqo.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "2741",
+    "filename": "2741-OVTZ65k.gif",
+    "name": "ez-barbell standing wide grip biceps curl",
+    "category": "upper arms",
+    "equipment": "ez barbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/2741-OVTZ65k.jpg",
+    "gif_url": "videos/2741-OVTZ65k.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0579",
+    "filename": "0579-7F1DVzn.gif",
+    "name": "lever front pulldown",
     "category": "back",
     "equipment": "leverage machine",
     "target": "lats",
     "muscle_group": "biceps",
     "secondary_muscles": [
       "biceps",
-      "forearms"
+      "rhomboids",
+      "rear deltoids"
     ],
-    "image": "images/1431-7OeHptV.jpg",
-    "gif_url": "videos/1431-7OeHptV.gif",
+    "image": "images/0579-7F1DVzn.jpg",
+    "gif_url": "videos/0579-7F1DVzn.gif",
     "role": "pull_vertical"
   },
   {
-    "id": "1432",
-    "filename": "1432-f4xtKBj.gif",
-    "name": "assisted standing pull-up",
+    "id": "1318",
+    "filename": "1318-yaMIo4D.gif",
+    "name": "cable incline bench row",
     "category": "back",
-    "equipment": "leverage machine",
-    "target": "lats",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "rear deltoids"
+    ],
+    "image": "images/1318-yaMIo4D.jpg",
+    "gif_url": "videos/1318-yaMIo4D.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1319",
+    "filename": "1319-OmQ8w0p.gif",
+    "name": "cable palm rotational row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
     "muscle_group": "biceps",
     "secondary_muscles": [
       "biceps",
       "forearms"
     ],
-    "image": "images/1432-f4xtKBj.jpg",
-    "gif_url": "videos/1432-f4xtKBj.gif",
-    "role": "pull_vertical"
+    "image": "images/1319-OmQ8w0p.jpg",
+    "gif_url": "videos/1319-OmQ8w0p.gif",
+    "role": "pull_row"
   },
   {
-    "id": "0572",
-    "filename": "0572-MaMuGH6.gif",
-    "name": "lever assisted chin-up",
+    "id": "1322",
+    "filename": "1322-MgKwAAo.gif",
+    "name": "cable rope extension incline bench row",
     "category": "back",
-    "equipment": "leverage machine",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "image": "images/1322-MgKwAAo.jpg",
+    "gif_url": "videos/1322-MgKwAAo.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1717",
+    "filename": "1717-f7fnAIB.gif",
+    "name": "cable squat row (with rope attachment)",
+    "category": "back",
+    "equipment": "cable",
     "target": "lats",
     "muscle_group": "biceps",
     "secondary_muscles": [
       "biceps",
+      "rhomboids",
+      "rear deltoids"
+    ],
+    "image": "images/1717-f7fnAIB.jpg",
+    "gif_url": "videos/1717-f7fnAIB.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0234",
+    "filename": "0234-4f8RXP8.gif",
+    "name": "cable standing row (v-bar)",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "image": "images/0234-4f8RXP8.jpg",
+    "gif_url": "videos/0234-4f8RXP8.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "0236",
+    "filename": "0236-JOZhu2h.gif",
+    "name": "cable standing twist row (v-bar)",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "image": "images/0236-JOZhu2h.jpg",
+    "gif_url": "videos/0236-JOZhu2h.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "2464",
+    "filename": "2464-ZgwWBoC.gif",
+    "name": "cable thibaudeau kayak row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "lats",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "rhomboids",
+      "rear deltoids"
+    ],
+    "image": "images/2464-ZgwWBoC.jpg",
+    "gif_url": "videos/2464-ZgwWBoC.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1324",
+    "filename": "1324-PQStVXH.gif",
+    "name": "cable upper row",
+    "category": "back",
+    "equipment": "cable",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "image": "images/1324-PQStVXH.jpg",
+    "gif_url": "videos/1324-PQStVXH.gif",
+    "role": "pull_row"
+  },
+  {
+    "id": "1630",
+    "filename": "1630-BCGQ6J5.gif",
+    "name": "cable close grip curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
       "forearms"
     ],
-    "image": "images/0572-MaMuGH6.jpg",
-    "gif_url": "videos/0572-MaMuGH6.gif",
-    "role": "pull_vertical"
+    "image": "images/1630-BCGQ6J5.jpg",
+    "gif_url": "videos/1630-BCGQ6J5.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0868",
+    "filename": "0868-G08RZcQ.gif",
+    "name": "cable curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0868-G08RZcQ.jpg",
+    "gif_url": "videos/0868-G08RZcQ.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1632",
+    "filename": "1632-dXz8zjF.gif",
+    "name": "cable drag curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1632-dXz8zjF.jpg",
+    "gif_url": "videos/1632-dXz8zjF.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1634",
+    "filename": "1634-otqIxU4.gif",
+    "name": "cable lying bicep curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1634-otqIxU4.jpg",
+    "gif_url": "videos/1634-otqIxU4.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0182",
+    "filename": "0182-61GrD55.gif",
+    "name": "cable lying close-grip curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0182-61GrD55.jpg",
+    "gif_url": "videos/0182-61GrD55.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1636",
+    "filename": "1636-wDUqY2u.gif",
+    "name": "cable overhead curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms",
+      "shoulders"
+    ],
+    "image": "images/1636-wDUqY2u.jpg",
+    "gif_url": "videos/1636-wDUqY2u.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1638",
+    "filename": "1638-QTXKWPh.gif",
+    "name": "cable pulldown bicep curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1638-QTXKWPh.jpg",
+    "gif_url": "videos/1638-QTXKWPh.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1644",
+    "filename": "1644-3XFdb1Z.gif",
+    "name": "cable squatting curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1644-3XFdb1Z.jpg",
+    "gif_url": "videos/1644-3XFdb1Z.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0229",
+    "filename": "0229-YwnI4ja.gif",
+    "name": "cable standing inner curl",
+    "category": "upper arms",
+    "equipment": "cable",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0229-YwnI4ja.jpg",
+    "gif_url": "videos/0229-YwnI4ja.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1383",
+    "filename": "1383-2ORFMoR.gif",
+    "name": "hack calf raise",
+    "category": "lower legs",
+    "equipment": "sled machine",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings",
+      "glutes"
+    ],
+    "image": "images/1383-2ORFMoR.jpg",
+    "gif_url": "videos/1383-2ORFMoR.gif",
+    "role": "lower_calf"
+  },
+  {
+    "id": "0742",
+    "filename": "0742-XDOiFns.gif",
+    "name": "sled forward angled calf raise",
+    "category": "lower legs",
+    "equipment": "sled machine",
+    "target": "calves",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings",
+      "glutes"
+    ],
+    "image": "images/0742-XDOiFns.jpg",
+    "gif_url": "videos/0742-XDOiFns.gif",
+    "role": "lower_calf"
+  },
+  {
+    "id": "0285",
+    "filename": "0285-BU15nH4.gif",
+    "name": "dumbbell alternate biceps curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0285-BU15nH4.jpg",
+    "gif_url": "videos/0285-BU15nH4.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1647",
+    "filename": "1647-NlfIbzq.gif",
+    "name": "dumbbell alternate preacher curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1647-NlfIbzq.jpg",
+    "gif_url": "videos/1647-NlfIbzq.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0294",
+    "filename": "0294-NbVPDMW.gif",
+    "name": "dumbbell biceps curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0294-NbVPDMW.jpg",
+    "gif_url": "videos/0294-NbVPDMW.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "2401",
+    "filename": "2401-nlJsbkW.gif",
+    "name": "dumbbell biceps curl (with arm blaster)",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/2401-nlJsbkW.jpg",
+    "gif_url": "videos/2401-nlJsbkW.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1654",
+    "filename": "1654-nFc4FyV.gif",
+    "name": "dumbbell biceps curl reverse",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1654-nFc4FyV.jpg",
+    "gif_url": "videos/1654-nFc4FyV.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "1655",
+    "filename": "1655-niXESDw.gif",
+    "name": "dumbbell biceps curl squat",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/1655-niXESDw.jpg",
+    "gif_url": "videos/1655-niXESDw.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0298",
+    "filename": "0298-Qyk5J3p.gif",
+    "name": "dumbbell cross body hammer curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0298-Qyk5J3p.jpg",
+    "gif_url": "videos/0298-Qyk5J3p.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0313",
+    "filename": "0313-slDvUAU.gif",
+    "name": "dumbbell hammer curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0313-slDvUAU.jpg",
+    "gif_url": "videos/0313-slDvUAU.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0312",
+    "filename": "0312-2NpxjC1.gif",
+    "name": "dumbbell hammer curl v. 2",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0312-2NpxjC1.jpg",
+    "gif_url": "videos/0312-2NpxjC1.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "2402",
+    "filename": "2402-GNhAeJ0.gif",
+    "name": "dumbbell hammer curls (with arm blaster)",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/2402-GNhAeJ0.jpg",
+    "gif_url": "videos/2402-GNhAeJ0.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0315",
+    "filename": "0315-F3xgbjF.gif",
+    "name": "dumbbell incline biceps curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0315-F3xgbjF.jpg",
+    "gif_url": "videos/0315-F3xgbjF.gif",
+    "role": "pull_biceps"
+  },
+  {
+    "id": "0320",
+    "filename": "0320-ByX0WxV.gif",
+    "name": "dumbbell incline hammer curl",
+    "category": "upper arms",
+    "equipment": "dumbbell",
+    "target": "biceps",
+    "muscle_group": "forearms",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "image": "images/0320-ByX0WxV.jpg",
+    "gif_url": "videos/0320-ByX0WxV.gif",
+    "role": "pull_biceps"
   }
 ]
