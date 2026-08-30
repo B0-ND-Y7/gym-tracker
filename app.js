@@ -26,6 +26,7 @@ let searchTerm = '';
 let showAllForMuscle = false;
 let restInterval = null;
 let modalReturnFocus = null;
+let pendingBuilderReturn = null;
 
 const app = document.getElementById('app');
 const modal = document.getElementById('modal');
@@ -173,25 +174,34 @@ function chooseMuscle(muscle) {
 
 function addSelection(muscle, exerciseId) {
   const entry = planEntry(muscle);
-  if (!entry) return;
+  if (!entry) return false;
   const exercise = exById(exerciseId);
   if (!exercise || !candidateList(muscle).some(candidate => candidate.id === String(exerciseId))) {
     toast('That exercise is not available for this muscle.');
-    return;
+    return false;
   }
   const dayDraft = draft();
   const selected = selection(muscle);
-  if (selected.includes(String(exerciseId))) return;
+  if (selected.includes(String(exerciseId))) return false;
   if (selected.length >= entry.slotSets.length) {
     toast(`${MUSCLES[muscle].label} already has the required exercises.`);
-    return;
+    return false;
   }
   dayDraft[muscle] = [...selected, String(exerciseId)];
   persist();
 
   const completedMuscle = dayDraft[muscle].length >= entry.slotSets.length;
-  if (completedMuscle) toast(`${MUSCLES[muscle].label} complete · choose the next muscle on the map.`);
+  if (completedMuscle) {
+    const nextMuscle = nextIncompleteMuscle(muscle);
+    if (nextMuscle) {
+      pendingBuilderReturn = { nextMuscle };
+      toast(`${MUSCLES[muscle].label} complete · choose ${MUSCLES[nextMuscle].label} next.`);
+    } else {
+      toast(`${MUSCLES[muscle].label} complete · workout ready.`);
+    }
+  }
   render();
+  return completedMuscle;
 }
 
 function removeSelection(muscle, exerciseId) {
@@ -451,6 +461,14 @@ function updateRestBar() {
     }
     return;
   }
+
+  // The countdown keeps running if the user visits Build/Progress, but the bar is
+  // only useful while actively logging the workout itself.
+  if (activeTab !== 'workout' || !state.workout) {
+    restBar.hidden = true;
+    return;
+  }
+
   restBar.hidden = false;
   restText.textContent = formatClock(seconds);
 }
@@ -504,6 +522,8 @@ function renderBuild(target, allowMap = true) {
   const complete = dayComplete();
   const visibleCandidates = filteredCandidates(candidates);
   const displayCandidates = (searchTerm || showAllForMuscle) ? visibleCandidates : visibleCandidates.slice(0, 12);
+  const remainingMuscles = day.plan.filter(item => selection(item.muscle).length < item.slotSets.length);
+  const suggestedNextMuscle = selection(currentMuscle).length >= entry.slotSets.length ? nextIncompleteMuscle(currentMuscle) : null;
 
   target.innerHTML = `
     ${topbar('Gym Tracker', 'Choose the day, muscle, then the exact exercises')}
@@ -519,8 +539,8 @@ function renderBuild(target, allowMap = true) {
       <p>${totals.exercises} exercises · ${totals.sets} working sets · designed for roughly an hour including normal rest.</p>
     </section>
 
-    <section class="section">
-      <div class="section-heading"><h2>Choose a muscle</h2><span>Tap the map or a muscle button</span></div>
+    <section id="muscleChooser" class="section muscle-chooser">
+      <div class="section-heading"><h2>Choose a muscle</h2><span>${remainingMuscles.length ? `${remainingMuscles.length} group${remainingMuscles.length === 1 ? '' : 's'} left` : 'All groups chosen'}</span></div>
       <div class="map-card">
         <div class="map-header">
           <strong>${esc(MUSCLES[currentMuscle].label)}</strong>
@@ -532,7 +552,14 @@ function renderBuild(target, allowMap = true) {
         <div id="bodyMap" class="body-map" data-scope="${esc(day.scope)}"></div>
         <div class="map-hint">Highlighted areas are used on ${esc(day.name)}. Tapping any part of a grouped muscle opens the same exercise list.</div>
       </div>
-      <div class="muscle-chips">${day.plan.map(renderMuscleChip).join('')}</div>
+      <div class="muscle-strip-meta">
+        <span>Tap a muscle below to choose its exercises</span>
+        ${day.plan.length > 3 ? '<span class="muscle-scroll-hint">Swipe for more →</span>' : ''}
+      </div>
+      <div class="muscle-strip-shell">
+        <div id="muscleChips" class="muscle-chips">${day.plan.map(item => renderMuscleChip(item, suggestedNextMuscle)).join('')}</div>
+        ${day.plan.length > 3 ? '<span class="muscle-edge-cue" aria-hidden="true">›</span>' : ''}
+      </div>
     </section>
 
     <section id="exercisePicker" class="section">
@@ -566,6 +593,14 @@ function renderBuild(target, allowMap = true) {
     return;
   }
   if (allowMap) initMap();
+  requestAnimationFrame(() => {
+    keepActiveMuscleVisible();
+    if (pendingBuilderReturn) {
+      const { nextMuscle } = pendingBuilderReturn;
+      pendingBuilderReturn = null;
+      returnToMuscleChooser(nextMuscle);
+    }
+  });
 }
 
 function renderDayTabs() {
@@ -574,10 +609,28 @@ function renderDayTabs() {
   `).join('')}</div>`;
 }
 
-function renderMuscleChip(entry) {
+function renderMuscleChip(entry, suggestedNextMuscle = null) {
   const count = selection(entry.muscle).length;
   const required = entry.slotSets.length;
-  return `<button class="muscle-chip ${entry.muscle === currentMuscle ? 'active' : ''} ${count >= required ? 'complete' : ''}" type="button" data-action="choose-muscle" data-muscle="${esc(entry.muscle)}">${esc(MUSCLES[entry.muscle].label)} ${count}/${required}</button>`;
+  const suggested = entry.muscle === suggestedNextMuscle;
+  return `<button class="muscle-chip ${entry.muscle === currentMuscle ? 'active' : ''} ${count >= required ? 'complete' : ''} ${suggested ? 'suggested' : ''}" type="button" data-action="choose-muscle" data-muscle="${esc(entry.muscle)}">${esc(MUSCLES[entry.muscle].label)} ${count}/${required}${suggested ? '<span class="next-tag">Next</span>' : ''}</button>`;
+}
+
+function keepActiveMuscleVisible(preferredMuscle = currentMuscle) {
+  const strip = document.getElementById('muscleChips');
+  if (!strip) return;
+  const chip = [...strip.querySelectorAll('[data-muscle]')].find(item => item.dataset.muscle === String(preferredMuscle)) || strip.querySelector('.muscle-chip.active');
+  if (!chip) return;
+  const left = Math.max(0, chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2);
+  strip.scrollTo({ left, behavior: 'smooth' });
+}
+
+function returnToMuscleChooser(nextMuscle) {
+  const chooser = document.getElementById('muscleChooser');
+  if (!chooser) return;
+  keepActiveMuscleVisible(nextMuscle);
+  const top = Math.max(0, chooser.getBoundingClientRect().top + window.scrollY - 10);
+  window.scrollTo({ top, behavior: 'smooth' });
 }
 
 function renderSelectionCard(entry, chosen) {

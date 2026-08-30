@@ -2,7 +2,7 @@
 
 A mobile-first workout builder and training tracker designed for a well-equipped commercial gym.
 
-**Current release:** `16.1.0`
+**Current release:** `16.2.0`
 
 ## Split
 
@@ -13,12 +13,12 @@ A mobile-first workout builder and training tracker designed for a well-equipped
 | Pull | Lats, upper back, rear delts, biceps |
 | Legs 2 | Hamstrings, glutes, quads, hips, calves |
 
-## v16.1 highlights
+## v16.2 highlights
 
 - Animated GIFs directly in the exercise chooser.
 - Tap any exercise demo/name for a large detail sheet with Favourite, Not at my gym and Avoid controls.
-- Muscle-map taps select a muscle without jumping the page or moving to the next muscle automatically.
-- Fixed 2:00 rest is mandatory after a completed set; there is no early-end control and the next incomplete set remains locked until 0:00.
+- Muscle-map taps select a muscle without jumping down to the exercise list. Completing a muscle returns to the Choose a muscle section and marks the next unfinished group.
+- Fixed 2:00 rest is mandatory after a completed set; there is no early-end control and the next incomplete set remains locked until 0:00. The rest bar only appears on the Workout screen while a rest is active.
 - Native migration for v13 backup files, including completed history, body-weight log, rotation, exercise notes and preferences.
 - New local library builder that expands the curated pool from the user's full dataset while strongly favouring conventional machine, Smith, cable, dumbbell and barbell movements.
 - No prep/stretch library is generated.
@@ -41,7 +41,7 @@ The builder targets up to 360 unique, conventional exercises. If strict filterin
 
 ```bash
 cd ~/Downloads
-unzip -o gym-tracker-v16.1.0.zip -d ~/gym-tracker
+unzip -o gym-tracker-v16.2.0.zip -d ~/gym-tracker
 cd ~/gym-tracker
 
 python3 prepare-exercise-library.py \
@@ -49,7 +49,7 @@ python3 prepare-exercise-library.py \
   --dest ~/gym-tracker
 
 git add -A
-git commit -m "Gym tracker v16.1 - exercise picker and backup fixes"
+git commit -m "Gym tracker v16.2 - builder UI polish"
 git pull --rebase origin main
 git push
 ```

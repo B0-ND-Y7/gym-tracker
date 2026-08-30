@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the v16.1 curated exercise library from the user's local 1,324-exercise dataset.
+"""Build the v16.2 curated exercise library from the user's local 1,324-exercise dataset.
 
 This intentionally favours conventional commercial-gym movements: machines, Smith,
 cable, dumbbell and barbell work. It does not generate prep/stretch content.
@@ -350,7 +350,7 @@ def select_exercises(lookup: dict, count: int):
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build Gym Tracker v16.1 conventional exercise library from the local exercise dataset.")
+    parser = argparse.ArgumentParser(description="Build Gym Tracker v16.2 conventional exercise library from the local exercise dataset.")
     parser.add_argument("--source", default="~/gym-exercise-lookup")
     parser.add_argument("--dest", default=".")
     parser.add_argument("--count", type=int, default=TARGET_COUNT)
@@ -372,7 +372,7 @@ def main() -> int:
         print(f"ERROR: only {len(selected)} conventional exercises matched; refusing to replace the current library.", file=sys.stderr)
         return 2
 
-    print(f"Gym Tracker media builder v16.1\nSelected {len(selected)} conventional exercises from {len(lookup)} source entries.\n")
+    print(f"Gym Tracker media builder v16.2\nSelected {len(selected)} conventional exercises from {len(lookup)} source entries.\n")
     for role in ROLE_SPECS:
         print(f"  {role:18}: {role_counts[role]}")
     if len(selected) < args.count:

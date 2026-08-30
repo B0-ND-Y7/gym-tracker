@@ -1,4 +1,4 @@
-export const APP_VERSION = '16.1.0';
+export const APP_VERSION = '16.2.0';
 export const SCHEMA_VERSION = 16;
 export const STORAGE_KEY = 'gymtracker-v16';
 export const LEGACY_KEYS = ['gymtracker-v15.2', 'gymtracker-v15'];

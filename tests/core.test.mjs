@@ -10,7 +10,7 @@ function ex(id, name, role, equipment='leverage machine', extra={}) {
   return { id, filename: `${id}.gif`, name, role, equipment, category: '', target: '', muscle_group: '', secondary_muscles: [], ...extra };
 }
 
-assert.equal(APP_VERSION, '16.1.0');
+assert.equal(APP_VERSION, '16.2.0');
 assert.deepEqual(DAYS.map(d => d.name), ['Push','Legs 1','Pull','Legs 2']);
 assert.equal(DAYS[0].plan.find(x => x.muscle === 'chest').slotSets.length, 2);
 assert.ok(DAYS[1].plan.some(x => x.muscle === 'hips'));

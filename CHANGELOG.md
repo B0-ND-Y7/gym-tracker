@@ -1,5 +1,14 @@
 # Changelog
 
+## 16.2.0 — builder navigation and UI polish
+
+- Restored the missing base `.button` styling so all app actions use the same visual system.
+- Completing a muscle now returns to the Choose a muscle section instead of leaving the user down in the exercise grid.
+- Added a visible Next marker, remaining-muscle count and horizontal swipe cue for sessions with several muscle groups.
+- Keeps the relevant muscle chip horizontally visible without vertically jumping when a muscle is tapped.
+- Rest bar is now hidden outside the active Workout screen while its countdown continues normally.
+- Kept the v16 storage/schema unchanged so existing v16.1 data remains in place.
+
 ## 16.1.0 — picker, backup and exercise-library refinement
 
 - Changed chooser previews to animated GIFs and moved exercise preferences into a large tap-to-open detail sheet.
