@@ -178,8 +178,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .button.compact { min-height: 36px; padding: 6px 9px; font-size: 10px; }
 .button[disabled] { opacity: .38; pointer-events: none; }
 .button:active { transform: scale(.985); }
-.pick-button { width: 100%; min-height: 38px; margin-top: 7px; border: 0; border-radius: 9px; background: var(--blue-grey); color: white; font-size: 10px; font-weight: 900; }
-.exercise-tile.selected .pick-button { background: var(--teal); color: #101617; }
+.pick-button { width: 100%; min-height: 40px; margin-top: 7px; }
+.exercise-tile.selected .pick-button { background: var(--teal); border-color: var(--teal); color: #101617; }
 
 .summary { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 12px; }
 .summary-row { display: grid; grid-template-columns: 92px minmax(0, 1fr) auto; gap: 8px; align-items: start; padding: 8px 0; border-bottom: 1px solid rgba(91,102,115,.45); }
@@ -217,6 +217,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .note { width: 100%; min-height: 58px; resize: vertical; margin-top: 9px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-raised); color: var(--text); padding: 9px; font-size: 12px; outline: 0; }
 .note:focus { border-color: var(--teal); }
 .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
+
+.rest-bar[hidden] { display: none !important; }
 
 .rest-bar {
   position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(78px + env(safe-area-inset-bottom));

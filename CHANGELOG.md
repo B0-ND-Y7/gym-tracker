@@ -1,4 +1,12 @@
 # Changelog
+## 16.2.1 — automatic muscle advance and rest polish
+
+- Automatically selects the next unfinished muscle after the current group is filled.
+- Returns the builder to the muscle chooser after advancing.
+- Avoids a final unnecessary rest timer once every set is complete.
+- Keeps active rests limited to the Workout tab and prevents them blocking a fully completed workout.
+- Unifies exercise action buttons with the shared button system.
+
 
 ## 16.2.0 — builder navigation and UI polish
 

@@ -194,8 +194,14 @@ function addSelection(muscle, exerciseId) {
   if (completedMuscle) {
     const nextMuscle = nextIncompleteMuscle(muscle);
     if (nextMuscle) {
+      // Advance automatically: the next unfinished muscle becomes active and the
+      // builder returns upward to the chooser instead of making the user tap it.
+      currentMuscle = nextMuscle;
+      mapView = MUSCLES[nextMuscle].view || currentDay().defaultView;
+      searchTerm = '';
+      showAllForMuscle = false;
       pendingBuilderReturn = { nextMuscle };
-      toast(`${MUSCLES[muscle].label} complete · choose ${MUSCLES[nextMuscle].label} next.`);
+      toast(`${MUSCLES[muscle].label} complete · ${MUSCLES[nextMuscle].label} is next.`);
     } else {
       toast(`${MUSCLES[muscle].label} complete · workout ready.`);
     }
@@ -301,7 +307,15 @@ function toggleSet(itemIndex, setIndex) {
   }
   set.done = !set.done;
   set.completedAt = set.done ? Date.now() : null;
-  if (set.done) startRest();
+
+  if (set.done) {
+    const counts = workoutSetCounts();
+    // Rest is only needed when another working set still remains. The final set
+    // of the workout should never leave a pointless timer blocking Finish.
+    if (counts.done < counts.total) startRest();
+    else clearRest();
+  }
+
   persist();
   renderWorkout(app);
 }
@@ -366,12 +380,16 @@ function workoutSetCounts(workout = state.workout) {
 
 function finishWorkout() {
   if (!state.workout) return;
-  if (Number(state.restUntil || 0) > Date.now()) {
+  const counts = workoutSetCounts();
+  const incomplete = counts.total - counts.done;
+
+  // A live rest still protects the next incomplete set, but it must not block
+  // finishing a workout whose final working set has already been completed.
+  if (incomplete > 0 && Number(state.restUntil || 0) > Date.now()) {
     toast(`Rest first · ${formatClock(Math.ceil((state.restUntil - Date.now()) / 1000))} remaining.`);
     return;
   }
-  const counts = workoutSetCounts();
-  const incomplete = counts.total - counts.done;
+  if (incomplete === 0 && state.restUntil) clearRest();
   if (counts.done === 0) { toast('Complete at least one working set before saving.'); return; }
   if (incomplete && !confirm(`${incomplete} working set${incomplete === 1 ? '' : 's'} not marked complete. Save this as a partial workout?`)) return;
 
@@ -436,6 +454,15 @@ function showFinishSummary(workout) {
   render(false);
 }
 
+function clearRest() {
+  state.restUntil = 0;
+  restBar.hidden = true;
+  if (restInterval) {
+    clearInterval(restInterval);
+    restInterval = null;
+  }
+}
+
 function startRest() {
   state.restUntil = Date.now() + 120000;
   persist();
@@ -448,18 +475,25 @@ function updateRestBar() {
   const seconds = Math.ceil(remainingMs / 1000);
   if (seconds <= 0) {
     if (state.restUntil) {
-      state.restUntil = 0;
+      clearRest();
       persist();
       navigator.vibrate?.([100,60,100]);
       toast('Rest complete.');
       if (activeTab === 'workout' && state.workout) renderWorkout(app);
-    }
-    restBar.hidden = true;
-    if (restInterval) {
-      clearInterval(restInterval);
-      restInterval = null;
+    } else {
+      clearRest();
     }
     return;
+  }
+
+  // Never show or enforce a rest once every working set is complete.
+  if (state.workout) {
+    const counts = workoutSetCounts();
+    if (counts.done >= counts.total) {
+      clearRest();
+      persist();
+      return;
+    }
   }
 
   // The countdown keeps running if the user visits Build/Progress, but the bar is
@@ -683,7 +717,7 @@ function renderExerciseTile(exercise, muscle, selected) {
     <div class="exercise-body">
       <button class="exercise-name-link" type="button" data-action="open-exercise-detail" data-muscle="${esc(muscle)}" data-id="${esc(exercise.id)}">${esc(exercise.name)}</button>
       <div class="exercise-meta">${esc(exercise.equipment || exercise.category || 'Exercise')}</div>
-      <button class="pick-button" type="button" data-action="add-selection" data-muscle="${esc(muscle)}" data-id="${esc(exercise.id)}" ${selected ? 'disabled' : ''}>${selected ? 'Selected' : 'Choose'}</button>
+      <button class="button teal pick-button" type="button" data-action="add-selection" data-muscle="${esc(muscle)}" data-id="${esc(exercise.id)}" ${selected ? 'disabled' : ''}>${selected ? 'Selected' : 'Choose'}</button>
     </div>
   </article>`;
 }
@@ -945,7 +979,7 @@ function openExerciseChooser(itemIndex) {
     <div class="exercise-grid">${candidates.map(exercise => `
       <article class="exercise-tile">
         <div class="exercise-thumb"><img src="${esc(exercise.gif_url || exercise.image)}" data-fallback="${esc(exercise.image || exercise.gif_url)}" loading="lazy" alt="${esc(exercise.name)} demonstration"></div>
-        <div class="exercise-body"><div class="exercise-name">${esc(exercise.name)}</div><div class="exercise-meta">${esc(exercise.equipment)}</div><button class="pick-button" type="button" data-action="replace-workout-exercise" data-item="${itemIndex}" data-id="${esc(exercise.id)}">Use this</button></div>
+        <div class="exercise-body"><div class="exercise-name">${esc(exercise.name)}</div><div class="exercise-meta">${esc(exercise.equipment)}</div><button class="button teal pick-button" type="button" data-action="replace-workout-exercise" data-item="${itemIndex}" data-id="${esc(exercise.id)}">Use this</button></div>
       </article>`).join('')}</div>`;
   openModal();
 }
