@@ -1,405 +1,449 @@
 #!/usr/bin/env python3
+"""Build the v16.1 curated exercise library from the user's local 1,324-exercise dataset.
+
+This intentionally favours conventional commercial-gym movements: machines, Smith,
+cable, dumbbell and barbell work. It does not generate prep/stretch content.
+"""
 from __future__ import annotations
-import argparse, json, re, shutil, sys
+
+import argparse
+import json
+import re
+import shutil
+import sys
 from pathlib import Path
 
-TARGET_COUNT = 250
+TARGET_COUNT = 360
 
 ROLE_SPECS = {
-    "push_horizontal": {"quota":18,"category_any":["chest"],"any":[["chest","press"],["bench","press"]],"prefer":["leverage machine","smith machine","dumbbell","barbell","cable"],"boost":["seated","lever","machine","horizontal","smith"],"exclude":["incline","decline","single arm","one arm","alternating","close grip","floor","ball","kneeling"]},
-    "push_incline": {"quota":14,"category_any":["chest"],"all":["incline","press"],"prefer":["leverage machine","smith machine","dumbbell","barbell"],"boost":["chest","bench","smith","machine"],"exclude":["single arm","one arm","alternating","ball","kneeling"]},
-    "push_fly": {"quota":12,"category_any":["chest"],"any":[["fly"],["crossover"],["pec","deck"]],"prefer":["leverage machine","cable","dumbbell"],"boost":["chest","seated","standing","machine"],"exclude":["reverse","rear","single arm","one arm","ball","kneeling"]},
-    "push_vertical": {"quota":14,"category_any":["shoulders"],"any":[["shoulder","press"],["military","press"]],"prefer":["leverage machine","smith machine","dumbbell","barbell"],"boost":["seated","machine","lever","smith"],"exclude":["single arm","one arm","alternating","behind neck","ball","kneeling"]},
-    "push_lateral": {"quota":10,"category_any":["shoulders"],"all":["lateral","raise"],"prefer":["leverage machine","cable","dumbbell"],"boost":["seated","lever","machine"],"exclude":["bent","rear","single arm","one arm","ball","kneeling"]},
-    "push_triceps": {"quota":18,"category_any":["upper arms"],"meta_any":["triceps","tricep"],"any":[["triceps","pushdown"],["triceps","extension"],["tricep","pushdown"],["tricep","extension"],["assisted","dip"],["dip"]],"prefer":["cable","leverage machine","assisted","ez barbell","dumbbell","smith machine"],"boost":["rope","bar","seated","lever","machine","smith"],"exclude":["single arm","one arm","kickback","bench dip","ball","kneeling"]},
-    "pull_vertical": {"quota":14,"category_any":["back"],"any":[["pulldown"],["pull up"],["pullup"],["chin up"],["chinup"]],"prefer":["cable","leverage machine","assisted"],"boost":["lat","wide","neutral","close grip","assisted","machine"],"exclude":["single arm","one arm","behind neck","straight arm","band","kneeling"]},
-    "pull_row": {"quota":20,"category_any":["back"],"any":[["row"]],"prefer":["leverage machine","cable","smith machine","dumbbell","barbell"],"boost":["seated","chest supported","lever","machine","smith"],"exclude":["upright row","single arm","one arm","renegade","inverted","ball","kneeling"]},
-    "pull_rear": {"quota":12,"category_any":["shoulders","back"],"any":[["reverse","fly"],["rear","delt"],["face","pull"]],"prefer":["leverage machine","cable","dumbbell"],"boost":["seated","machine","lever"],"exclude":["single arm","one arm","ball","kneeling"]},
-    "pull_biceps": {"quota":18,"category_any":["upper arms"],"meta_any":["biceps","bicep","brachialis"],"any":[["curl"]],"prefer":["leverage machine","cable","ez barbell","dumbbell","barbell"],"boost":["preacher","biceps","seated","lever","machine","hammer","smith"],"exclude":["wrist","reverse wrist","single arm","one arm","concentration","ball","zottman","leg curl","wrist curl","reverse curl","kneeling"]},
-    "lower_compound": {"quota":25,"category_any":["upper legs"],"any":[["leg","press"],["hack","squat"],["smith","squat"],["belt","squat"],["squat"]],"prefer":["sled machine","leverage machine","smith machine","barbell","dumbbell"],"boost":["45","hack","smith","lever","machine","seated"],"exclude":["single leg","one leg","pistol","sissy","jump","overhead","front squat","calf","cossack","curtsy","curtsey","split","zercher"]},
-    "lower_quad": {"quota":15,"category_any":["upper legs"],"meta_any":["quadriceps","quads"],"any":[["leg","extension"],["quad","extension"]],"prefer":["leverage machine","cable"],"boost":["lever","machine","seated"],"exclude":["single leg","one leg","band","kneeling"]},
-    "lower_ham_curl": {"quota":15,"category_any":["upper legs"],"meta_any":["hamstrings","hamstring"],"all":["leg","curl"],"prefer":["leverage machine","cable"],"boost":["seated","lying","lever","machine"],"exclude":["single leg","one leg","ball","band","kneeling"]},
-    "lower_hinge": {"quota":10,"category_any":["upper legs","back"],"any":[["romanian","deadlift"],["stiff","leg","deadlift"],["stiff","legged","deadlift"],["back","extension"]],"prefer":["smith machine","barbell","dumbbell","leverage machine","weighted"],"boost":["smith","45","lever","machine","seated"],"exclude":["single leg","one leg","kettlebell","band","ball","kneeling"]},
-    "lower_glute": {"quota":12,"category_any":["upper legs"],"meta_any":["glute","glutes","gluteus"],"any":[["hip","thrust"],["glute","bridge"],["glute","drive"]],"prefer":["leverage machine","smith machine","barbell","weighted"],"boost":["lever","machine","smith","seated"],"exclude":["single leg","one leg","band","ball","kneeling"]},
-    "lower_hip": {"quota":8,"category_any":["upper legs"],"any":[["hip","abduction"],["hip","adduction"],["abductor"],["adductor"]],"prefer":["leverage machine","cable"],"boost":["seated","lever","machine"],"exclude":["single leg","one leg","band","lying","kneeling"]},
-    "lower_calf": {"quota":5,"category_any":["lower legs"],"meta_any":["calves","calf","gastrocnemius","soleus"],"all":["calf","raise"],"prefer":["leverage machine","sled machine","smith machine","dumbbell"],"boost":["standing","seated","lever","machine","smith"],"exclude":["single leg","one leg","donkey","jump"]},
-    "core": {"quota":10,"category_any":["waist"],"any":[["ab","crunch"],["crunch"],["cable","crunch"],["machine","crunch"],["torso","rotation"],["wood","chop"]],"prefer":["leverage machine","cable","smith machine"],"boost":["seated","machine","cable","weighted"],"exclude":["dragon","wheel","rollout","v-up","jackknife","hanging","windshield","kneeling","ball","single arm"]},
+    "push_horizontal": {
+        "quota": 26, "category_any": ["chest"],
+        "any": [["chest", "press"], ["bench", "press"]],
+        "prefer": ["leverage machine", "smith machine", "dumbbell", "barbell", "cable"],
+        "boost": ["machine", "lever", "seated", "smith", "chest"],
+        "exclude": ["incline", "decline", "reverse grip", "guillotine", "floor", "close grip"],
+    },
+    "push_incline": {
+        "quota": 20, "category_any": ["chest"], "all": ["incline", "press"],
+        "prefer": ["leverage machine", "smith machine", "dumbbell", "barbell"],
+        "boost": ["machine", "lever", "smith", "chest"],
+        "exclude": ["reverse grip"],
+    },
+    "push_decline": {
+        "quota": 8, "category_any": ["chest"], "all": ["decline", "press"],
+        "prefer": ["leverage machine", "smith machine", "dumbbell", "barbell"],
+        "boost": ["machine", "lever", "smith", "chest"],
+        "exclude": ["reverse grip"],
+    },
+    "push_fly": {
+        "quota": 18, "category_any": ["chest"],
+        "any": [["fly"], ["crossover"], ["pec", "deck"]],
+        "prefer": ["leverage machine", "cable", "dumbbell"],
+        "boost": ["machine", "lever", "seated", "standing", "pec deck", "chest"],
+        "exclude": ["reverse", "rear delt", "incline dumbbell", "decline dumbbell"],
+    },
+    "push_vertical": {
+        "quota": 22, "category_any": ["shoulders"],
+        "any": [["shoulder", "press"], ["military", "press"]],
+        "prefer": ["leverage machine", "smith machine", "dumbbell", "barbell"],
+        "boost": ["machine", "lever", "seated", "smith"],
+        "exclude": ["behind neck", "behind head", "reverse grip"],
+    },
+    "push_lateral": {
+        "quota": 16, "category_any": ["shoulders"],
+        "any": [["lateral", "raise"], ["side", "lateral"]],
+        "prefer": ["leverage machine", "cable", "dumbbell"],
+        "boost": ["machine", "lever", "seated", "standing"],
+        "exclude": ["bent over", "rear delt"],
+    },
+    "push_triceps": {
+        "quota": 28, "category_any": ["upper arms"], "meta_any": ["triceps", "tricep"],
+        "any": [["pushdown"], ["triceps", "extension"], ["tricep", "extension"], ["dip"]],
+        "prefer": ["cable", "leverage machine", "assisted", "ez barbell", "dumbbell", "smith machine"],
+        "boost": ["rope", "bar", "machine", "lever", "seated", "standing", "overhead"],
+        "exclude": ["bench dip", "kickback", "lying", "skullcrusher", "skull crusher"],
+    },
+    "pull_vertical": {
+        "quota": 28, "category_any": ["back"],
+        "any": [["pulldown"], ["pull up"], ["pull-up"], ["chin up"], ["chin-up"]],
+        "prefer": ["cable", "leverage machine", "assisted"],
+        "boost": ["lat", "front", "machine", "lever", "assisted", "neutral grip", "close grip", "wide grip"],
+        "exclude": ["behind neck", "behind head"],
+    },
+    "pull_row": {
+        "quota": 42, "category_any": ["back"], "any": [["row"]],
+        "prefer": ["leverage machine", "cable", "smith machine", "dumbbell", "barbell"],
+        "boost": ["machine", "lever", "seated", "chest supported", "high row", "t bar", "smith"],
+        "exclude": ["upright row", "renegade", "kayak", "twist row"],
+    },
+    "pull_rear": {
+        "quota": 20, "category_any": ["shoulders", "back"],
+        "any": [["reverse", "fly"], ["rear", "delt"], ["face", "pull"]],
+        "prefer": ["leverage machine", "cable", "dumbbell"],
+        "boost": ["machine", "lever", "seated", "standing", "pec deck"],
+        "exclude": ["lying"],
+    },
+    "pull_biceps": {
+        "quota": 38, "category_any": ["upper arms"], "meta_any": ["biceps", "bicep", "brachialis"],
+        "any": [["curl"]],
+        "prefer": ["leverage machine", "cable", "ez barbell", "dumbbell", "barbell"],
+        "boost": ["biceps curl", "bicep curl", "preacher", "hammer", "machine", "lever", "standing", "seated"],
+        "exclude": ["wrist", "leg curl", "arm blaster", "concentration", "zottman", "spider curl", "drag curl", "reverse curl"],
+    },
+    "lower_compound": {
+        "quota": 30, "category_any": ["upper legs"],
+        "any": [["leg", "press"], ["hack", "squat"], ["smith", "squat"], ["squat"]],
+        "prefer": ["sled machine", "leverage machine", "smith machine", "barbell", "dumbbell"],
+        "boost": ["45", "hack", "machine", "lever", "smith", "full squat", "goblet"],
+        "exclude": ["front squat", "overhead", "zercher", "split squat", "jump squat", "calf"],
+    },
+    "lower_quad": {
+        "quota": 10, "category_any": ["upper legs"], "meta_any": ["quadriceps", "quads"],
+        "any": [["leg", "extension"], ["quad", "extension"]],
+        "prefer": ["leverage machine", "cable"],
+        "boost": ["machine", "lever", "seated"],
+    },
+    "lower_ham_curl": {
+        "quota": 14, "category_any": ["upper legs"], "meta_any": ["hamstrings", "hamstring"],
+        "all": ["leg", "curl"],
+        "prefer": ["leverage machine", "cable"],
+        "boost": ["machine", "lever", "seated", "lying"],
+    },
+    "lower_hinge": {
+        "quota": 12, "category_any": ["upper legs", "back"],
+        "any": [["romanian", "deadlift"], ["stiff", "leg", "deadlift"], ["stiff", "legged", "deadlift"], ["back", "extension"]],
+        "prefer": ["smith machine", "barbell", "dumbbell", "leverage machine", "weighted"],
+        "boost": ["romanian", "smith", "machine", "lever", "45"],
+        "exclude": ["good morning"],
+    },
+    "lower_glute": {
+        "quota": 12, "category_any": ["upper legs"], "meta_any": ["glute", "glutes", "gluteus"],
+        "any": [["hip", "thrust"], ["glute", "drive"], ["glute", "kickback"], ["hip", "extension"]],
+        "prefer": ["leverage machine", "smith machine", "barbell", "cable", "weighted"],
+        "boost": ["machine", "lever", "smith", "hip thrust", "glute drive"],
+        "exclude": ["bridge march", "floor"],
+    },
+    "lower_hip": {
+        "quota": 8, "category_any": ["upper legs"],
+        "any": [["hip", "abduction"], ["hip", "adduction"], ["abductor"], ["adductor"]],
+        "prefer": ["leverage machine", "cable"],
+        "boost": ["machine", "lever", "seated"],
+        "exclude": ["lying"],
+    },
+    "lower_calf": {
+        "quota": 8, "category_any": ["lower legs"], "meta_any": ["calves", "calf", "gastrocnemius", "soleus"],
+        "any": [["calf", "raise"], ["calf", "press"]],
+        "prefer": ["leverage machine", "sled machine", "smith machine", "dumbbell", "barbell"],
+        "boost": ["machine", "lever", "standing", "seated", "smith", "leg press"],
+        "exclude": ["donkey", "jump"],
+    },
 }
 
-ROLE_RECOMMENDED_MIN = {
-    "push_horizontal":8,"push_incline":6,"push_fly":5,"push_vertical":7,"push_lateral":5,"push_triceps":8,
-    "pull_vertical":7,"pull_row":10,"pull_rear":6,"pull_biceps":8,
-    "lower_compound":12,"lower_quad":5,"lower_ham_curl":6,"lower_hinge":5,"lower_glute":6,"lower_hip":4,"lower_calf":3,
-    "core":4,
-}
-
-ALLOWED_EQUIPMENT={"leverage machine","cable","sled machine","smith machine","dumbbell","barbell","ez barbell","assisted","weighted","body weight","other"}
-GLOBAL_EXCLUDE=["kettlebell","band","stability ball","bosu","medicine ball","resistance band","jump","burpee","handstand","muscle up","snatch","clean and jerk","olympic","pistol","sissy","dragon flag","wheel rollout","neck","wrist roller","turkish get up","turkish get-up","windmill","renegade","cossack","curtsy","curtsey","single leg","one leg","single arm","one arm","alternating","behind neck","upright row","good morning","sissy squat"]
-
-# These are searched against the user's full 1,324-entry lookup. The first good
-# match is used. If a particular movement is not present, the app falls back to clear text guidance.
-PREP_SPECS = {
-    # Dynamic prep: prefer simple body-weight movements and reject machine/
-    # resistance variants that merely happen to contain the same words.
-    "arm_circles": {"patterns":[["arm","circle"],["shoulder","circle"],["arm","rotation"]],"exclude":["roller","cable","dumbbell","barbell","band","machine","lying","internal","external"]},
-    "shoulder_rolls": {"patterns":[["shoulder","roll"],["shoulder","circle"]],"exclude":["roller","flexor","depressor","retractor","cable","band","machine","lying"]},
-    "chest_opener": {"patterns":[["dynamic","chest","stretch"],["arm","swing"],["chest","opener"]],"exclude":["machine","cable","dumbbell","barbell"]},
-    "thoracic_rotation": {"patterns":[["thoracic","rotation"],["upper","back","rotation"],["reach","to","sky"],["thread","needle"],["torso","rotation"]],"exclude":["machine","cable","band","weighted"]},
-    "scapular_push": {"patterns":[["scapular","push"],["scapula","push"]],"exclude":["machine","cable"]},
-    "scapular_pull": {"patterns":[["scapular","pull"],["scapula","pull"]],"exclude":["machine","cable"]},
-    "leg_swings": {"patterns":[["leg","swing"],["walking","high","kick"],["straight","leg","kick"]],"exclude":["cable","band","machine","lying","weighted"]},
-    "walking_lunge": {"patterns":[["walking","lunge"],["forward","lunge"]],"exclude":["jump","barbell","dumbbell","weighted","smith"]},
-    "bodyweight_squat": {"patterns":[["bodyweight","squat"],["body","weight","squat"],["air","squat"]],"require_equipment":["body weight"],"exclude":["jump","drop","plyometric","pistol","sissy","split","curtsey","curtsy","cossack","barbell","dumbbell","smith","hack","row","rowing","pull"]},
-    "hip_circles": {"patterns":[["hip","circle"],["standing","hip","rotation"],["hip","opener"]],"exclude":["band","cable","machine","lying","internal","external","ball","weighted"]},
-    "knee_hugs": {"patterns":[["walking","knee","hug"],["knee","hug"],["walking","leg","cradle"]],"exclude":["machine","cable","band","lying"]},
-    "high_knees": {"patterns":[["high","knees"],["high","knee"]],"exclude":["wall","machine","cable","band","walking","lunge","row","lying"]},
-    "ankle_circles": {"patterns":[["ankle","circle"],["ankle","rotation"]],"exclude":["band","machine","cable","weighted"]},
-
-    # Post-workout static stretches: prefer simple standing/kneeling/floor
-    # versions rather than ball, band or machine variants.
-    "chest_stretch": {"patterns":[["chest","stretch"],["front","shoulder","stretch"]],"exclude":["ball","band","machine","cable"]},
-    "shoulder_stretch": {"patterns":[["cross","body","shoulder"],["posterior","shoulder","stretch"],["rear","deltoid","stretch"],["shoulder","stretch"]],"exclude":["ball","band","machine","cable","roller"]},
-    "triceps_stretch": {"patterns":[["overhead","triceps","stretch"],["triceps","stretch"]],"exclude":["ball","band","machine","cable"]},
-    "lat_stretch": {"patterns":[["kneeling","lat","stretch"],["lat","stretch"],["lats","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
-    "hamstring_stretch": {"patterns":[["standing","hamstring","stretch"],["seated","hamstring","stretch"],["hamstring","stretch"],["runner","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
-    "quad_stretch": {"patterns":[["standing","quadriceps","stretch"],["standing","quad","stretch"],["lying","quadriceps","stretch"],["quad","stretch"],["quadriceps","stretch"]],"exclude":["all fours","squad","ball","band","machine","cable"]},
-    "calf_stretch": {"patterns":[["standing","calf","stretch"],["calf","stretch"],["posterior","tibialis","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
-    "glute_stretch": {"patterns":[["seated","glute","stretch"],["lying","glute","stretch"],["glute","stretch"]],"exclude":["ball","band","machine","cable","weighted"]},
-    "hip_flexor_stretch": {"patterns":[["kneeling","hip","flexor"],["standing","hip","flexor"],["hip","flexor","stretch"]],"exclude":["exercise ball","stability ball","ball","band","machine","cable","weighted"]},
-}
-
-
-# Broader prep/stretch pool. These are additional to the named fallbacks above.
-# The app chooses only movements whose tags match the exercises in the current
-# workout, so upper-body days cannot accidentally pull in lower-body stretches.
-PREP_META = {
-    "arm_circles":{"phase":"dynamic","tags":["shoulders"],"dose":"10 each way"},
-    "shoulder_rolls":{"phase":"dynamic","tags":["shoulders"],"dose":"10 each way"},
-    "chest_opener":{"phase":"dynamic","tags":["chest","shoulders"],"dose":"8–10 reps"},
-    "thoracic_rotation":{"phase":"dynamic","tags":["back","lats","shoulders"],"dose":"6–8 each side"},
-    "scapular_push":{"phase":"dynamic","tags":["chest","shoulders"],"dose":"8–10 reps"},
-    "scapular_pull":{"phase":"dynamic","tags":["back","lats","shoulders"],"dose":"6–10 reps"},
-    "leg_swings":{"phase":"dynamic","tags":["hamstrings","hips","quads"],"dose":"8–10 each leg"},
-    "walking_lunge":{"phase":"dynamic","tags":["quads","glutes","hips"],"dose":"6 each side"},
-    "bodyweight_squat":{"phase":"dynamic","tags":["quads","glutes","hips"],"dose":"8–10 reps"},
-    "hip_circles":{"phase":"dynamic","tags":["hips","glutes"],"dose":"8 each way"},
-    "knee_hugs":{"phase":"dynamic","tags":["hips","glutes","hamstrings"],"dose":"6 each side"},
-    "high_knees":{"phase":"dynamic","tags":["hips","quads","calves"],"dose":"20–30 sec"},
-    "ankle_circles":{"phase":"dynamic","tags":["calves","ankles"],"dose":"8 each way"},
-    "chest_stretch":{"phase":"static","tags":["chest","shoulders"],"dose":"30 sec each side"},
-    "shoulder_stretch":{"phase":"static","tags":["shoulders","rear_shoulders"],"dose":"30 sec each side"},
-    "triceps_stretch":{"phase":"static","tags":["triceps","shoulders"],"dose":"30 sec each side"},
-    "lat_stretch":{"phase":"static","tags":["back","lats"],"dose":"30 sec each side"},
-    "hamstring_stretch":{"phase":"static","tags":["hamstrings"],"dose":"30 sec each side"},
-    "quad_stretch":{"phase":"static","tags":["quads"],"dose":"30 sec each side"},
-    "calf_stretch":{"phase":"static","tags":["calves","ankles"],"dose":"30 sec each side"},
-    "glute_stretch":{"phase":"static","tags":["glutes","hips"],"dose":"30 sec each side"},
-    "hip_flexor_stretch":{"phase":"static","tags":["hips","quads"],"dose":"30 sec each side"},
-}
-
-PREP_POOL_SPECS = [
-    # Dynamic upper body
-    {"label":"dynamic chest / shoulders","phase":"dynamic","tags":["chest","shoulders"],"dose":"8–10 controlled reps","quota":4,
-     "patterns":[["dynamic","chest","stretch"],["chest","opener"],["arm","swing"],["scapula","push"],["scapular","push"]],
-     "exclude":["machine","cable","dumbbell","barbell","band","roller","lying","weighted"]},
-    {"label":"dynamic shoulders","phase":"dynamic","tags":["shoulders","rear_shoulders"],"dose":"8–10 each way","quota":4,
-     "patterns":[["arm","circle"],["shoulder","circle"],["shoulder","roll"],["wall","slide"],["shoulder","mobility"]],
-     "exclude":["machine","cable","dumbbell","barbell","band","roller","internal","external","weighted"]},
-    {"label":"dynamic upper back","phase":"dynamic","tags":["back","lats","shoulders"],"dose":"6–8 each side","quota":4,
-     "patterns":[["thoracic","rotation"],["torso","rotation"],["upper","back","rotation"],["thread","needle"],["reach","sky"],["scapula","pull"],["scapular","pull"]],
-     "exclude":["machine","cable","dumbbell","barbell","band","weighted"]},
-    # Dynamic lower body
-    {"label":"dynamic hips / legs","phase":"dynamic","tags":["hips","hamstrings","quads"],"dose":"8–10 each side","quota":5,
-     "patterns":[["leg","swing"],["straight","leg","kick"],["walking","high","kick"],["hip","opener"],["hip","circle"],["knee","hug"],["leg","cradle"]],
-     "exclude":["machine","cable","dumbbell","barbell","band","lying","weighted","wall"]},
-    {"label":"dynamic squat / lunge","phase":"dynamic","tags":["quads","glutes","hips"],"dose":"6–10 reps","quota":5,
-     "patterns":[["walking","lunge"],["forward","lunge"],["reverse","lunge"],["bodyweight","squat"],["body","weight","squat"],["air","squat"]],
-     "exclude":["jump","drop","plyometric","pistol","sissy","curtsey","curtsy","cossack","barbell","dumbbell","smith","hack","row","weighted"]},
-    {"label":"dynamic ankles / calves","phase":"dynamic","tags":["calves","ankles"],"dose":"8–10 each side","quota":3,
-     "patterns":[["ankle","circle"],["ankle","rotation"],["ankle","mobility"]],
-     "exclude":["machine","cable","dumbbell","barbell","band","weighted"]},
-    # Static upper body
-    {"label":"chest stretch","phase":"static","tags":["chest","shoulders"],"dose":"30 sec each side","quota":4,
-     "patterns":[["chest","stretch"],["pectoralis","stretch"],["front","shoulder","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"shoulder stretch","phase":"static","tags":["shoulders","rear_shoulders"],"dose":"30 sec each side","quota":4,
-     "patterns":[["rear","deltoid","stretch"],["posterior","shoulder","stretch"],["cross","body","shoulder"],["shoulder","stretch"]],
-     "exclude":["ball","band","machine","cable","roller","weighted","dynamic"]},
-    {"label":"triceps stretch","phase":"static","tags":["triceps","shoulders"],"dose":"30 sec each side","quota":3,
-     "patterns":[["triceps","stretch"],["tricep","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"lat / back stretch","phase":"static","tags":["back","lats"],"dose":"30 sec each side","quota":4,
-     "patterns":[["lat","stretch"],["lats","stretch"],["back","stretch"]],
-     "exclude":["lower back","ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"biceps / forearm stretch","phase":"static","tags":["biceps"],"dose":"30 sec each side","quota":3,
-     "patterns":[["biceps","stretch"],["bicep","stretch"],["forearm","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
-    # Static lower body
-    {"label":"hamstring stretch","phase":"static","tags":["hamstrings"],"dose":"30 sec each side","quota":5,
-     "patterns":[["hamstring","stretch"],["hamstrings","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"quad stretch","phase":"static","tags":["quads"],"dose":"30 sec each side","quota":4,
-     "patterns":[["quadriceps","stretch"],["quad","stretch"]],
-     "exclude":["all fours","squad","ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"calf stretch","phase":"static","tags":["calves","ankles"],"dose":"30 sec each side","quota":4,
-     "patterns":[["calf","stretch"],["calves","stretch"],["achilles","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"glute stretch","phase":"static","tags":["glutes","hips"],"dose":"30 sec each side","quota":4,
-     "patterns":[["glute","stretch"],["gluteus","stretch"],["figure","four","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"hip flexor stretch","phase":"static","tags":["hips","quads"],"dose":"30 sec each side","quota":4,
-     "patterns":[["hip","flexor","stretch"],["hip","flexor"]],
-     "exclude":["exercise ball","stability ball","ball","band","machine","cable","weighted","dynamic"]},
-    {"label":"adductor / groin stretch","phase":"static","tags":["hips","adductors"],"dose":"30 sec each side","quota":3,
-     "patterns":[["adductor","stretch"],["groin","stretch"],["inner","thigh","stretch"]],
-     "exclude":["ball","band","machine","cable","weighted","dynamic"]},
+# Avoid novelty, athletic drills and fiddly unilateral variations in the default chooser.
+GLOBAL_EXCLUDE = [
+    "kettlebell", "band", "stability ball", "bosu", "medicine ball", "resistance band",
+    "burpee", "handstand", "muscle up", "snatch", "clean and jerk", "olympic", "turkish",
+    "pistol", "sissy", "cossack", "curtsy", "curtsey", "jefferson", "renegade",
+    "single leg", "one leg", "single arm", "one arm", "alternating", "alternate",
+    "behind neck", "behind head", "guillotine", "arm blaster", "kayak", "side plank",
+    "inverse leg curl", "biceps curl squat", "standing twist row", "good morning", "neck",
 ]
+ALLOWED_EQUIPMENT = {
+    "leverage machine", "cable", "sled machine", "smith machine", "dumbbell", "barbell",
+    "ez barbell", "assisted", "weighted", "body weight", "other"
+}
 
-def norm(v:str)->str:
-    v=(v or '').lower().replace('&',' and ')
-    v=re.sub(r'[^a-z0-9]+',' ',v)
-    return re.sub(r'\s+',' ',v).strip()
 
-def contains_all(text,parts): return all(norm(x) in text for x in parts)
+def norm(value: object) -> str:
+    text = str(value or "").lower().replace("&", " and ")
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
 
-def matches(rec,spec):
-    name=norm(rec.get('name','')); equipment=norm(rec.get('equipment','')); category=norm(rec.get('category',''))
-    metadata=norm(' '.join(str(rec.get(k,'')) for k in ('name','category','target','muscle_group'))+' '+' '.join(str(x) for x in (rec.get('secondary_muscles') or [])))
-    if equipment not in ALLOWED_EQUIPMENT:return False
-    cats={norm(x) for x in spec.get('category_any',[])}
-    if cats and category not in cats:return False
-    meta_terms=[norm(x) for x in spec.get('meta_any',[])]
-    if meta_terms and not any(x and x in metadata for x in meta_terms):return False
-    if any(norm(x) in name for x in GLOBAL_EXCLUDE):return False
-    if any(norm(x) in name for x in spec.get('exclude',[])):return False
-    if spec.get('all') and not contains_all(name,spec['all']):return False
-    groups=spec.get('any',[])
-    if groups and not any(contains_all(name,g) for g in groups):return False
+
+def contains_all(text: str, parts: list[str]) -> bool:
+    return all(norm(part) in text for part in parts)
+
+
+def metadata_text(rec: dict) -> str:
+    secondary = rec.get("secondary_muscles") or []
+    if not isinstance(secondary, list):
+        secondary = [secondary]
+    return norm(" ".join(str(rec.get(k, "")) for k in ("name", "category", "target", "muscle_group")) + " " + " ".join(map(str, secondary)))
+
+
+def disallowed_setup(rec: dict) -> bool:
+    name = norm(rec.get("name", ""))
+    equipment = norm(rec.get("equipment", ""))
+    if any(term in name for term in GLOBAL_EXCLUDE):
+        return True
+    # Standing/seated cable work is useful. Cable movements requiring the floor/bench are not.
+    if equipment == "cable" and any(term in name for term in ("lying", "supine", "on floor", "floor", "bench press", "incline fly", "decline fly", "kneeling")):
+        return True
+    return False
+
+
+def matches(rec: dict, spec: dict) -> bool:
+    name = norm(rec.get("name", ""))
+    equipment = norm(rec.get("equipment", ""))
+    category = norm(rec.get("category", ""))
+    meta = metadata_text(rec)
+    if equipment not in ALLOWED_EQUIPMENT or disallowed_setup(rec):
+        return False
+    cats = {norm(x) for x in spec.get("category_any", [])}
+    if cats and category not in cats:
+        return False
+    meta_terms = [norm(x) for x in spec.get("meta_any", [])]
+    if meta_terms and not any(x and x in meta for x in meta_terms):
+        return False
+    if any(norm(x) in name for x in spec.get("exclude", [])):
+        return False
+    if spec.get("all") and not contains_all(name, spec["all"]):
+        return False
+    groups = spec.get("any", [])
+    if groups and not any(contains_all(name, group) for group in groups):
+        return False
     return True
 
-def score(rec,spec):
-    if not matches(rec,spec):return -10000
-    name=norm(rec.get('name','')); equipment=norm(rec.get('equipment','')); category=norm(rec.get('category',''))
-    s=100.0
-    for i,p in enumerate(spec.get('prefer',[])):
-        if equipment==norm(p): s+=55-i*5; break
-    for w in spec.get('boost',[]):
-        if norm(w) in name:s+=8
-    s-=max(0,len(name.split())-6)*2.5
-    if category in {'chest','back','shoulders','upper arms','upper legs','lower legs'}:s+=2
-    return s
 
-def load_full_data(source:Path):
-    for path in [source/'data'/'exercises.json', source/'exercises.json']:
-        if path.exists():
+def score(rec: dict, spec: dict) -> float:
+    if not matches(rec, spec):
+        return -10000
+    name = norm(rec.get("name", ""))
+    equipment = norm(rec.get("equipment", ""))
+    score_value = 100.0
+    for index, preferred in enumerate(spec.get("prefer", [])):
+        if equipment == norm(preferred):
+            score_value += 68 - index * 7
+            break
+    for boost in spec.get("boost", []):
+        if norm(boost) in name:
+            score_value += 9
+    # Short, ordinary names usually represent the straightforward movement the user wants.
+    score_value -= max(0, len(name.split()) - 6) * 3
+    if " v 2" in name or " variation" in name:
+        score_value -= 8
+    if "pov" in name:
+        score_value -= 4
+    return score_value
+
+
+def load_lookup(source: Path) -> dict:
+    path = source / "exercise-gif-lookup.json"
+    if not path.is_file():
+        raise FileNotFoundError(f"cannot find {path}")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict) or not payload:
+        raise ValueError("exercise-gif-lookup.json is empty or invalid")
+    return payload
+
+
+def load_full_data(source: Path) -> list[dict]:
+    for path in (source / "data" / "exercises.json", source / "exercises.json"):
+        if path.is_file():
             try:
-                data=json.loads(path.read_text(encoding='utf-8'))
-                if isinstance(data,list):return data
-            except Exception:pass
+                data = json.loads(path.read_text(encoding="utf-8"))
+                if isinstance(data, list):
+                    return data
+            except Exception:
+                pass
     return []
 
-def instruction_map(source:Path):
-    out={}
+
+def instruction_map(source: Path) -> dict[str, str]:
+    result: dict[str, str] = {}
     for rec in load_full_data(source):
-        rid=str(rec.get('id','')).zfill(4); ins=rec.get('instructions')
-        if isinstance(ins,dict):ins=ins.get('en')
-        if isinstance(ins,list):ins=' '.join(str(x) for x in ins)
-        if isinstance(ins,str) and ins.strip():out[rid]=ins.strip()
-    return out
-
-def media_item(rec,filename,source,instructions,role=None,key=None):
-    gif_rel=Path(rec.get('gif_url') or f'videos/{filename}')
-    img_rel=Path(rec.get('image') or f'images/{Path(filename).with_suffix(".jpg").name}')
-    gif_src=source/'public'/gif_rel; img_src=source/'public'/img_rel
-    if not gif_src.exists() or not img_src.exists():return None
-    rid=str(rec.get('id','')).zfill(4)
-    item={"id":rid,"filename":filename,"name":rec.get('name') or filename,"category":rec.get('category',''),"equipment":rec.get('equipment',''),"target":rec.get('target',''),"muscle_group":rec.get('muscle_group',''),"secondary_muscles":rec.get('secondary_muscles') or [],"image":f'images/{img_src.name}',"gif_url":f'videos/{gif_src.name}'}
-    if role:item['role']=role
-    if key:item['key']=key
-    if rid in instructions:item['instructions']=instructions[rid]
-    return item,gif_src,img_src
-
-def find_prep(lookup,key,spec,used):
-    patterns=spec.get('patterns',[])
-    excludes=[norm(x) for x in spec.get('exclude',[])]
-    req_equipment={norm(x) for x in spec.get('require_equipment',[])}
-    ranked=[]
-    for filename,rec in lookup.items():
-        if filename in used:continue
-        name=norm(rec.get('name','')); equipment=norm(rec.get('equipment',''))
-        if any(x and x in name for x in excludes):continue
-        if req_equipment and equipment not in req_equipment:continue
-        for rank,g in enumerate(patterns):
-            if not contains_all(name,g):continue
-            # Strongly favour the earliest, most-specific pattern, simple
-            # body-weight movements, and concise names. Exact/near-exact names
-            # beat incidental word matches.
-            sc=260-rank*35-max(0,len(name.split())-5)*4
-            if equipment=='body weight':sc+=35
-            if equipment in {'other',''}:sc+=8
-            gnorm=' '.join(norm(x) for x in g)
-            if name==gnorm:sc+=55
-            elif name.startswith(gnorm) or name.endswith(gnorm):sc+=22
-            if any(x in name for x in ['stretch','circle','swing','lunge','squat','rotation','roll','knee','scapular','scapula']):sc+=8
-            ranked.append((sc,filename,rec));break
-    ranked.sort(reverse=True,key=lambda x:x[0])
-    return ranked[0][1:] if ranked else (None,None)
-
-def prep_candidates(lookup,spec,limit=5):
-    patterns=spec.get('patterns',[]); excludes=[norm(x) for x in spec.get('exclude',[])]
-    out=[]
-    for filename,rec in lookup.items():
-        name=norm(rec.get('name',''))
-        if any(x and x in name for x in excludes):continue
-        for g in patterns:
-            if contains_all(name,g):
-                out.append((filename,rec.get('name',''),rec.get('equipment','')));break
-        if len(out)>=limit:break
-    return out
+        rid = str(rec.get("id", "")).zfill(4)
+        ins = rec.get("instructions")
+        if isinstance(ins, dict):
+            ins = ins.get("en")
+        if isinstance(ins, list):
+            ins = "\n".join(str(item) for item in ins if str(item).strip())
+        if isinstance(ins, str) and ins.strip():
+            result[rid] = ins.strip()
+    return result
 
 
-def prep_pool_candidates(lookup,spec,used):
-    patterns=spec.get('patterns',[])
-    excludes=[norm(x) for x in spec.get('exclude',[])]
-    allowed={"body weight","other",""}
-    ranked=[]
-    for filename,rec in lookup.items():
-        if filename in used: continue
-        name=norm(rec.get('name','')); equipment=norm(rec.get('equipment',''))
-        if equipment not in allowed: continue
-        if any(x and x in name for x in excludes): continue
-        best=None
-        for rank,g in enumerate(patterns):
-            if not contains_all(name,g): continue
-            sc=240-rank*22-max(0,len(name.split())-6)*4
-            if equipment=='body weight': sc+=28
-            if 'stretch' in name: sc+=12 if spec.get('phase')=='static' else 0
-            if spec.get('phase')=='dynamic' and any(x in name for x in ['dynamic','circle','rotation','swing','lunge','squat','mobility','scapula','scapular']): sc+=12
-            gnorm=' '.join(norm(x) for x in g)
-            if name==gnorm: sc+=45
-            elif name.startswith(gnorm) or name.endswith(gnorm): sc+=18
-            best=sc; break
-        if best is not None: ranked.append((best,filename,rec))
-    ranked.sort(reverse=True,key=lambda x:(x[0],x[1]))
-    return ranked
+def media_item(rec: dict, filename: str, source: Path, instructions: dict[str, str], role: str):
+    gif_rel = Path(rec.get("gif_url") or f"videos/{filename}")
+    img_rel = Path(rec.get("image") or f"images/{Path(filename).with_suffix('.jpg').name}")
+    gif_src = source / "public" / gif_rel
+    img_src = source / "public" / img_rel
+    if not gif_src.is_file() or not img_src.is_file():
+        return None
+    rid = str(rec.get("id", "")).zfill(4)
+    item = {
+        "id": rid,
+        "filename": filename,
+        "name": rec.get("name") or filename,
+        "role": role,
+        "category": rec.get("category", ""),
+        "equipment": rec.get("equipment", ""),
+        "target": rec.get("target", ""),
+        "muscle_group": rec.get("muscle_group", ""),
+        "secondary_muscles": rec.get("secondary_muscles") or [],
+        "image": f"images/{img_src.name}",
+        "gif_url": f"videos/{gif_src.name}",
+    }
+    if rid in instructions:
+        item["instructions"] = instructions[rid]
+    return item, gif_src, img_src
 
-def main():
-    ap=argparse.ArgumentParser(description='Build Gym Tracker v13.0 exercise + dynamic prep/stretch media libraries from your local exercise GIF collection.')
-    ap.add_argument('--source',default='~/gym-exercise-lookup')
-    ap.add_argument('--dest',default='.')
-    ap.add_argument('--count',type=int,default=TARGET_COUNT)
-    ap.add_argument('--dry-run',action='store_true')
-    args=ap.parse_args()
-    print('Gym Tracker media builder v13.0')
-    source=Path(args.source).expanduser().resolve(); dest=Path(args.dest).expanduser().resolve()
-    lookup_path=source/'exercise-gif-lookup.json'
-    if not lookup_path.exists():print(f'ERROR: cannot find {lookup_path}',file=sys.stderr);return 1
-    lookup=json.loads(lookup_path.read_text(encoding='utf-8'))
-    if not isinstance(lookup,dict) or not lookup:print('ERROR: invalid lookup',file=sys.stderr);return 1
-    instructions=instruction_map(source)
 
-    used=set(); selected=[]; role_counts={r:0 for r in ROLE_SPECS}
-    for role,spec in ROLE_SPECS.items():
-        ranked=sorted(((score(rec,spec),fn,rec) for fn,rec in lookup.items()),reverse=True,key=lambda x:x[0])
-        for sc,fn,rec in ranked:
-            if role_counts[role]>=spec['quota'] or len(selected)>=args.count:break
-            if sc<80 or fn in used:continue
-            selected.append((role,fn,rec,sc));role_counts[role]+=1;used.add(fn)
-    if len(selected)<args.count:
-        extras=[]
-        for role,spec in ROLE_SPECS.items():
-            for fn,rec in lookup.items():
-                if fn in used:continue
-                sc=score(rec,spec)
-                if sc>=90:extras.append((sc,role,fn,rec))
-        extras.sort(reverse=True,key=lambda x:x[0])
-        for sc,role,fn,rec in extras:
-            if len(selected)>=args.count:break
-            if fn in used:continue
-            selected.append((role,fn,rec,sc));role_counts[role]+=1;used.add(fn)
-    under=[]
-    for role,min_count in ROLE_RECOMMENDED_MIN.items():
-        actual=role_counts.get(role,0)
-        if actual<min_count:under.append((role,actual,min_count))
-    if under:
-        print('WARNING: some movement categories have limited variety in this dataset:',file=sys.stderr)
-        for role,actual,min_count in under:print(f'  {role}: {actual} found; {min_count}+ recommended',file=sys.stderr)
-        print('The app will still work and can use nearby compatible roles where configured.',file=sys.stderr)
-    if len(selected)<args.count:print(f'WARNING: requested {args.count} exercises but found {len(selected)} after strict filtering.',file=sys.stderr)
-    if len(selected)<90:print(f'ERROR: only found {len(selected)} suitable exercises',file=sys.stderr);return 2
+def canonical_name(name: str) -> str:
+    value = norm(name)
+    value = re.sub(r"\b(?:side|back|front) pov\b", "", value)
+    value = re.sub(r"\bv \d+\b", "", value)
+    return re.sub(r"\s+", " ", value).strip()
 
-    mainlib=[];main_media=[];report=[]
-    for role,fn,rec,sc in selected[:args.count]:
-        m=media_item(rec,fn,source,instructions,role=role)
-        if not m:print(f'ERROR: missing media for {fn}',file=sys.stderr);return 3
-        item,gif_src,img_src=m;mainlib.append(item);main_media.append((item,gif_src,img_src));report.append(f'{role:18} | {fn:24} | {item["name"]} | {item["equipment"]}')
 
-    # Prep / stretch GIFs are intentionally additional to the 106 main exercises.
-    prep=[];prep_media=[];prep_report=[];prep_used=set()
-    for key,spec in PREP_SPECS.items():
-        fn,rec=find_prep(lookup,key,spec,prep_used)
-        if not fn:
-            cand=prep_candidates(lookup,spec)
-            suffix=(' | candidates: '+', '.join(f'{f}={n}' for f,n,e in cand)) if cand else ''
-            prep_report.append(f'{key:22} | NOT FOUND{suffix}');continue
-        m=media_item(rec,fn,source,instructions,key=key)
-        if not m:prep_report.append(f'{key:22} | MEDIA MISSING | {fn}');continue
-        item,gif_src,img_src=m
-        meta=PREP_META.get(key,{})
-        item.update({"phase":meta.get("phase","dynamic"),"tags":meta.get("tags",[]),"dose":meta.get("dose","")})
-        prep.append(item);prep_media.append((item,gif_src,img_src));prep_used.add(fn)
-        prep_report.append(f'{key:22} | {fn:24} | {item["name"]} | {item["phase"]} | {",".join(item["tags"])}')
+def select_exercises(lookup: dict, count: int):
+    selected: list[tuple[str, str, dict, float]] = []
+    used_files: set[str] = set()
+    used_names: set[str] = set()
+    role_counts = {role: 0 for role in ROLE_SPECS}
 
-    # Add a broader, strictly filtered pool so the app can rotate prep and
-    # stretches week to week while still matching the muscles trained that day.
-    for spec in PREP_POOL_SPECS:
-        added=0
-        for sc,fn,rec in prep_pool_candidates(lookup,spec,prep_used):
-            if added>=spec.get("quota",3): break
-            key=f'pool_{spec["phase"]}_{Path(fn).stem}'
-            m=media_item(rec,fn,source,instructions,key=key)
-            if not m: continue
-            item,gif_src,img_src=m
-            item.update({"phase":spec["phase"],"tags":spec["tags"],"dose":spec["dose"],"pool_label":spec["label"]})
-            prep.append(item);prep_media.append((item,gif_src,img_src));prep_used.add(fn);added+=1
-            prep_report.append(f'{key:22} | {fn:24} | {item["name"]} | {item["phase"]} | {",".join(item["tags"])}')
+    # First satisfy per-role quotas so each muscle has genuine breadth.
+    for role, spec in ROLE_SPECS.items():
+        ranked = sorted(
+            ((score(rec, spec), filename, rec) for filename, rec in lookup.items()),
+            key=lambda row: (row[0], row[1]), reverse=True,
+        )
+        for points, filename, rec in ranked:
+            if role_counts[role] >= spec["quota"] or len(selected) >= count:
+                break
+            if points < 90 or filename in used_files:
+                continue
+            cname = canonical_name(rec.get("name", filename))
+            if cname in used_names:
+                continue
+            selected.append((role, filename, rec, points))
+            used_files.add(filename)
+            used_names.add(cname)
+            role_counts[role] += 1
 
-    print(f'Selected {len(mainlib)} main exercises and {len(prep)} prep/stretch movements.\n')
-    for role in ROLE_SPECS:print(f'  {role:18}: {sum(1 for x in mainlib if x["role"]==role)}')
-    print('\nPrep/stretch matches:')
-    print('\n'.join('  '+x for x in prep_report))
-    if args.dry_run:return 0
+    # If strict quotas cannot fill the requested count, add the next best conventional
+    # movement from any role, still deduplicating near-identical POV/name variants.
+    if len(selected) < count:
+        extras = []
+        for role, spec in ROLE_SPECS.items():
+            for filename, rec in lookup.items():
+                if filename in used_files:
+                    continue
+                points = score(rec, spec)
+                if points >= 95:
+                    extras.append((points, role, filename, rec))
+        extras.sort(key=lambda row: (row[0], row[2]), reverse=True)
+        for points, role, filename, rec in extras:
+            if len(selected) >= count:
+                break
+            if filename in used_files:
+                continue
+            cname = canonical_name(rec.get("name", filename))
+            if cname in used_names:
+                continue
+            selected.append((role, filename, rec, points))
+            used_files.add(filename)
+            used_names.add(cname)
+            role_counts[role] += 1
 
-    vd=dest/'videos';im=dest/'images'
-    # Do not prune generated media here. Older workouts stored in the iPhone/PWA
-    # can still reference media from an earlier curated library. Keeping those
-    # files is cheap and prevents an app update from breaking an in-progress or
-    # historical workout. A future explicit prune command can remove unused
-    # files after the user has exported/cleared old data.
-    vd.mkdir(parents=True,exist_ok=True);im.mkdir(parents=True,exist_ok=True)
-    # Deduplicate files that happen to be used both in main and prep libraries.
-    copied=set()
-    for item,gif_src,img_src in main_media+prep_media:
-        for srcp,rel in [(gif_src,item['gif_url']),(img_src,item['image'])]:
-            if rel in copied:continue
-            shutil.copy2(srcp,dest/rel);copied.add(rel)
-    # Validate the exact paths that will be written to the JSON libraries before
-    # publishing them. This makes a missing GIF/JPG a build failure instead of
-    # a broken card appearing later on the phone.
-    missing=[]
-    for item in mainlib+prep:
-        for field in ('gif_url','image'):
-            rel=item.get(field)
-            if rel and not (dest/rel).is_file():missing.append(f'{item.get("name",item.get("filename","?"))}: {rel}')
+    return selected, role_counts
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Build Gym Tracker v16.1 conventional exercise library from the local exercise dataset.")
+    parser.add_argument("--source", default="~/gym-exercise-lookup")
+    parser.add_argument("--dest", default=".")
+    parser.add_argument("--count", type=int, default=TARGET_COUNT)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--allow-shrink", action="store_true", help="Allow replacing an existing library with fewer exercises.")
+    args = parser.parse_args()
+
+    source = Path(args.source).expanduser().resolve()
+    dest = Path(args.dest).expanduser().resolve()
+    try:
+        lookup = load_lookup(source)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    instructions = instruction_map(source)
+    selected, role_counts = select_exercises(lookup, max(1, args.count))
+    if len(selected) < 120:
+        print(f"ERROR: only {len(selected)} conventional exercises matched; refusing to replace the current library.", file=sys.stderr)
+        return 2
+
+    print(f"Gym Tracker media builder v16.1\nSelected {len(selected)} conventional exercises from {len(lookup)} source entries.\n")
+    for role in ROLE_SPECS:
+        print(f"  {role:18}: {role_counts[role]}")
+    if len(selected) < args.count:
+        print(f"\nNOTE: requested {args.count}; strict conventional filtering produced {len(selected)} unique movements.")
+
+    report = []
+    library = []
+    media = []
+    for role, filename, rec, points in selected:
+        built = media_item(rec, filename, source, instructions, role)
+        if not built:
+            print(f"WARNING: skipping {filename}; its GIF or thumbnail is missing.", file=sys.stderr)
+            continue
+        item, gif_src, img_src = built
+        library.append(item)
+        media.append((item, gif_src, img_src))
+        report.append(f"{role:18} | {filename:24} | {item['name']} | {item['equipment']} | score {points:.0f}")
+
+    if len(library) < 120:
+        print(f"ERROR: only {len(library)} selected exercises have complete media; current library left untouched.", file=sys.stderr)
+        return 3
+
+    existing_count = 0
+    existing_path = dest / "exercise-library.json"
+    if existing_path.is_file():
+        try:
+            existing_payload = json.loads(existing_path.read_text(encoding="utf-8"))
+            existing_count = len(existing_payload) if isinstance(existing_payload, (list, dict)) else 0
+        except Exception:
+            existing_count = 0
+    if existing_count and len(library) < existing_count and not args.allow_shrink:
+        print(
+            f"ERROR: new strict library has {len(library)} exercises but the current library has {existing_count}. "
+            "Refusing to shrink it. Re-run with --allow-shrink only if that is intentional.",
+            file=sys.stderr,
+        )
+        return 5
+
+    if args.dry_run:
+        return 0
+
+    videos = dest / "videos"
+    images = dest / "images"
+    videos.mkdir(parents=True, exist_ok=True)
+    images.mkdir(parents=True, exist_ok=True)
+
+    # Deliberately do not prune old media: saved history can still reference it.
+    copied: set[str] = set()
+    for item, gif_src, img_src in media:
+        for src, rel in ((gif_src, item["gif_url"]), (img_src, item["image"])):
+            if rel in copied:
+                continue
+            shutil.copy2(src, dest / rel)
+            copied.add(rel)
+
+    missing = []
+    for item in library:
+        for field in ("gif_url", "image"):
+            if not (dest / item[field]).is_file():
+                missing.append(f"{item['name']}: {item[field]}")
     if missing:
-        print('ERROR: generated library references missing media:',file=sys.stderr)
-        for line in missing:print(f'  {line}',file=sys.stderr)
+        print("ERROR: generated library references missing media:", file=sys.stderr)
+        for item in missing:
+            print(f"  {item}", file=sys.stderr)
         return 4
-    (dest/'exercise-library.json').write_text(json.dumps(mainlib,ensure_ascii=False,indent=2),encoding='utf-8')
-    (dest/'prep-library.json').write_text(json.dumps(prep,ensure_ascii=False,indent=2),encoding='utf-8')
-    (dest/'exercise-library-selection.txt').write_text('\n'.join(report)+'\n',encoding='utf-8')
-    (dest/'prep-library-selection.txt').write_text('\n'.join(prep_report)+'\n',encoding='utf-8')
-    print(f'\nWrote {len(mainlib)} main exercises and {len(prep)} prep/stretch movements to {dest}.')
+
+    (dest / "exercise-library.json").write_text(json.dumps(library, ensure_ascii=False, indent=2), encoding="utf-8")
+    (dest / "exercise-library-selection.txt").write_text("\n".join(report) + "\n", encoding="utf-8")
+    print(f"\nWrote {len(library)} exercises to {dest}.")
     return 0
 
-if __name__=='__main__':raise SystemExit(main())
+
+if __name__ == "__main__":
+    raise SystemExit(main())

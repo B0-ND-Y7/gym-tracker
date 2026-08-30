@@ -10,7 +10,7 @@ function ex(id, name, role, equipment='leverage machine', extra={}) {
   return { id, filename: `${id}.gif`, name, role, equipment, category: '', target: '', muscle_group: '', secondary_muscles: [], ...extra };
 }
 
-assert.equal(APP_VERSION, '16.0.0');
+assert.equal(APP_VERSION, '16.1.0');
 assert.deepEqual(DAYS.map(d => d.name), ['Push','Legs 1','Pull','Legs 2']);
 assert.equal(DAYS[0].plan.find(x => x.muscle === 'chest').slotSets.length, 2);
 assert.ok(DAYS[1].plan.some(x => x.muscle === 'hips'));
@@ -93,6 +93,46 @@ assert.equal(migrated.history[0].day, 2);
 assert.equal(migrated.history[0].items[0].exerciseId, '2330');
 assert.deepEqual(historyWorkoutSetCounts(migrated.history[0]), {done:3,total:3});
 assert.equal(migrated.weightLog[0].weight, 103);
+
+// v13 backups had no app marker and stored preferences/notes by GIF filename.
+const v13Library = normalizeLibrary([
+  ex('2330','cable lat pulldown full range of motion','pull_vertical','cable',{filename:'2330-LEprlgG.gif', instructions:'Pull the bar down under control.'}),
+  ex('0577','lever chest press','push_horizontal','leverage machine',{filename:'0577-T0yTjgW.gif'})
+]);
+const v13 = {
+  version:'13.1.1',
+  state:{},
+  history:[{
+    version:'13.1.1', sessionKey:'v9::2026-08-24::Monday', day:'Monday', split:'upperPull', workoutName:'Upper Pull',
+    isoDate:'2026-08-24T14:36:54.962Z', durationSeconds:3923, prescribedSets:3,
+    exercises:[{filename:'2330-LEprlgG.gif', id:'2330', name:'cable lat pulldown full range of motion', role:'pull_vertical', targetSets:3, targetReps:'8–12', sets:[
+      {w:'17.5',r:'10',d:true},{w:'15',r:'10',d:true},{w:'15',r:'10',d:true}
+    ]}]
+  }],
+  plans:{'v9::2026-08-24::Monday':{split:'upperPull'}},
+  rotationState:{nextIndex:2},
+  weightLog:[{date:'2026-08-26',weight:103}],
+  prefs:{
+    '2330-LEprlgG.gif':{favorite:true,avoid:false,unavailable:false},
+    '0577-T0yTjgW.gif':{favorite:false,avoid:true,unavailable:false}
+  },
+  exerciseNotes:{'2330-LEprlgG.gif':'Seat on pin 4'},
+  sessionStarts:{}
+};
+const migratedV13 = parseBackupPayload(v13, v13Library);
+assert.equal(migratedV13.rotationDay, 2);
+assert.equal(migratedV13.builderDay, 2);
+assert.deepEqual(migratedV13.prefs.fav, ['2330']);
+assert.deepEqual(migratedV13.prefs.avoid, ['0577']);
+assert.equal(migratedV13.notes['2330'], 'Seat on pin 4');
+assert.equal(migratedV13.history.length, 1);
+assert.equal(migratedV13.history[0].items[0].exerciseId, '2330');
+assert.equal(v13Library[0].instructions, 'Pull the bar down under control.');
+
+// Decline presses are now a first-class chest role rather than being lost from the chooser.
+const decline = ex('dec1','smith decline bench press','push_decline','smith machine');
+assert.equal(matchesMuscle(decline, 'chest'), true);
+
 
 assert.equal(legacyDayIndex({split:'legsA'}), 1);
 assert.equal(legacyDayIndex({split:'lowerB'}), 3);

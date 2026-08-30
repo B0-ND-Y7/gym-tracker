@@ -159,7 +159,7 @@ function selectDay(dayIndex) {
   render();
 }
 
-function chooseMuscle(muscle, scroll = false) {
+function chooseMuscle(muscle) {
   if (!currentDay().plan.some(entry => entry.muscle === muscle)) {
     toast(`That muscle is not part of ${currentDay().name}.`);
     return;
@@ -169,7 +169,6 @@ function chooseMuscle(muscle, scroll = false) {
   searchTerm = '';
   showAllForMuscle = false;
   render();
-  if (scroll) requestAnimationFrame(() => document.getElementById('exercisePicker')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 }
 
 function addSelection(muscle, exerciseId) {
@@ -191,14 +190,7 @@ function addSelection(muscle, exerciseId) {
   persist();
 
   const completedMuscle = dayDraft[muscle].length >= entry.slotSets.length;
-  const next = completedMuscle ? nextIncompleteMuscle(muscle) : null;
-  if (next) {
-    currentMuscle = next;
-    mapView = MUSCLES[next].view;
-    searchTerm = '';
-    showAllForMuscle = false;
-    toast(`${MUSCLES[muscle].label} done · next ${MUSCLES[next].label}`);
-  }
+  if (completedMuscle) toast(`${MUSCLES[muscle].label} complete · choose the next muscle on the map.`);
   render();
 }
 
@@ -219,33 +211,6 @@ function cleanExerciseFromDrafts(exerciseId) {
   }
 }
 
-function toggleFavourite(exerciseId) {
-  const id = String(exerciseId);
-  const current = preferenceState(state.prefs, id);
-  state.prefs = setPreference(state.prefs, id, current === 'fav' ? 'normal' : 'fav');
-  persist();
-  toast(current === 'fav' ? 'Favourite removed.' : 'Added to favourites.');
-  render();
-}
-
-function avoidExercise(exerciseId) {
-  const id = String(exerciseId);
-  state.prefs = setPreference(state.prefs, id, 'avoid');
-  cleanExerciseFromDrafts(id);
-  persist();
-  toast('Exercise hidden from future choices.');
-  render();
-}
-
-function markUnavailable(exerciseId) {
-  const id = String(exerciseId);
-  state.prefs = setPreference(state.prefs, id, 'unavailable');
-  cleanExerciseFromDrafts(id);
-  persist();
-  toast('Marked unavailable at your gym.');
-  render();
-}
-
 function restoreExercisePreference(exerciseId) {
   state.prefs = setPreference(state.prefs, String(exerciseId), 'normal');
   persist();
@@ -258,7 +223,7 @@ function startWorkout() {
   if (state.workout && !confirm('Replace the active workout? Any unsaved set entries in it will be lost.')) return;
   if (!dayComplete()) {
     const missing = currentDay().plan.find(entry => selection(entry.muscle).length < entry.slotSets.length);
-    if (missing) chooseMuscle(missing.muscle, true);
+    if (missing) chooseMuscle(missing.muscle);
     toast('Choose the remaining exercises first.');
     return;
   }
@@ -310,6 +275,10 @@ function updateSet(itemIndex, setIndex, field, value) {
 function toggleSet(itemIndex, setIndex) {
   const set = state.workout?.items?.[itemIndex]?.sets?.[setIndex];
   if (!set) return;
+  if (!set.done && Number(state.restUntil || 0) > Date.now()) {
+    toast(`Rest first · ${formatClock(Math.ceil((state.restUntil - Date.now()) / 1000))} remaining.`);
+    return;
+  }
   if (!set.done) {
     if (!validSetInput('reps', set.reps) || String(set.reps).trim() === '') {
       toast('Enter valid reps before completing the set.');
@@ -387,6 +356,10 @@ function workoutSetCounts(workout = state.workout) {
 
 function finishWorkout() {
   if (!state.workout) return;
+  if (Number(state.restUntil || 0) > Date.now()) {
+    toast(`Rest first · ${formatClock(Math.ceil((state.restUntil - Date.now()) / 1000))} remaining.`);
+    return;
+  }
   const counts = workoutSetCounts();
   const incomplete = counts.total - counts.done;
   if (counts.done === 0) { toast('Complete at least one working set before saving.'); return; }
@@ -460,12 +433,6 @@ function startRest() {
   if (!restInterval) restInterval = window.setInterval(updateRestBar, 500);
 }
 
-function endRest() {
-  state.restUntil = 0;
-  persist();
-  updateRestBar();
-}
-
 function updateRestBar() {
   const remainingMs = Math.max(0, Number(state.restUntil || 0) - Date.now());
   const seconds = Math.ceil(remainingMs / 1000);
@@ -475,6 +442,7 @@ function updateRestBar() {
       persist();
       navigator.vibrate?.([100,60,100]);
       toast('Rest complete.');
+      if (activeTab === 'workout' && state.workout) renderWorkout(app);
     }
     restBar.hidden = true;
     if (restInterval) {
@@ -535,7 +503,7 @@ function renderBuild(target, allowMap = true) {
   const totalSelected = selectedCount();
   const complete = dayComplete();
   const visibleCandidates = filteredCandidates(candidates);
-  const displayCandidates = (searchTerm || showAllForMuscle) ? visibleCandidates : visibleCandidates.slice(0, 9);
+  const displayCandidates = (searchTerm || showAllForMuscle) ? visibleCandidates : visibleCandidates.slice(0, 12);
 
   target.innerHTML = `
     ${topbar('Gym Tracker', 'Choose the day, muscle, then the exact exercises')}
@@ -573,7 +541,7 @@ function renderBuild(target, allowMap = true) {
       ${renderSelectedSlots(entry, chosen)}
       <div class="toolbar">
         <input id="exerciseSearch" class="search" type="search" value="${esc(searchTerm)}" placeholder="Search ${esc(MUSCLES[currentMuscle].label)}…" autocomplete="off">
-        ${candidates.length > 9 ? `<button class="button compact" type="button" data-action="toggle-show-all">${showAllForMuscle ? 'Top picks' : `All ${candidates.length}`}</button>` : ''}
+        ${candidates.length > 12 ? `<button class="button compact browse-all" type="button" data-action="toggle-show-all">${showAllForMuscle ? 'Show top picks' : `Browse all ${candidates.length}`}</button>` : ''}
       </div>
       <div class="exercise-grid" id="exerciseGrid">
         ${displayCandidates.length ? displayCandidates.map(exercise => renderExerciseTile(exercise, currentMuscle, chosen.includes(exercise.id))).join('') : '<div class="empty" style="grid-column:1/-1">No suitable exercises found for this muscle.</div>'}
@@ -651,18 +619,16 @@ function filteredCandidates(candidates) {
 }
 
 function renderExerciseTile(exercise, muscle, selected) {
+  const demo = exercise.gif_url || exercise.image;
+  const fallback = exercise.image || exercise.gif_url;
   const favourite = state.prefs.fav.includes(exercise.id);
-  const image = exercise.image || exercise.gif_url;
-  const fallback = exercise.gif_url || exercise.image;
-  return `<article class="exercise-tile ${selected ? 'selected' : ''}">
-    <div class="exercise-thumb"><img src="${esc(image)}" data-fallback="${esc(fallback)}" loading="lazy" alt="${esc(exercise.name)} demonstration"></div>
-    <div class="tile-actions">
-      <button class="icon-button ${favourite ? 'favourite' : ''}" type="button" data-action="toggle-favourite" data-id="${esc(exercise.id)}" aria-label="${favourite ? 'Remove favourite' : 'Favourite'} ${esc(exercise.name)}">${favourite ? '★' : '☆'}</button>
-      <button class="icon-button" type="button" data-action="mark-unavailable" data-id="${esc(exercise.id)}" aria-label="Mark ${esc(exercise.name)} unavailable at my gym" title="Not at my gym">⌧</button>
-      <button class="icon-button" type="button" data-action="avoid-exercise" data-id="${esc(exercise.id)}" aria-label="Avoid ${esc(exercise.name)}" title="Avoid">×</button>
-    </div>
+  return `<article class="exercise-tile ${selected ? 'selected' : ''} ${favourite ? 'is-favourite' : ''}">
+    <button class="exercise-preview" type="button" data-action="open-exercise-detail" data-muscle="${esc(muscle)}" data-id="${esc(exercise.id)}" aria-label="Open ${esc(exercise.name)} demo and options">
+      <span class="exercise-thumb"><img src="${esc(demo)}" data-fallback="${esc(fallback)}" loading="lazy" alt="${esc(exercise.name)} demonstration"></span>
+      <span class="preview-hint">Tap to expand</span>
+    </button>
     <div class="exercise-body">
-      <div class="exercise-name">${esc(exercise.name)}</div>
+      <button class="exercise-name-link" type="button" data-action="open-exercise-detail" data-muscle="${esc(muscle)}" data-id="${esc(exercise.id)}">${esc(exercise.name)}</button>
       <div class="exercise-meta">${esc(exercise.equipment || exercise.category || 'Exercise')}</div>
       <button class="pick-button" type="button" data-action="add-selection" data-muscle="${esc(muscle)}" data-id="${esc(exercise.id)}" ${selected ? 'disabled' : ''}>${selected ? 'Selected' : 'Choose'}</button>
     </div>
@@ -727,11 +693,12 @@ function renderWorkoutCard(item, itemIndex) {
 }
 
 function renderSetRow(itemIndex, setIndex, set) {
-  return `<div class="set-row">
+  const restLocked = !set.done && Number(state.restUntil || 0) > Date.now();
+  return `<div class="set-row ${restLocked ? 'rest-locked' : ''}">
     <div class="set-number">${setIndex + 1}</div>
     <div class="set-input"><label>WEIGHT KG</label><input type="text" inputmode="decimal" data-action="set-input" data-item="${itemIndex}" data-set="${setIndex}" data-field="weight" value="${esc(set.weight)}" placeholder="—"></div>
     <div class="set-input"><label>REPS</label><input type="number" inputmode="numeric" min="1" max="100" data-action="set-input" data-item="${itemIndex}" data-set="${setIndex}" data-field="reps" value="${esc(set.reps)}" placeholder="—"></div>
-    <button class="set-done ${set.done ? 'done' : ''}" type="button" data-action="toggle-set" data-item="${itemIndex}" data-set="${setIndex}" aria-label="${set.done ? 'Mark set incomplete' : 'Complete set'}">${set.done ? '✓' : '○'}</button>
+    <button class="set-done ${set.done ? 'done' : ''}" type="button" data-action="toggle-set" data-item="${itemIndex}" data-set="${setIndex}" aria-label="${restLocked ? 'Rest timer active' : set.done ? 'Mark set incomplete' : 'Complete set'}" ${restLocked ? 'disabled' : ''}>${set.done ? '✓' : restLocked ? '••' : '○'}</button>
   </div>`;
 }
 
@@ -836,7 +803,7 @@ async function importData(file) {
   try {
     const text = (await file.text()).replace(/^\uFEFF/, '').trim();
     const cleaned = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-    const nextState = parseBackupPayload(JSON.parse(cleaned));
+    const nextState = parseBackupPayload(JSON.parse(cleaned), library);
     state = nextState;
     if (libraryStatus === 'ready') state.drafts = sanitizeDrafts(state.drafts, library, state.prefs);
     persist();
@@ -862,6 +829,59 @@ function resetApp() {
   render();
 }
 
+function openExerciseDetail(exerciseId, muscle = currentMuscle) {
+  const exercise = exById(exerciseId);
+  if (!exercise) return;
+  const actualMuscle = currentDay().plan.some(entry => entry.muscle === muscle) ? muscle : currentMuscle;
+  const selectedIds = selection(actualMuscle);
+  const selected = selectedIds.includes(String(exercise.id));
+  const required = planEntry(actualMuscle)?.slotSets?.length || 0;
+  const muscleFull = !selected && required > 0 && selectedIds.length >= required;
+  const pref = preferenceState(state.prefs, exercise.id);
+  const demo = exercise.gif_url || exercise.image;
+  const fallback = exercise.image || exercise.gif_url;
+  const instructions = String(exercise.instructions || '').trim();
+  modalReturnFocus = document.activeElement;
+  modalBody.innerHTML = `
+    <div class="modal-header">
+      <div><div class="eyebrow">${esc(MUSCLES[actualMuscle]?.label || exercise.target || 'Exercise')}</div><h2 id="modalTitle">${esc(exercise.name)}</h2></div>
+      <button class="button compact" type="button" data-action="close-modal">Close</button>
+    </div>
+    <div class="exercise-detail-demo"><img src="${esc(demo)}" data-fallback="${esc(fallback)}" alt="${esc(exercise.name)} animated demonstration"></div>
+    <div class="detail-meta-row">
+      <span>${esc(exercise.equipment || 'Exercise')}</span>
+      ${exercise.target ? `<span>${esc(exercise.target)}</span>` : ''}
+      ${pref !== 'normal' ? `<span class="detail-pref-state">${esc(pref === 'fav' ? 'Favourite' : pref === 'avoid' ? 'Avoided' : 'Not at my gym')}</span>` : ''}
+    </div>
+    ${instructions ? `<div class="detail-instructions"><strong>How to perform it</strong><p>${esc(instructions)}</p></div>` : ''}
+    <div class="detail-actions">
+      <button class="button ${pref === 'fav' ? 'primary' : ''}" type="button" data-action="detail-favourite" data-id="${esc(exercise.id)}" data-muscle="${esc(actualMuscle)}">${pref === 'fav' ? 'Remove favourite' : 'Favourite'}</button>
+      <button class="button" type="button" data-action="detail-unavailable" data-id="${esc(exercise.id)}">Not at my gym</button>
+      <button class="button danger" type="button" data-action="detail-avoid" data-id="${esc(exercise.id)}">Avoid exercise</button>
+    </div>
+    <button class="button teal detail-choose" type="button" data-action="detail-choose" data-id="${esc(exercise.id)}" data-muscle="${esc(actualMuscle)}" ${selected || muscleFull ? 'disabled' : ''}>${selected ? 'Already selected' : muscleFull ? `${esc(MUSCLES[actualMuscle]?.label || 'Muscle')} slots are full` : `Choose for ${esc(MUSCLES[actualMuscle]?.label || 'workout')}`}</button>`;
+  openModal();
+}
+
+function toggleDetailFavourite(exerciseId, muscle) {
+  const id = String(exerciseId);
+  const current = preferenceState(state.prefs, id);
+  state.prefs = setPreference(state.prefs, id, current === 'fav' ? 'normal' : 'fav');
+  persist();
+  render(false);
+  openExerciseDetail(id, muscle);
+}
+
+function setDetailPreference(exerciseId, mode) {
+  const id = String(exerciseId);
+  state.prefs = setPreference(state.prefs, id, mode);
+  cleanExerciseFromDrafts(id);
+  persist();
+  closeModal();
+  toast(mode === 'avoid' ? 'Exercise hidden from future choices.' : 'Marked unavailable at your gym.');
+  render();
+}
+
 function openExerciseChooser(itemIndex) {
   const item = state.workout?.items?.[itemIndex];
   if (!item) return;
@@ -871,7 +891,7 @@ function openExerciseChooser(itemIndex) {
     <div class="modal-header"><div><div class="eyebrow">${esc(MUSCLES[item.muscle].label)}</div><h2 id="modalTitle">Change exercise</h2></div><button class="button compact" type="button" data-action="close-modal">Close</button></div>
     <div class="exercise-grid">${candidates.map(exercise => `
       <article class="exercise-tile">
-        <div class="exercise-thumb"><img src="${esc(exercise.image || exercise.gif_url)}" data-fallback="${esc(exercise.gif_url || exercise.image)}" loading="lazy" alt="${esc(exercise.name)} demonstration"></div>
+        <div class="exercise-thumb"><img src="${esc(exercise.gif_url || exercise.image)}" data-fallback="${esc(exercise.image || exercise.gif_url)}" loading="lazy" alt="${esc(exercise.name)} demonstration"></div>
         <div class="exercise-body"><div class="exercise-name">${esc(exercise.name)}</div><div class="exercise-meta">${esc(exercise.equipment)}</div><button class="pick-button" type="button" data-action="replace-workout-exercise" data-item="${itemIndex}" data-id="${esc(exercise.id)}">Use this</button></div>
       </article>`).join('')}</div>`;
   openModal();
@@ -964,7 +984,7 @@ function initMap() {
       ariaLabel: `${currentDay().name} ${mapView.toLowerCase()} muscle selector`,
       onMuscleClick: (id, name) => {
         const muscle = mapIdToMuscle(id, name);
-        if (muscle) chooseMuscle(muscle, true);
+        if (muscle) chooseMuscle(muscle);
         else toast(`That area is not part of ${currentDay().name}.`);
       }
     });
@@ -1026,20 +1046,21 @@ function handleClick(event) {
   const action = button.dataset.action;
   switch (action) {
     case 'select-day': selectDay(button.dataset.day); break;
-    case 'choose-muscle': chooseMuscle(button.dataset.muscle, true); break;
+    case 'choose-muscle': chooseMuscle(button.dataset.muscle); break;
     case 'map-view': mapView = button.dataset.view === 'BACK' ? 'BACK' : 'FRONT'; render(); break;
     case 'add-selection': addSelection(button.dataset.muscle, button.dataset.id); break;
+    case 'open-exercise-detail': openExerciseDetail(button.dataset.id, button.dataset.muscle); break;
+    case 'detail-choose': addSelection(button.dataset.muscle, button.dataset.id); closeModal(); break;
+    case 'detail-favourite': toggleDetailFavourite(button.dataset.id, button.dataset.muscle); break;
+    case 'detail-avoid': setDetailPreference(button.dataset.id, 'avoid'); break;
+    case 'detail-unavailable': setDetailPreference(button.dataset.id, 'unavailable'); break;
     case 'remove-selection': removeSelection(button.dataset.muscle, button.dataset.id); break;
-    case 'toggle-favourite': toggleFavourite(button.dataset.id); break;
-    case 'avoid-exercise': avoidExercise(button.dataset.id); break;
-    case 'mark-unavailable': markUnavailable(button.dataset.id); break;
     case 'restore-preference': restoreExercisePreference(button.dataset.id); break;
     case 'retry-map': bodyMusclesPromise = null; mapLoadFailedAt = 0; initMap(); break;
     case 'toggle-show-all': showAllForMuscle = !showAllForMuscle; render(); break;
     case 'start-workout': startWorkout(); break;
     case 'go-build': setTab('build'); break;
     case 'toggle-set': toggleSet(Number(button.dataset.item), Number(button.dataset.set)); break;
-    case 'end-rest': endRest(); break;
     case 'finish-workout': finishWorkout(); break;
     case 'discard-workout': discardWorkout(); break;
     case 'open-exercise-chooser': openExerciseChooser(Number(button.dataset.item)); break;

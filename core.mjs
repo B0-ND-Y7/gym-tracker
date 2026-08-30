@@ -1,4 +1,4 @@
-export const APP_VERSION = '16.0.0';
+export const APP_VERSION = '16.1.0';
 export const SCHEMA_VERSION = 16;
 export const STORAGE_KEY = 'gymtracker-v16';
 export const LEGACY_KEYS = ['gymtracker-v15.2', 'gymtracker-v15'];
@@ -6,7 +6,7 @@ export const LEGACY_KEYS = ['gymtracker-v15.2', 'gymtracker-v15'];
 export const MUSCLES = {
   chest: {
     label: 'Chest',
-    roles: ['push_horizontal', 'push_incline', 'push_fly'],
+    roles: ['push_horizontal', 'push_incline', 'push_decline', 'push_fly'],
     aliases: ['chest', 'pectorals', 'pectoral', 'pec'],
     mapIds: ['chest-upper-left','chest-upper-right','chest-lower-left','chest-lower-right'],
     view: 'FRONT'
@@ -120,22 +120,22 @@ export const DAYS = [
 export const STAPLES = {
   chest: [
     'machine chest press','lever chest press','smith bench press','barbell bench press','dumbbell bench press',
-    'incline chest press','smith incline bench press','dumbbell incline bench press','lever seated fly','cable standing fly'
+    'incline chest press','smith incline bench press','dumbbell incline bench press','decline chest press','smith decline bench press','machine fly','pec deck','lever seated fly','cable standing fly','cable crossover'
   ],
   shoulders: [
-    'lever shoulder press','machine shoulder press','smith seated shoulder press','dumbbell seated shoulder press',
-    'lever lateral raise','cable lateral raise','dumbbell lateral raise'
+    'lever shoulder press','machine shoulder press','smith seated shoulder press','smith shoulder press','dumbbell seated shoulder press','barbell shoulder press',
+    'lever lateral raise','machine lateral raise','cable lateral raise','dumbbell lateral raise'
   ],
-  triceps: ['cable triceps pushdown','triceps pushdown','rope pushdown','overhead triceps extension','lever triceps extension','lever seated dip'],
-  biceps: ['dumbbell biceps curl','dumbbell bicep curl','dumbbell hammer curl','cable curl','cable hammer curl','lever bicep curl','lever preacher curl','barbell curl','ez barbell curl'],
-  lats: ['lat pulldown','lateral pulldown','lever front pulldown','assisted pull-up','assisted chin-up'],
-  upper_back: ['lever seated row','lever high row','cable seated row','smith bent over row','t bar row','dumbbell row'],
-  rear_delts: ['lever seated reverse fly','cable rear delt row','dumbbell reverse fly','rear delt raise'],
-  quads: ['leg press','hack squat','smith squat','leg extension','smith leg press','barbell squat'],
-  hamstrings: ['seated leg curl','lying leg curl','romanian deadlift','dumbbell romanian deadlift','stiff leg deadlift','back extension'],
-  glutes: ['hip thrust','glute bridge','lever hip thrust'],
-  hips: ['seated hip abduction','seated hip adduction','hip abduction','hip adduction'],
-  calves: ['seated calf raise','standing calf raise','smith standing leg calf raise','hack calf raise']
+  triceps: ['cable triceps pushdown','triceps pushdown','rope pushdown','straight bar pushdown','overhead triceps extension','cable overhead triceps extension','lever triceps extension','machine triceps extension','lever seated dip','assisted dip'],
+  biceps: ['dumbbell biceps curl','dumbbell bicep curl','standing dumbbell curl','seated dumbbell curl','dumbbell hammer curl','cable curl','cable biceps curl','cable hammer curl','lever bicep curl','machine bicep curl','lever preacher curl','preacher curl','barbell curl','ez barbell curl'],
+  lats: ['lat pulldown','lateral pulldown','front pulldown','lever front pulldown','machine pulldown','assisted pull-up','assisted chin-up','straight arm pulldown'],
+  upper_back: ['lever seated row','machine seated row','lever high row','machine high row','chest supported row','cable seated row','smith bent over row','t bar row','barbell row','dumbbell row'],
+  rear_delts: ['lever seated reverse fly','machine reverse fly','reverse pec deck','cable rear delt row','cable reverse fly','face pull','dumbbell reverse fly','rear delt raise'],
+  quads: ['leg press','45 leg press','hack squat','smith squat','smith full squat','leg extension','machine leg extension','smith leg press','barbell squat','goblet squat'],
+  hamstrings: ['seated leg curl','lying leg curl','machine leg curl','romanian deadlift','smith romanian deadlift','dumbbell romanian deadlift','barbell romanian deadlift','stiff leg deadlift','back extension'],
+  glutes: ['hip thrust','machine hip thrust','lever hip thrust','smith hip thrust','barbell hip thrust','glute drive','glute kickback'],
+  hips: ['seated hip abduction','seated hip adduction','machine hip abduction','machine hip adduction','hip abduction','hip adduction'],
+  calves: ['seated calf raise','machine seated calf raise','standing calf raise','machine standing calf raise','smith standing leg calf raise','leg press calf raise','hack calf raise']
 };
 
 export function defaultState() {
@@ -179,6 +179,9 @@ export function normalizeExercise(raw, key = '') {
     muscle_group: String(raw?.muscle_group ?? raw?.muscleGroup ?? ''),
     secondary_muscles: secondary,
     role: String(raw?.role ?? ''),
+    instructions: typeof raw?.instructions === 'string'
+      ? raw.instructions
+      : String(raw?.instructions?.en ?? raw?.instruction ?? ''),
     image: String(raw?.image ?? (filename ? `images/${filename.replace(/\.gif$/i,'.jpg')}` : '')),
     gif_url: String(raw?.gif_url ?? (filename ? `videos/${filename}` : ''))
   };
@@ -450,12 +453,92 @@ export function validateState(candidate) {
   return result;
 }
 
-export function parseBackupPayload(payload) {
-  if (!payload || typeof payload !== 'object') throw new Error('Backup is not valid JSON data.');
-  if (payload.app !== 'gym-tracker') throw new Error('This is not a Gym Tracker backup.');
-  const data = payload.data || payload.state;
-  if (!data || typeof data !== 'object') throw new Error('Backup does not contain Gym Tracker state.');
-  return validateState(data);
+function legacyIdResolver(library = []) {
+  const lookup = new Map();
+  for (const exercise of library || []) {
+    const id = String(exercise?.id ?? '');
+    const filename = String(exercise?.filename ?? '');
+    if (id) lookup.set(id, id);
+    if (filename) lookup.set(filename, id || filename);
+  }
+  return value => {
+    const raw = String(value ?? '').trim();
+    if (!raw) return '';
+    if (lookup.has(raw)) return lookup.get(raw);
+    // The historical GIF filename starts with the dataset exercise ID (e.g. 2330-LEprlgG.gif).
+    // Preserve that stable ID even when the exercise is not in the currently curated library.
+    const filenameId = raw.match(/^(\d{3,})[-_.]/)?.[1];
+    return filenameId || raw;
+  };
+}
+
+function migrateV13Preferences(rawPrefs, resolveId) {
+  const next = { avoid: [], unavailable: [], fav: [] };
+  if (!rawPrefs || typeof rawPrefs !== 'object' || Array.isArray(rawPrefs)) return next;
+  for (const [legacyKey, pref] of Object.entries(rawPrefs)) {
+    if (!pref || typeof pref !== 'object') continue;
+    const id = resolveId(legacyKey);
+    if (!id) continue;
+    if (pref.avoid) next.avoid.push(id);
+    else if (pref.unavailable) next.unavailable.push(id);
+    else if (pref.favorite || pref.favourite) next.fav.push(id);
+  }
+  for (const key of Object.keys(next)) next[key] = [...new Set(next[key].map(String))];
+  return next;
+}
+
+function migrateV13Notes(rawNotes, resolveId) {
+  const notes = {};
+  if (!rawNotes || typeof rawNotes !== 'object' || Array.isArray(rawNotes)) return notes;
+  for (const [legacyKey, value] of Object.entries(rawNotes)) {
+    if (typeof value !== 'string') continue;
+    const id = resolveId(legacyKey);
+    if (id) notes[id] = value;
+  }
+  return notes;
+}
+
+export function parseBackupPayload(payload, library = []) {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Backup is not valid JSON data.');
+
+  // v16+ backups are wrapped with an app marker and a single state object.
+  if (payload.app === 'gym-tracker') {
+    const data = payload.data || payload.state;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Backup does not contain Gym Tracker state.');
+    return validateState(data);
+  }
+
+  // v12/v13 exported the individual stores at the top level rather than using an app marker.
+  // Keep completed history, weights, rotation, exercise notes and preferences. Old active
+  // plans are intentionally not restored because the workout schema changed in v16.
+  const looksLikeLegacyTopLevel = /^13(?:\.|$)/.test(String(payload.version || ''))
+    || (Array.isArray(payload.history) && payload.rotationState && Object.prototype.hasOwnProperty.call(payload, 'plans'));
+  if (looksLikeLegacyTopLevel) {
+    const resolveId = legacyIdResolver(library);
+    const rotationDay = Number(payload?.rotationState?.nextIndex ?? 0);
+    const candidate = {
+      schemaVersion: SCHEMA_VERSION,
+      rotationDay,
+      builderDay: rotationDay,
+      drafts: {},
+      workout: null,
+      history: Array.isArray(payload.history) ? payload.history : [],
+      prefs: migrateV13Preferences(payload.prefs, resolveId),
+      notes: migrateV13Notes(payload.exerciseNotes, resolveId),
+      weightLog: Array.isArray(payload.weightLog) ? payload.weightLog : [],
+      restUntil: 0,
+      settings: { showAllExercises: false },
+      lastBackupAt: null
+    };
+    return validateState(candidate);
+  }
+
+  // v12 and a few development builds were sometimes exported as raw state objects.
+  if (Array.isArray(payload.history) || payload.rotationDay != null || payload.rotationState?.nextIndex != null) {
+    return validateState(payload);
+  }
+
+  throw new Error('This backup format is not recognised as a Gym Tracker backup.');
 }
 
 export function mapLabelToMuscle(label) {

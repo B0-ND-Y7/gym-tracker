@@ -1,5 +1,19 @@
 # Changelog
 
+## 16.1.0 — picker, backup and exercise-library refinement
+
+- Changed chooser previews to animated GIFs and moved exercise preferences into a large tap-to-open detail sheet.
+- Removed Favourite / Avoid / Not at my gym controls from the compact chooser cards.
+- Added large exercise demos and optional instructions in the detail sheet.
+- Added native v13 backup migration for history, body weight, rotation, notes and filename-keyed preferences.
+- Removed the early-end rest control and locked the next incomplete set until the fixed 2:00 rest reaches zero.
+- Prevented workout completion while a mandatory rest period is active.
+- Removed automatic page scrolling and automatic muscle advancement from the workout builder.
+- Increased the immediate top-pick grid from 9 to 12 exercises and retained Browse all for the complete muscle list.
+- Added a v16.1 local media builder targeting up to 360 conventional exercises from the full source dataset.
+- Added decline pressing as a first-class chest role and broadened straightforward machine, Smith, cable and free-weight staples.
+- Preserved the v16 palette while making chooser media, modal detail and rest states clearer on mobile.
+
 ## 16.0.0 — audited rebuild
 
 - Split the app into `index.html`, `styles.css`, `app.js` and testable `core.mjs` modules.

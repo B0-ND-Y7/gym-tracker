@@ -2,11 +2,9 @@
 
 A mobile-first workout builder and training tracker designed for a well-equipped commercial gym.
 
-**Current release:** `16.0.0`
+**Current release:** `16.1.0`
 
-## What it does
-
-Gym Tracker uses a four-session rolling split:
+## Split
 
 | Session | Main muscle groups |
 | --- | --- |
@@ -15,63 +13,58 @@ Gym Tracker uses a four-session rolling split:
 | Pull | Lats, upper back, rear delts, biceps |
 | Legs 2 | Hamstrings, glutes, quads, hips, calves |
 
-The workout builder lets you choose the exact exercises for each muscle group instead of forcing a random workout. The interactive anatomy map and muscle buttons both open the same filtered exercise choices.
+## v16.1 highlights
 
-## Features
-
-- Muscle-first workout builder with selectable Push / Legs 1 / Pull / Legs 2 days
-- Interactive front/back anatomical muscle map
-- Exercise GIF/image demonstrations from the local exercise library
-- Machine and Smith-machine biased exercise ranking, while retaining useful cable and free-weight options
-- Awkward lying/supine/floor cable variations filtered out
-- Favourite, Avoid and Not at my gym preferences
-- Per-exercise setup notes such as seat/pad/pin positions
-- Per-set weight, reps and completion tracking
-- Automatic next-weight suggestions using double progression
-- Fixed two-minute automatic rest timer after a completed set
-- Workout history, body-weight log and JSON backup/restore
-- Offline-capable PWA shell and iPhone safe-area support
-- Local-only workout data; no backend account required
+- Animated GIFs directly in the exercise chooser.
+- Tap any exercise demo/name for a large detail sheet with Favourite, Not at my gym and Avoid controls.
+- Muscle-map taps select a muscle without jumping the page or moving to the next muscle automatically.
+- Fixed 2:00 rest is mandatory after a completed set; there is no early-end control and the next incomplete set remains locked until 0:00.
+- Native migration for v13 backup files, including completed history, body-weight log, rotation, exercise notes and preferences.
+- New local library builder that expands the curated pool from the user's full dataset while strongly favouring conventional machine, Smith, cable, dumbbell and barbell movements.
+- No prep/stretch library is generated.
 
 ## Exercise media
 
-The release package intentionally does **not** contain:
+The release ZIP intentionally does **not** contain `exercise-library.json`, `images/` or `videos/`. This prevents an app-shell update from deleting existing exercise media or breaking saved history.
 
-- `exercise-library.json`
-- `images/`
-- `videos/`
+To expand the curated exercise pool, run the included builder against the existing local dataset after extracting the release:
 
-Those are generated/maintained separately in the deployed repository so an app-shell update cannot delete or overwrite existing exercise media.
+```bash
+python3 prepare-exercise-library.py \
+  --source ~/gym-exercise-lookup \
+  --dest ~/gym-tracker
+```
+
+The builder targets up to 360 unique, conventional exercises. If strict filtering produces fewer suitable movements, it keeps the smaller high-quality set rather than padding the library with awkward variants. Existing media is retained; selected media is added/updated and `exercise-library.json` is regenerated.
 
 ## Updating an existing deployment
 
-Copy the release ZIP into the root of the existing repository:
-
 ```bash
 cd ~/Downloads
-unzip -o gym-tracker-v16.0.0.zip -d ~/gym-tracker
+unzip -o gym-tracker-v16.1.0.zip -d ~/gym-tracker
 cd ~/gym-tracker
 
+python3 prepare-exercise-library.py \
+  --source ~/gym-exercise-lookup \
+  --dest ~/gym-tracker
+
 git add -A
-git commit -m "Gym tracker v16 - audited rebuild"
+git commit -m "Gym tracker v16.1 - exercise picker and backup fixes"
 git pull --rebase origin main
 git push
 ```
 
-No exercise-library rebuild is required for the v16 app-shell update.
-
 ## Tests
-
-Core tests can be run with Node.js:
 
 ```bash
 node --check app.js
 node --check core.mjs
 node --check sw.js
-node tests/core.test.mjs
+node --test tests/core.test.mjs
+python3 -m py_compile prepare-exercise-library.py
 ```
 
-The tests cover exercise classification, awkward-exercise filtering, candidate deduplication, preferences, weight progression, backup migration, state validation and anatomy-map grouping.
+The tests cover exercise classification, cable/setup filtering, candidate deduplication, preferences, progression, v12/v13 backup migration, state validation and anatomy-map grouping.
 
 ## Design palette
 
