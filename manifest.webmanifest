@@ -1,9 +1,1 @@
-{
-  "name": "Gym Tracker",
-  "short_name": "Gym",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#080b09",
-  "theme_color": "#080b09"
-}
+{"name":"Gym Tracker","short_name":"Gym Tracker","start_url":"./","display":"standalone","background_color":"#0b0d0f","theme_color":"#0b0d0f","description":"Muscle-based gym workout tracker"}
