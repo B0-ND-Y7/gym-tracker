@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '16.2.1';
+const VERSION = '16.3.0';
 const CACHE = `gym-tracker-v${VERSION}`;
 const CORE = [
   './',

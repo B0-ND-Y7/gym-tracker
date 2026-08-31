@@ -27,6 +27,7 @@ let showAllForMuscle = false;
 let restInterval = null;
 let modalReturnFocus = null;
 let pendingBuilderReturn = null;
+const preloadedMedia = new Set();
 
 const app = document.getElementById('app');
 const modal = document.getElementById('modal');
@@ -121,6 +122,58 @@ function nextIncompleteMuscle(after = currentMuscle) {
     if (selection(entry.muscle).length < entry.slotSets.length) return entry.muscle;
   }
   return null;
+}
+
+function haptic(kind = 'light') {
+  // The Web Vibration API is intentionally feature-detected. iOS Safari/PWAs
+  // currently do not expose it, while supported browsers get subtle feedback.
+  const patterns = {
+    light: 35,
+    set: 45,
+    exercise: [55, 45, 80],
+    rest: [90, 55, 110],
+    success: [60, 40, 100]
+  };
+  try {
+    if (typeof navigator.vibrate === 'function') navigator.vibrate(patterns[kind] || patterns.light);
+  } catch (error) {
+    console.debug('Haptic feedback unavailable', error);
+  }
+}
+
+function preloadMedia(url) {
+  const src = String(url || '').trim();
+  if (!src || preloadedMedia.has(src)) return;
+  preloadedMedia.add(src);
+  const image = new Image();
+  image.decoding = 'async';
+  image.src = src;
+}
+
+function preloadUpcomingWorkoutGif() {
+  const items = state.workout?.items || [];
+  if (!items.length) return;
+  let activeIndex = items.findIndex(item => (item.sets || []).some(set => !set.done));
+  if (activeIndex < 0) return;
+  const activeExercise = exById(items[activeIndex].exerciseId);
+  preloadMedia(activeExercise?.gif_url || activeExercise?.image);
+  const nextItem = items.slice(activeIndex + 1).find(item => (item.sets || []).some(set => !set.done));
+  if (!nextItem) return;
+  const nextExercise = exById(nextItem.exerciseId);
+  preloadMedia(nextExercise?.gif_url || nextExercise?.image);
+}
+
+function previousPerformanceText(previous) {
+  if (!previous?.sets?.length) return 'No previous result';
+  const sets = previous.sets.filter(set => Number.isFinite(Number(set.reps)) && Number(set.reps) > 0);
+  if (!sets.length) return 'No previous result';
+  const weights = sets.map(set => Number(set.weight));
+  const sameWeight = weights.every(weight => Number.isFinite(weight) && Math.abs(weight - weights[0]) < 0.001);
+  if (sameWeight) {
+    const weight = Number.isInteger(weights[0]) ? String(weights[0]) : String(Number(weights[0].toFixed(2)));
+    return `${weight} kg — ${sets.map(set => Number(set.reps)).join(' / ')}`;
+  }
+  return sets.map(set => `${Number.isFinite(Number(set.weight)) ? Number(set.weight) : 0} kg × ${Number(set.reps)}`).join(' · ');
 }
 
 async function loadLibrary() {
@@ -289,7 +342,8 @@ function updateSet(itemIndex, setIndex, field, value) {
 }
 
 function toggleSet(itemIndex, setIndex) {
-  const set = state.workout?.items?.[itemIndex]?.sets?.[setIndex];
+  const item = state.workout?.items?.[itemIndex];
+  const set = item?.sets?.[setIndex];
   if (!set) return;
   if (!set.done && Number(state.restUntil || 0) > Date.now()) {
     toast(`Rest first · ${formatClock(Math.ceil((state.restUntil - Date.now()) / 1000))} remaining.`);
@@ -309,6 +363,8 @@ function toggleSet(itemIndex, setIndex) {
   set.completedAt = set.done ? Date.now() : null;
 
   if (set.done) {
+    const exerciseComplete = (item.sets || []).every(row => row.done);
+    haptic(exerciseComplete ? 'exercise' : 'set');
     const counts = workoutSetCounts();
     // Rest is only needed when another working set still remains. The final set
     // of the workout should never leave a pointless timer blocking Finish.
@@ -344,6 +400,7 @@ function replaceWorkoutExercise(itemIndex, exerciseId) {
   item.sets = Array.from({ length: item.targetSets }, () => ({ weight: suggestion.weight, reps: '', done: false }));
   persist();
   closeModal();
+  toast(`Swapped to ${exercise.name} · ${item.targetSets} sets × ${item.repRange}`);
   render();
 }
 
@@ -433,21 +490,25 @@ function showFinishSummary(workout) {
   const day = DAYS[workout.day];
   const pbs = workout.pbs || [];
   const duration = formatDuration(workout.durationSeconds);
+  const exerciseCount = (workout.items || []).filter(item => (item.sets || []).some(set => set.done)).length;
+  const setLabel = `${workout.completedSets} set${workout.completedSets === 1 ? '' : 's'}`;
+  const exerciseLabel = `${exerciseCount} exercise${exerciseCount === 1 ? '' : 's'}`;
+  haptic('success');
   modalReturnFocus = document.activeElement;
   modalBody.innerHTML = `
     <div class="modal-header">
       <div><div class="eyebrow">Workout saved</div><h2 id="modalTitle">${esc(day.name)} complete</h2></div>
       <button class="button compact" type="button" data-action="close-modal">Close</button>
     </div>
+    <div class="finish-summary-line">${esc(duration)} · ${esc(setLabel)} · ${esc(exerciseLabel)}</div>
     <div class="stats-grid">
       <div class="stat"><strong>${esc(duration)}</strong><span>duration</span></div>
       <div class="stat"><strong>${workout.completedSets}/${workout.totalSets}</strong><span>sets completed</span></div>
-      <div class="stat"><strong>${pbs.length}</strong><span>new bests</span></div>
+      <div class="stat"><strong>${exerciseCount}</strong><span>exercises</span></div>
     </div>
-    <div class="panel" style="padding:12px">
-      <div class="small">Next workout</div>
-      <strong>${esc(DAYS[state.rotationDay].name)}</strong>
-      ${pbs.length ? `<div class="small" style="margin-top:8px">${pbs.map(pb => `${esc(exById(pb.exerciseId)?.name || 'Exercise')}: ${pb.first ? 'first recorded result' : `${pb.weight} kg best`}`).join('<br>')}</div>` : ''}
+    <div class="panel finish-next-card">
+      <div class="finish-next-row"><div><div class="small">Next workout</div><strong>${esc(DAYS[state.rotationDay].name)}</strong></div><div class="finish-best"><strong>${pbs.length}</strong><span>new best${pbs.length === 1 ? '' : 's'}</span></div></div>
+      ${pbs.length ? `<div class="small finish-pbs">${pbs.map(pb => `${esc(exById(pb.exerciseId)?.name || 'Exercise')}: ${pb.first ? 'first recorded result' : `${pb.weight} kg best`}`).join('<br>')}</div>` : ''}
     </div>`;
   openModal();
   activeTab = 'build';
@@ -477,7 +538,7 @@ function updateRestBar() {
     if (state.restUntil) {
       clearRest();
       persist();
-      navigator.vibrate?.([100,60,100]);
+      haptic('rest');
       toast('Rest complete.');
       if (activeTab === 'workout' && state.workout) renderWorkout(app);
     } else {
@@ -748,14 +809,13 @@ function renderWorkout(target) {
       <button class="button ${counts.done === counts.total ? 'primary' : ''}" type="button" data-action="finish-workout">Finish & save workout</button>
       <button class="button danger" type="button" data-action="discard-workout">Discard workout</button>
     </div>`;
+  preloadUpcomingWorkoutGif();
 }
 
 function renderWorkoutCard(item, itemIndex) {
   const exercise = exById(item.exerciseId) || { name: 'Exercise unavailable', equipment: '', gif_url: '', image: '' };
   const previous = findPreviousExercise(state.history, item.exerciseId);
-  const previousText = previous
-    ? previous.sets.slice(-3).map(set => `${set.weight || 0}kg × ${set.reps}`).join(' · ')
-    : 'No previous result';
+  const previousText = previousPerformanceText(previous);
   const completed = (item.sets || []).filter(set => set.done).length;
   const demo = exercise.gif_url || exercise.image;
   const fallback = exercise.image || exercise.gif_url;
@@ -767,14 +827,17 @@ function renderWorkoutCard(item, itemIndex) {
         <div class="exercise-title">${esc(exercise.name)}</div>
         <div class="small">${esc(exercise.equipment)} · ${item.targetSets} sets × ${esc(item.repRange)}</div>
       </div>
-      <button class="button compact" type="button" data-action="open-exercise-chooser" data-item="${itemIndex}">Change</button>
+      <button class="button compact teal" type="button" data-action="open-exercise-chooser" data-item="${itemIndex}">Swap</button>
     </div>
-    <div class="demo">${demo ? `<img src="${esc(demo)}" data-fallback="${esc(fallback)}" alt="${esc(exercise.name)} demonstration">` : '<span class="small">Demo unavailable</span>'}</div>
-    <div class="previous-line"><span>Previous: ${esc(previousText)}</span><span>${esc(item.suggestionReason || '')}</span></div>
+    <div class="demo">${demo ? `<img src="${esc(demo)}" data-fallback="${esc(fallback)}" loading="lazy" decoding="async" alt="${esc(exercise.name)} demonstration">` : '<span class="small">Demo unavailable</span>'}</div>
+    <div class="previous-line"><span><strong>Last time:</strong> ${esc(previousText)}</span><span>${esc(item.suggestionReason || '')}</span></div>
     <div class="set-table">
       ${(item.sets || []).map((set, setIndex) => renderSetRow(itemIndex, setIndex, set)).join('')}
     </div>
-    <textarea class="note" data-action="exercise-note" data-item="${itemIndex}" placeholder="Machine position, seat height, pin, grip…">${esc(item.note || '')}</textarea>
+    <div class="setup-note-wrap">
+      <label class="setup-note-label" for="setup-note-${itemIndex}"><span>Setup notes</span><small>Saved for this exercise</small></label>
+      <textarea id="setup-note-${itemIndex}" class="note" data-action="exercise-note" data-item="${itemIndex}" placeholder="Seat 4, back pad 2, wide handle, pin position…">${esc(item.note || '')}</textarea>
+    </div>
     <div class="card-footer"><span class="small">${completed}/${item.targetSets} sets complete · ticking a set starts the 2:00 rest timer</span></div>
   </article>`;
 }
@@ -972,15 +1035,25 @@ function setDetailPreference(exerciseId, mode) {
 function openExerciseChooser(itemIndex) {
   const item = state.workout?.items?.[itemIndex];
   if (!item) return;
-  const candidates = candidateList(item.muscle).slice(0, 18);
+  const currentExercise = exById(item.exerciseId);
+  const usedIds = new Set((state.workout?.items || []).map(row => String(row.exerciseId)));
+  const candidates = candidateList(item.muscle)
+    .filter(exercise => exercise.id !== String(item.exerciseId) && !usedIds.has(exercise.id));
+  const recommended = candidates.slice(0, 3);
+  const more = candidates.slice(3, 15);
+  const tile = exercise => `
+      <article class="exercise-tile swap-tile">
+        <div class="exercise-thumb"><img src="${esc(exercise.gif_url || exercise.image)}" data-fallback="${esc(exercise.image || exercise.gif_url)}" loading="lazy" decoding="async" alt="${esc(exercise.name)} demonstration"></div>
+        <div class="exercise-body"><div class="exercise-name">${esc(exercise.name)}</div><div class="exercise-meta">${esc(exercise.equipment)}</div><button class="button teal pick-button" type="button" data-action="replace-workout-exercise" data-item="${itemIndex}" data-id="${esc(exercise.id)}">Swap to this</button></div>
+      </article>`;
   modalReturnFocus = document.activeElement;
   modalBody.innerHTML = `
-    <div class="modal-header"><div><div class="eyebrow">${esc(MUSCLES[item.muscle].label)}</div><h2 id="modalTitle">Change exercise</h2></div><button class="button compact" type="button" data-action="close-modal">Close</button></div>
-    <div class="exercise-grid">${candidates.map(exercise => `
-      <article class="exercise-tile">
-        <div class="exercise-thumb"><img src="${esc(exercise.gif_url || exercise.image)}" data-fallback="${esc(exercise.image || exercise.gif_url)}" loading="lazy" alt="${esc(exercise.name)} demonstration"></div>
-        <div class="exercise-body"><div class="exercise-name">${esc(exercise.name)}</div><div class="exercise-meta">${esc(exercise.equipment)}</div><button class="button teal pick-button" type="button" data-action="replace-workout-exercise" data-item="${itemIndex}" data-id="${esc(exercise.id)}">Use this</button></div>
-      </article>`).join('')}</div>`;
+    <div class="modal-header"><div><div class="eyebrow">${esc(MUSCLES[item.muscle].label)}</div><h2 id="modalTitle">Swap exercise</h2></div><button class="button compact" type="button" data-action="close-modal">Close</button></div>
+    <div class="swap-current"><span class="small">Replacing</span><strong>${esc(currentExercise?.name || 'Current exercise')}</strong><span class="small">Keeps ${item.targetSets} sets · replacement uses its normal rep range and your previous weight history.</span></div>
+    <div class="section-heading swap-heading"><h3>Recommended swaps</h3><span>Best matches</span></div>
+    ${recommended.length ? `<div class="exercise-grid swap-recommended">${recommended.map(tile).join('')}</div>` : '<div class="empty">No suitable alternatives available.</div>'}
+    ${more.length ? `<details class="swap-more"><summary>More alternatives (${more.length})</summary><div class="exercise-grid">${more.map(tile).join('')}</div></details>` : ''}`;
+  recommended.forEach(exercise => preloadMedia(exercise.gif_url || exercise.image));
   openModal();
 }
 

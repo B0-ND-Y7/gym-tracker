@@ -2,7 +2,7 @@
 
 A mobile-first workout builder and training tracker designed for a well-equipped commercial gym.
 
-**Current release:** `16.2.1`
+**Current release:** `16.3.0`
 
 ## Split
 
@@ -13,15 +13,14 @@ A mobile-first workout builder and training tracker designed for a well-equipped
 | Pull | Lats, upper back, rear delts, biceps |
 | Legs 2 | Hamstrings, glutes, quads, hips, calves |
 
-## v16.2.1 highlights
+## v16.3.0 highlights
 
-- Animated GIFs directly in the exercise chooser.
-- Tap any exercise demo/name for a large detail sheet with Favourite, Not at my gym and Avoid controls.
-- Muscle-map taps select a muscle without jumping down to the exercise list. Completing a muscle automatically selects the next unfinished group and scrolls back up to the Choose a muscle section.
-- Fixed 2:00 rest starts only after a working set is marked complete and another set still remains; there is no early-end control and the next incomplete set stays locked until 0:00. No pointless rest is started after the final set, and the rest bar only appears on the Workout screen while active.
-- Native migration for v13 backup files, including completed history, body-weight log, rotation, exercise notes and preferences.
-- New local library builder that expands the curated pool from the user's full dataset while strongly favouring conventional machine, Smith, cable, dumbbell and barbell movements.
-- No prep/stretch library is generated.
+- Clear in-workout **Swap** flow with three recommended same-muscle alternatives first.
+- Compact **Last time** performance shown beside weight guidance.
+- Existing per-exercise notes are labelled **Setup notes** and stay with that exercise.
+- End-of-workout popup now shows duration · sets · exercise count.
+- Current/next workout GIF optimisation with lazy loading plus explicit preloading.
+- Feature-detected haptic feedback hooks for supported browsers. iPhone Safari/PWAs currently do not expose the vibration API.
 
 ## Exercise media
 
@@ -41,7 +40,7 @@ The builder targets up to 360 unique, conventional exercises. If strict filterin
 
 ```bash
 cd ~/Downloads
-unzip -o gym-tracker-v16.2.1.zip -d ~/gym-tracker
+unzip -o gym-tracker-v16.3.0.zip -d ~/gym-tracker
 cd ~/gym-tracker
 
 python3 prepare-exercise-library.py \
@@ -49,7 +48,7 @@ python3 prepare-exercise-library.py \
   --dest ~/gym-tracker
 
 git add -A
-git commit -m "Gym tracker v16.2.1 - navigation and rest polish"
+git commit -m "Gym tracker v16.3 - gym usability polish"
 git pull --rebase origin main
 git push
 ```

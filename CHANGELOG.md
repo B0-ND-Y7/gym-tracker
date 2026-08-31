@@ -1,4 +1,13 @@
 # Changelog
+
+## 16.3.0
+- Restored and improved in-workout Swap with three recommended alternatives.
+- Added compact last-performance display to workout cards.
+- Clarified existing per-exercise notes as Setup notes.
+- Expanded finish summary with duration, sets and exercise count.
+- Added next-GIF preloading/lazy media optimisation.
+- Added feature-detected haptic feedback hooks for supported browsers.
+
 ## 16.2.1 — automatic muscle advance and rest polish
 
 - Automatically selects the next unfinished muscle after the current group is filled.
