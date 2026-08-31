@@ -2,7 +2,7 @@
 
 A mobile-first workout builder and training tracker designed for a well-equipped commercial gym.
 
-**Current release:** `16.3.0`
+**Current release:** `16.4.0`
 
 ## Split
 
@@ -13,7 +13,7 @@ A mobile-first workout builder and training tracker designed for a well-equipped
 | Pull | Lats, upper back, rear delts, biceps |
 | Legs 2 | Hamstrings, glutes, quads, hips, calves |
 
-## v16.3.0 highlights
+## v16.4.0 highlights
 
 - Clear in-workout **Swap** flow with three recommended same-muscle alternatives first.
 - Compact **Last time** performance shown beside weight guidance.
@@ -40,7 +40,7 @@ The builder targets up to 360 unique, conventional exercises. If strict filterin
 
 ```bash
 cd ~/Downloads
-unzip -o gym-tracker-v16.3.0.zip -d ~/gym-tracker
+unzip -o gym-tracker-v16.4.0.zip -d ~/gym-tracker
 cd ~/gym-tracker
 
 python3 prepare-exercise-library.py \
@@ -76,3 +76,6 @@ The tests cover exercise classification, cable/setup filtering, candidate dedupl
 ## Third-party software
 
 The interactive anatomy map uses [Body Muscles](https://github.com/vulovix/body-muscles), licensed under Apache 2.0. See `THIRD_PARTY_NOTICES.md` and `licenses/`.
+
+## Progress mini trackers
+The Progress summary cards are tappable. Sessions, sets and body weight each open a compact tracker with additional history and calculated statistics. The body-weight chart is also shown directly on the Progress page.

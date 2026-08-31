@@ -1,3 +1,9 @@
+## 16.4.0
+- Removed the stale anatomy loading placeholder after map initialisation.
+- Restored the body-weight graph.
+- Added tappable Sessions, Sets logged and Body weight mini trackers.
+- Simplified the full-bleed home-screen icon.
+
 # Changelog
 
 ## 16.3.0

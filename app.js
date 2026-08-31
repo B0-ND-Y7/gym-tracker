@@ -852,25 +852,179 @@ function renderSetRow(itemIndex, setIndex, set) {
   </div>`;
 }
 
-function renderProgress(target) {
+function dateFromHistoryWorkout(workout) {
+  const raw = historyWorkoutDate(workout);
+  if (!raw) return null;
+  const date = new Date(raw);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function withinDays(date, days, now = Date.now()) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return false;
+  const age = now - date.getTime();
+  return age >= 0 && age <= days * 86400000;
+}
+
+function completedSetsForWorkout(workout) {
+  return Number(workout?.completedSets || workoutSetCounts(workout).done || 0);
+}
+
+function formatSignedKg(value) {
+  if (!Number.isFinite(value)) return '—';
+  const rounded = Math.round(value * 10) / 10;
+  const prefix = rounded > 0 ? '+' : '';
+  return `${prefix}${rounded.toFixed(rounded % 1 ? 1 : 0)} kg`;
+}
+
+function weightValue(entry) {
+  const value = Number(entry?.weight);
+  return Number.isFinite(value) ? value : null;
+}
+
+function renderWeightGraph(entries, compact = false) {
+  const values = entries
+    .map(entry => ({ date: new Date(entry.date), weight: weightValue(entry) }))
+    .filter(entry => entry.weight != null && !Number.isNaN(entry.date.getTime()));
+  if (!values.length) return '<div class="empty">Add a body-weight entry to start the graph.</div>';
+
+  const width = 600;
+  const height = compact ? 145 : 190;
+  const padX = 34;
+  const padTop = 20;
+  const padBottom = compact ? 28 : 34;
+  const weights = values.map(entry => entry.weight);
+  let min = Math.min(...weights);
+  let max = Math.max(...weights);
+  if (Math.abs(max - min) < 0.5) { min -= 0.5; max += 0.5; }
+  else { min -= 0.4; max += 0.4; }
+
+  const x = index => values.length === 1 ? width / 2 : padX + (index / (values.length - 1)) * (width - padX * 2);
+  const y = value => padTop + ((max - value) / (max - min)) * (height - padTop - padBottom);
+  const points = values.map((entry, index) => `${x(index).toFixed(1)},${y(entry.weight).toFixed(1)}`).join(' ');
+  const last = values.at(-1);
+  const first = values[0];
+  const change = last.weight - first.weight;
+  const dotStep = Math.max(1, Math.ceil(values.length / 18));
+  const dots = values.map((entry, index) => index % dotStep === 0 || index === values.length - 1
+    ? `<circle cx="${x(index).toFixed(1)}" cy="${y(entry.weight).toFixed(1)}" r="3.8"><title>${esc(entry.date.toLocaleDateString())}: ${esc(entry.weight)} kg</title></circle>`
+    : '').join('');
+
+  return `<div class="weight-chart-wrap ${compact ? 'compact' : ''}">
+    <div class="weight-chart-summary"><strong>${esc(last.weight)} kg</strong><span>${esc(formatSignedKg(change))} overall</span></div>
+    <svg class="weight-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="Body weight progress from ${esc(first.weight)} kilograms to ${esc(last.weight)} kilograms">
+      <line class="weight-grid" x1="${padX}" x2="${width - padX}" y1="${y(max).toFixed(1)}" y2="${y(max).toFixed(1)}"></line>
+      <line class="weight-grid" x1="${padX}" x2="${width - padX}" y1="${y(min).toFixed(1)}" y2="${y(min).toFixed(1)}"></line>
+      ${values.length > 1 ? `<polyline class="weight-line" points="${points}"></polyline>` : ''}
+      <g class="weight-dots">${dots}</g>
+      <text class="weight-axis" x="${padX}" y="${height - 8}">${esc(first.date.toLocaleDateString(undefined, {day:'numeric', month:'short'}))}</text>
+      <text class="weight-axis end" x="${width - padX}" y="${height - 8}">${esc(last.date.toLocaleDateString(undefined, {day:'numeric', month:'short'}))}</text>
+      <text class="weight-axis value" x="${padX}" y="${padTop - 6}">${esc(Math.round(max * 10) / 10)} kg</text>
+      <text class="weight-axis value" x="${padX}" y="${height - padBottom + 16}">${esc(Math.round(min * 10) / 10)} kg</text>
+    </svg>
+  </div>`;
+}
+
+function progressSnapshot() {
   const history = state.history || [];
-  const sortedWeights = [...state.weightLog].sort((a,b) => new Date(a.date) - new Date(b.date));
-  const latestWeight = sortedWeights.at(-1)?.weight;
-  const completedSets = history.reduce((total, workout) => total + Number(workout.completedSets || workoutSetCounts(workout).done || 0), 0);
+  const weights = [...state.weightLog]
+    .map(entry => ({ ...entry, weight: weightValue(entry) }))
+    .filter(entry => entry.weight != null && !Number.isNaN(new Date(entry.date).getTime()))
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+  const now = Date.now();
+  const sessions7 = history.filter(workout => withinDays(dateFromHistoryWorkout(workout), 7, now));
+  const sessions30 = history.filter(workout => withinDays(dateFromHistoryWorkout(workout), 30, now));
+  const totalSets = history.reduce((total, workout) => total + completedSetsForWorkout(workout), 0);
+  const sets7 = sessions7.reduce((total, workout) => total + completedSetsForWorkout(workout), 0);
+  const durations = history.map(workout => Number(workout.durationSeconds)).filter(value => Number.isFinite(value) && value > 0);
+  const totalSeconds = durations.reduce((a,b) => a+b, 0);
+  const averageSeconds = durations.length ? Math.round(totalSeconds / durations.length) : 0;
+  const biggestSets = history.length ? Math.max(...history.map(completedSetsForWorkout)) : 0;
+  const latestWeight = weights.at(-1)?.weight ?? null;
+  const firstWeight = weights[0]?.weight ?? null;
+  const weight30Candidate = [...weights].reverse().find(entry => new Date(entry.date).getTime() <= now - 30 * 86400000);
+  const weight30Change = latestWeight != null && weight30Candidate ? latestWeight - weight30Candidate.weight : null;
+  return { history, weights, sessions7, sessions30, totalSets, sets7, totalSeconds, averageSeconds, biggestSets, latestWeight, firstWeight, weight30Change };
+}
+
+function progressStatButton(kind, value, label, sublabel) {
+  return `<button class="stat stat-button" type="button" data-action="progress-detail" data-kind="${esc(kind)}" aria-label="View ${esc(label)} details">
+    <strong>${value}</strong><span>${esc(label)}</span><small>${esc(sublabel)}</small>
+  </button>`;
+}
+
+function openProgressDetail(kind) {
+  const stats = progressSnapshot();
+  modalReturnFocus = document.activeElement;
+  let title = 'Progress';
+  let eyebrow = 'Mini tracker';
+  let content = '';
+
+  if (kind === 'sessions') {
+    title = 'Training sessions';
+    const complete = stats.history.filter(workout => !workout.partial).length;
+    const partial = stats.history.length - complete;
+    const recent = stats.history.slice(-6).reverse();
+    content = `<div class="tracker-grid">
+      <div class="tracker-metric"><strong>${stats.history.length}</strong><span>Total sessions</span></div>
+      <div class="tracker-metric"><strong>${stats.sessions7.length}</strong><span>Last 7 days</span></div>
+      <div class="tracker-metric"><strong>${stats.sessions30.length}</strong><span>Last 30 days</span></div>
+      <div class="tracker-metric"><strong>${formatDuration(stats.averageSeconds)}</strong><span>Average length</span></div>
+    </div>
+    <div class="tracker-strip"><span>${complete} complete</span><span>${partial} partial</span><span>${formatDuration(stats.totalSeconds)} total training</span></div>
+    <div class="section-heading tracker-heading"><h3>Recent sessions</h3><span>Latest ${Math.min(6, recent.length)}</span></div>
+    ${recent.length ? recent.map(renderHistoryCard).join('') : '<div class="empty">No workouts saved yet.</div>'}`;
+  } else if (kind === 'sets') {
+    title = 'Sets logged';
+    const average = stats.history.length ? Math.round((stats.totalSets / stats.history.length) * 10) / 10 : 0;
+    const recent = stats.history.slice(-8).reverse();
+    content = `<div class="tracker-grid">
+      <div class="tracker-metric"><strong>${stats.totalSets}</strong><span>Total sets</span></div>
+      <div class="tracker-metric"><strong>${stats.sets7}</strong><span>Last 7 days</span></div>
+      <div class="tracker-metric"><strong>${average}</strong><span>Average / session</span></div>
+      <div class="tracker-metric"><strong>${stats.biggestSets}</strong><span>Biggest session</span></div>
+    </div>
+    <div class="section-heading tracker-heading"><h3>Recent set totals</h3><span>By session</span></div>
+    ${recent.length ? `<div class="set-tracker-list">${recent.map(workout => {
+      const date = dateFromHistoryWorkout(workout);
+      const count = completedSetsForWorkout(workout);
+      const max = Math.max(1, stats.biggestSets);
+      return `<div class="set-tracker-row"><div><strong>${esc(DAYS[clampDay(workout.day)]?.name || 'Workout')}</strong><span>${date ? esc(date.toLocaleDateString()) : '—'}</span></div><div class="set-mini-bar"><span style="width:${Math.max(5, Math.round(count / max * 100))}%"></span></div><b>${count}</b></div>`;
+    }).join('')}</div>` : '<div class="empty">No sets logged yet.</div>'}`;
+  } else {
+    title = 'Body weight';
+    const overall = stats.latestWeight != null && stats.firstWeight != null ? stats.latestWeight - stats.firstWeight : null;
+    content = `<div class="tracker-grid">
+      <div class="tracker-metric"><strong>${stats.latestWeight != null ? `${esc(stats.latestWeight)} kg` : '—'}</strong><span>Current</span></div>
+      <div class="tracker-metric"><strong>${stats.firstWeight != null ? `${esc(stats.firstWeight)} kg` : '—'}</strong><span>Starting</span></div>
+      <div class="tracker-metric"><strong>${esc(formatSignedKg(overall))}</strong><span>Overall change</span></div>
+      <div class="tracker-metric"><strong>${stats.weights.length}</strong><span>Entries</span></div>
+    </div>
+    ${stats.weight30Change != null ? `<div class="tracker-strip"><span>30-day change: <strong>${esc(formatSignedKg(stats.weight30Change))}</strong></span></div>` : ''}
+    ${renderWeightGraph(stats.weights, true)}`;
+  }
+
+  modalBody.innerHTML = `<div class="modal-header"><div><div class="eyebrow">${eyebrow}</div><h2 id="modalTitle">${esc(title)}</h2></div><button class="button compact" type="button" data-action="close-modal">Close</button></div>${content}`;
+  openModal();
+}
+
+function renderProgress(target) {
+  const stats = progressSnapshot();
+  const latestWeight = stats.latestWeight;
   target.innerHTML = `${topbar('Progress', 'History, body weight and backups')}
-    <div class="stats-grid">
-      <div class="stat"><strong>${history.length}</strong><span>sessions</span></div>
-      <div class="stat"><strong>${completedSets}</strong><span>sets logged</span></div>
-      <div class="stat"><strong>${latestWeight ? `${esc(latestWeight)} kg` : '—'}</strong><span>body weight</span></div>
+    <div class="stats-grid progress-stats">
+      ${progressStatButton('sessions', stats.history.length, 'sessions', 'Tap for tracker')}
+      ${progressStatButton('sets', stats.totalSets, 'sets logged', 'Tap for tracker')}
+      ${progressStatButton('weight', latestWeight != null ? `${esc(latestWeight)} kg` : '—', 'body weight', 'Tap for tracker')}
     </div>
     <section class="section">
-      <div class="section-heading"><h2>Body weight</h2><span>Stored locally</span></div>
+      <div class="section-heading"><h2>Body weight</h2><span>${stats.weights.length ? `${stats.weights.length} entr${stats.weights.length === 1 ? 'y' : 'ies'}` : 'Stored locally'}</span></div>
+      ${renderWeightGraph(stats.weights)}
       <div class="weight-entry"><input id="weightInput" type="text" inputmode="decimal" placeholder="e.g. 103.0"><button class="button teal" type="button" data-action="save-weight">Save</button></div>
-      ${sortedWeights.length ? `<div class="weight-history">${sortedWeights.slice(-5).reverse().map(entry => `<span>${esc(new Date(entry.date).toLocaleDateString())} · ${esc(entry.weight)} kg</span>`).join('')}</div>` : ''}
+      ${stats.weights.length ? `<div class="weight-history">${stats.weights.slice(-5).reverse().map(entry => `<span>${esc(new Date(entry.date).toLocaleDateString())} · ${esc(entry.weight)} kg</span>`).join('')}</div>` : ''}
     </section>
     <section class="section">
       <div class="section-heading"><h2>Recent workouts</h2><span>Last 12</span></div>
-      ${history.length ? history.slice(-12).reverse().map(renderHistoryCard).join('') : '<div class="empty">No workouts saved yet.</div>'}
+      ${stats.history.length ? stats.history.slice(-12).reverse().map(renderHistoryCard).join('') : '<div class="empty">No workouts saved yet.</div>'}
     </section>
     <section class="section">
       <div class="section-heading"><h2>Exercise preferences</h2><span>Favourite · avoid · unavailable</span></div>
@@ -1122,7 +1276,9 @@ function initMap() {
   const container = document.getElementById('bodyMap');
   if (!container || activeTab !== 'build') return;
   if (!window.BodyMuscles) {
-    container.innerHTML = '<div class="map-message"><strong>Loading anatomy map…</strong><br>The muscle buttons below remain fully usable.</div>';
+    // Keep the map area clean while the small anatomy dependency loads.
+    // The muscle buttons remain usable and the SVG appears as soon as ready.
+    container.replaceChildren();
     ensureBodyMuscles().then(lib => {
       const current = document.getElementById('bodyMap');
       if (!current || activeTab !== 'build') return;
@@ -1135,6 +1291,9 @@ function initMap() {
   try {
     mapChart?.destroy?.();
     mapChart = null;
+    // BodyChart appends its SVG. Clear the temporary loading message first so
+    // the placeholder cannot remain beside the rendered anatomy map.
+    container.replaceChildren();
     const { BodyChart, ViewSide } = window.BodyMuscles;
     mapChart = new BodyChart(container, {
       view: mapView === 'FRONT' ? ViewSide.FRONT : ViewSide.BACK,
@@ -1149,6 +1308,7 @@ function initMap() {
       }
     });
     requestAnimationFrame(() => {
+      container.querySelectorAll('.map-message').forEach(node => node.remove());
       cropMap(container);
       styleMapPaths(container);
     });
@@ -1226,6 +1386,7 @@ function handleClick(event) {
     case 'open-exercise-chooser': openExerciseChooser(Number(button.dataset.item)); break;
     case 'replace-workout-exercise': replaceWorkoutExercise(Number(button.dataset.item), button.dataset.id); break;
     case 'save-weight': saveWeight(); break;
+    case 'progress-detail': openProgressDetail(button.dataset.kind); break;
     case 'export-data': exportData(); break;
     case 'import-data': importFile.click(); break;
     case 'reset-app': resetApp(); break;
